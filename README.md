@@ -77,7 +77,7 @@ ERD 이미지 첨부 (https://drive.google.com/file/d/1c2CmWteDQokKMabPMcZ7VuJjK
 <details>
 <summary>📷 ERD 이미지 더보기</summary>
 
-(https://drive.google.com/uc?export=view&id=1c2CmWteDQokKMabPMcZ7VuJjKofZd2Uz)
+**![ERD 이미지](https://drive.google.com/uc?export=view&id=1c2CmWteDQokKMabPMcZ7VuJjKofZd2Uz)**
 
 </details>
 
