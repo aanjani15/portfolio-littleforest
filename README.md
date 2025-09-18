@@ -71,7 +71,10 @@
 
 ---
 
+<details>
+<summary>📷 화면 구성</summary>
 
+</details>
 
 
 ---
