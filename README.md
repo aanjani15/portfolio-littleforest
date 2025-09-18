@@ -71,6 +71,10 @@
 
 ---
 
+
+
+
+---
 ## 📊 ERD & 테이블 설계
 ERD 이미지 첨부 (https://drive.google.com/file/d/1c2CmWteDQokKMabPMcZ7VuJjKofZd2Uz/view?usp=drive_link)
 
@@ -78,6 +82,7 @@ ERD 이미지 첨부 (https://drive.google.com/file/d/1c2CmWteDQokKMabPMcZ7VuJjK
 <summary>📷 ERD 이미지 더보기</summary>
   
 <img width="398" height="592" alt="image" src="https://github.com/user-attachments/assets/bcb4685c-67ec-40bf-91e1-251c93e85e41" />
+<img width="383" height="620" alt="화면 캡처 2025-09-18 163515" src="https://github.com/user-attachments/assets/7c7d80ee-11b2-4b6e-b78a-2f7b6e5f087a" />
 
 </details>
 
