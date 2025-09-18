@@ -1,0 +1,97 @@
+<!-- templates/fragments/header.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+	<header>
+		<style>
+			.logout {
+				display: inline-flex;
+				align-items: right;
+				gap: 6px;
+				padding: 6px 14px;
+				border: 1px solid #dc2626;
+				border-radius: 6px;
+				background: white;
+				color: #dc2626;
+				font-weight: 600;
+				font-size: 14px;
+				text-decoration: none;
+				transition: all 0.2s ease;
+				margin-left: 10px;
+			}
+
+			.logout:hover {
+				background: #dc2626;
+				color: white;
+			}
+		</style>	
+		
+		<div class="logo">
+			<a href="/"> <img src="/image/logo2.png" alt="logo"> </a>
+		</div>
+
+		<div class="menu">
+         <div class="menu-item">
+            <a href="#">서비스</a>
+            <div class="submenu">
+               <a href="/growtree">나무심기</a>
+               <a href="/wallet">지갑</a>
+               <a href="/wallet">결제하기</a>
+               <a href="/emission1">탄소 감축량</a>
+            </div>
+			</div>
+
+			<div class="menu-item">
+				<a href="/notice">공지사항</a>
+			</div>
+
+			<div class="menu-item">
+				<a href="/community">커뮤니티</a>
+			</div>
+
+			<div class="menu-item">
+				<a href="#">포인트</a>
+				<div class="submenu">
+					<a href="/pay">나의 포인트</a>
+					<a href="/payment">지출 포인트</a>
+					<a href="/slider">적립 방법</a>
+				</div>
+			</div>
+
+			<div class="menu-item">
+				<a href="/about">회사소개</a>
+			</div>
+		</div>
+
+		<div class="mypage">
+			<!--<a href="#" id="mypage-link"> <i class="fa-solid fa-circle-user"></i></a>-->
+			<!-- 로그인 안 했을 때: 로그인으로 -->
+			<a th:if="${session.loginUser == null}" th:href="@{/login}" class="user-btn" title="로그인">
+				<i class="fa-regular fa-user"></i>
+			</a>
+
+			<!-- 로그인 했을 때: 마이페이지로 -->
+			<a th:if="${session.loginUser != null}" th:href="@{/mypage}" class="user-btn" title="마이페이지">
+				<i class="fa-solid fa-user"></i>
+			</a>
+
+			<a th:if="${session.loginUser != null}" th:href="@{/logout}" class="logout">
+				<i class="fa-solid fa-right-from-bracket"></i> 로그아웃</a>
+		</div>
+		
+
+		<!--<script>
+			document.getElementById('mypage-link').addEventListener('click', function (event) {
+				event.preventDefault();
+				const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+				window.location.href = isLoggedIn ? '/mypage' : '/login';
+			});
+		</script>-->
+	</header>
+
+	
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Little Forest</title>
+  <link rel="stylesheet" href="/css/joinpagestyle.css">
+    <script src="../js/email.js"></script>
+  
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+  <div class="login-container">
+    <h2>JOIN</h2>
+    <p class="subtitle">필수 정보를 입력해주세요.</p>
+
+    <form action="/join" method="post">
+      <input type="text" name="name" placeholder="이름" required />
+      <input type="text" name="oauth_id" placeholder="아이디" required />
+     <input type="date" name="birth" placeholder="생년월일" required />
+      <input type="text" name="phone" placeholder="전화번호" required />
+      <input type="password" name="password" placeholder="비밀번호" required />
+<div class="address-wrapper">
+  <input type="text" id="address" name="address" placeholder="주소" required readonly />
+  <button type="button" class="address-btn" onclick="openPostcode()">주소 검색</button>
+</div>
+<input type="text" name="detail_address" placeholder="상세주소" required />
+
+
+         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+         <script src="../js/address.js"></script>
+
+         <!-- 이메일 입력칸 -->
+      <input type="email" id="email" name="email" placeholder="이메일" required />
+
+      <!-- 이메일 인증코드 입력 + 버튼 한 줄 -->
+      <div class="email-code-wrapper">
+        <input type="text" id="emailCode" name="emailCode" placeholder="이메일 인증 코드 입력" required />
+        <button type="button" onclick="requestEmailCode()">코드 받기</button>
+      </div>
+
+      <button type="submit">회원가입</button>
+    </form>
+    
+         <!-- 홈으로 가기 -->
+      <a href="/" class="btn home" style="color: white;"> 
+      <img src="/image/home.png" alt="홈" style="width: 20px; height: 20px;">
+         홈으로 가기
+      </a>
+  </div>
+  
+  
+   <!--  fireflies.js -->
+   <script>
+      let c = init("canvas"),
+         w = (canvas.width = window.innerWidth),
+         h = (canvas.height = window.innerHeight);
+      //initiation
+
+      //반딧불 사이즈 조절
+      const SIZE_MIN = 1;
+      const SIZE_MAX = 3;
+
+      class firefly {
+         constructor() {
+            this.x = Math.random() * w;
+            this.y = Math.random() * h;
+            this.s = Math.random() * 2;  /* 스피드  */
+            this.ang = Math.random() * 2 * Math.PI;
+            this.v = this.s * this.s / 4;
+
+            // 속도는 크기와 무관하게 예전 분포 유지
+            // 기존: this.v = this.s*this.s/4;
+            this.s = SIZE_MIN + Math.random() * (SIZE_MAX - SIZE_MIN);
+            this.v = (Math.random() * 2) ** 2 / 4;   // 0 ~ 1 근처, 예전과 동일한 범위
+
+         }
+
+
+         move() {
+            this.x += this.v * Math.cos(this.ang);
+            this.y += this.v * Math.sin(this.ang);
+            this.ang += Math.random() * 20 * Math.PI / 180 - 10 * Math.PI / 180;
+         }
+         show() {
+            /*      c.beginPath();
+                c.arc(this.x,this.y,this.s,0,2*Math.PI);
+                c.fillStyle="#fddba3";
+                c.fill(); */
+
+            /* 형광버전 */
+            c.save();
+            c.shadowColor = "rgba(255, 255, 80, 0.9)";
+            c.shadowBlur = 12;                 // 글로우 강도 (10~20 사이로 조절)
+            c.beginPath();
+            c.arc(this.x, this.y, this.s, 0, 2 * Math.PI);
+            c.fillStyle = "#fff44f";
+            c.fill();
+            c.restore();
+
+            /* (선명) 라디얼 그라디언트 */
+            /*       const g = c.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.s * 3);
+                  g.addColorStop(0.00, "#ffffcc");           // 밝은 코어
+                  g.addColorStop(0.40, "#fff44f");           // 형광 노랑
+                  g.addColorStop(1.00, "rgba(255,255,0,0)"); // 가장자리는 투명
+                  c.beginPath();
+                  c.arc(this.x, this.y, this.s * 3, 0, 2*Math.PI);
+                  c.fillStyle = g;
+                  c.fill(); */
+         }
+      }
+
+      let f = [];
+
+      function draw() {
+         if (f.length < 100) {
+            for (let j = 0; j < 10; j++) {
+               f.push(new firefly());
+            }
+         }
+         //animation
+         for (let i = 0; i < f.length; i++) {
+            f[i].move();
+            f[i].show();
+            if (f[i].x < 0 || f[i].x > w || f[i].y < 0 || f[i].y > h) {
+               f.splice(i, 1);
+            }
+         }
+      }
+
+      let mouse = {};
+      let last_mouse = {};
+
+      canvas.addEventListener(
+         "mousemove",
+         function (e) {
+            last_mouse.x = mouse.x;
+            last_mouse.y = mouse.y;
+
+            mouse.x = e.pageX - this.offsetLeft;
+            mouse.y = e.pageY - this.offsetTop;
+         },
+         false
+      );
+      function init(elemid) {
+         let canvas = document.getElementById(elemid),
+            c = canvas.getContext("2d"),
+            w = (canvas.width = window.innerWidth),
+            h = (canvas.height = window.innerHeight);
+         c.fillStyle = "rgba(30,30,30,1)";
+         c.fillRect(0, 0, w, h);
+         return c;
+      }
+
+      window.requestAnimFrame = (function () {
+         return (
+            window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function (callback) {
+               window.setTimeout(callback);
+            }
+         );
+      });
+
+      function loop() {
+         window.requestAnimFrame(loop);
+         c.clearRect(0, 0, w, h);
+         draw();
+      }
+
+      window.addEventListener("resize", function () {
+         (w = canvas.width = window.innerWidth),
+            (h = canvas.height = window.innerHeight);
+         loop();
+      });
+
+      loop();
+      setInterval(loop, 1000 / 60);
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.admin.AdminPostMapper">
+
+  <resultMap id="CommentWithUserMap" type="com.fintecho.littleforest.vo.CommentVO">
+    <id     column="id"            property="id"/>
+    <result column="user_id"       property="user_Id"/>
+    <result column="community_id"  property="community_Id"/>
+    <result column="comment_id"    property="comment_Id"/>
+    <result column="created_at"    property="created_At" jdbcType="TIMESTAMP"/>
+    <result column="likes"         property="likes"/>
+
+    <association property="user" javaType="com.fintecho.littleforest.vo.UserVO">
+      <id     column="u_id"             property="id"/>
+      <result column="u_name"           property="name"/>
+      <result column="u_nickname"       property="nickname"/>
+      <result column="u_profile_photo"  property="profile_Photo"/>
+    </association>
+  </resultMap>
+  
+  <resultMap id="CommunityMap" type="com.fintecho.littleforest.vo.CommunityVO">
+  <id     column="id"          property="id"/>
+  <result column="user_id"     property="user_Id"/>
+  <result column="type"        property="type"/>
+  <result column="title"       property="title"/>
+  <result column="content"     property="content"/>
+  <result column="created_at"  property="created_At" jdbcType="TIMESTAMP"/>
+  <result column="photo"       property="photo"/>
+  <result column="likes"       property="likes"/>
+</resultMap>
+
+  <select id="countPosts" parameterType="com.fintecho.littleforest.vo.admin.AdminVO" resultType="int">
+    SELECT COUNT(*)
+    FROM community_table c
+    JOIN user_table u ON u.id = c.user_id
+    WHERE 1=1
+      <if test="type != null and type != ''"> AND c.type = #{type} </if>
+      <if test="keyword != null and keyword != ''">
+        AND (LOWER(c.title) LIKE '%'||LOWER(#{keyword})||'%' OR
+             LOWER(u.nickname) LIKE '%'||LOWER(#{keyword})||'%')
+      </if>
+  </select>
+
+  <select id="findPosts" parameterType="com.fintecho.littleforest.vo.admin.AdminVO" resultType="map">
+    SELECT
+      c.id          AS "id",
+      c.type        AS "type",
+      c.title       AS "title",
+      c.photo       AS "photo",
+      c.likes       AS "likes",
+      c.created_at  AS "created_at",
+      u.nickname    AS "writer"
+    FROM community_table c
+    JOIN user_table u ON u.id = c.user_id
+    WHERE 1=1
+      <if test="type != null and type != ''"> AND c.type = #{type} </if>
+      <if test="keyword != null and keyword != ''">
+        AND (LOWER(c.title) LIKE '%'||LOWER(#{keyword})||'%' OR
+             LOWER(u.nickname) LIKE '%'||LOWER(#{keyword})||'%')
+      </if>
+    ORDER BY c.created_at DESC
+    OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+  </select>
+
+  <delete id="bulkDeleteWeirdTypes">
+    DELETE FROM community_table
+     WHERE (type IS NULL OR type NOT IN
+       <foreach item="t" collection="allowedTypes" open="(" separator="," close=")">
+         #{t}
+       </foreach>
+     )
+  </delete>
+
+ <select id="findPostById" resultMap="CommunityMap">
+		SELECT
+		c.id,
+		c.user_id,
+		c.type,
+		c.title,
+		c.content,
+		c.created_at,
+		c.photo,
+		c.likes
+		FROM community_table c
+		WHERE c.id = #{id}
+	</select>
+
+  <select id="findCommentsByCommunityId" resultMap="CommentWithUserMap">
+    SELECT
+      c.id,
+      c.user_id,
+      c.community_id,
+      c.comment_id,
+      c.created_at,
+      c.likes,
+      u.id            AS u_id,
+      u.name          AS u_name,
+      u.nickname      AS u_nickname,
+      u.profile_photo AS u_profile_photo
+    FROM comment_table c
+    INNER JOIN user_table u ON u.id = c.user_id
+    WHERE c.community_id = #{id}
+    ORDER BY c.created_at ASC, c.id ASC
+  </select>
+  
+  <delete id="deletePost" parameterType="int">
+        DELETE FROM community_table
+        WHERE id = #{id}
+   </delete>
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteComment" parameterType="int">
+        DELETE FROM comment_table
+        WHERE id = #{id}
+    </delete>
+  
+</mapper>

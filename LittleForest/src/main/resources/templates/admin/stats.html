@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<body th:replace="~{admin/layout :: layout(~{::section}, ~{::script})}">
+	<section class="container">
+		<h2 class="title">회원 통계</h2>
+
+		<!-- KPI -->
+		<div class="kpi-row">
+			<div class="kpi">
+				<div class="kpi-title">총 회원</div>
+				<div id="kpi-users" class="kpi-value">-</div>
+			</div>
+			<div class="kpi">
+				<div class="kpi-title">자라는 나무</div>
+				<div id="kpi-growing" class="kpi-value">-</div>
+			</div>
+			<div class="kpi">
+				<div class="kpi-title">다 키운 나무</div>
+				<div id="kpi-grown" class="kpi-value">-</div>
+			</div>
+			<div class="kpi">
+				<div class="kpi-title">MAU(30일)</div>
+				<div id="kpi-mau" class="kpi-value">-</div>
+			</div>
+		</div>
+
+		<!-- 그룹 카드: 비슷한 표를 한 카드에 묶음 -->
+		<div class="group-grid">
+
+			<!-- 01 가입 · 활성 -->
+			<div class="card group-card">
+				<div class="group-head">
+					<h3>가입 · 활성</h3>
+				</div>
+				<div class="group two">
+					<div class="unit">
+						<h4>월별 신규 가입자</h4>
+						<div class="chart h180"><canvas id="chNewUsers"></canvas></div>
+					</div>
+					<div class="unit">
+						<h4>일간 / 주간 / 월간</h4>
+						<div class="chart h180"><canvas id="chActive"></canvas></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 02 출석 · 커뮤니티 -->
+			<div class="card group-card">
+				<div class="group-head">
+					<h3>출석 · 커뮤니티</h3>
+				</div>
+				<div class="group two">
+					<div class="unit">
+						<h4>요일별 출석 분포</h4>
+						<div class="chart h180"><canvas id="chWeekday"></canvas></div>
+					</div>
+					<div class="unit">
+						<h4>게시글/댓글/좋아요</h4>
+						<div class="chart h180"><canvas id="chCommunity"></canvas></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 03 포인트 · 기부 -->
+			<div class="card group-card">
+				<div class="group-head">
+					<h3>포인트 · 기부</h3>
+				</div>
+				<div class="group two">
+					<div class="unit">
+						<h4>포인트(월·유형별)</h4>
+						<div class="chart h200"><canvas id="chPointType"></canvas></div>
+					</div>
+					<div class="unit">
+						<h4>월별 기부</h4>
+						<div class="chart h200"><canvas id="chDonation"></canvas></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 04 매출 · 탄소 -->
+			<div class="card group-card">
+				<div class="group-head">
+					<h3>매출 · 탄소</h3>
+				</div>
+				<div class="group two">
+					<div class="unit">
+						<h4>카테고리별 매출 · 탄소 효과</h4>
+						<div class="chart h200"><canvas id="chSalesCarbon"></canvas></div>
+					</div>
+					<div class="unit">
+						<h4>월별 탄소 절감</h4>
+						<div class="chart h200"><canvas id="chEmission"></canvas></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 05 나무 현황 -->
+			<div class="card group-card">
+				<div class="group-head">
+					<h3>나무 현황</h3>
+				</div>
+				<div class="group two">
+					<div class="unit">
+						<h4>나무 레벨 분포</h4>
+						<div class="chart h180"><canvas id="chLevels"></canvas></div>
+					</div>
+					<div class="unit">
+						<h4>월별 완성 나무</h4>
+						<div class="chart h180"><canvas id="chGrownMonthly"></canvas></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 06 선물 TOP (보낸/받은) -->
+			<div class="card group-card">
+				<div class="group-head">
+					<h3>선물 TOP</h3>
+				</div>
+				<div class="group two">
+					<div class="unit">
+						<h4>보낸 순위</h4>
+						<div class="table-scroll">
+							<table id="tbGiftSent" class="table"></table>
+						</div>
+					</div>
+					<div class="unit">
+						<h4>받은 순위</h4>
+						<div class="table-scroll">
+							<table id="tbGiftRecv" class="table"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<link rel="stylesheet" th:href="@{/css/admin-stats.css(v=${#dates.createNow().time})}">
+	</section>
+
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+	<script th:src="@{/js/admin-stats.js(v=${#dates.createNow().time})}"></script>
+</body>
+
+</html>

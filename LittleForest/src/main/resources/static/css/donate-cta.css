@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+/* 흔들리는 효과 */
+.btn-jittery { animation: jittery 4s infinite; }
+@keyframes jittery {
+  5%, 50% { transform: scale(1); }
+  10% { transform: scale(0.9); }
+  15% { transform: scale(1.15); }
+  20% { transform: scale(1.15) rotate(-5deg); }
+  25% { transform: scale(1.15) rotate(5deg); }
+  30% { transform: scale(1.15) rotate(-3deg); }
+  35% { transform: scale(1.15) rotate(2deg); }
+  40% { transform: scale(1.15) rotate(0); }
+}
+
+/* wallet.html 의 #openDonateModal 과 동일한 스타일 */
+.donate-cta {
+  --btn-bg: #00AE68;
+  --btn-bg-dark: #007144;
+
+  background: var(--btn-bg);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 14px 22px;
+  line-height: 1;
+
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 6px 0 var(--btn-bg-dark);
+  cursor: pointer;
+  transition: box-shadow .12s ease, opacity .12s ease;
+
+  display: inline-block;
+}
+
+.donate-cta:hover { box-shadow: 0 3px 0 var(--btn-bg-dark); opacity: .95; }
+.donate-cta:active { box-shadow: 0 0 0 var(--btn-bg-dark); opacity: .9; }
+
+/* 우측 카드 아래 가운데 정렬용 래퍼 */
+.donate-cta-wrap {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}

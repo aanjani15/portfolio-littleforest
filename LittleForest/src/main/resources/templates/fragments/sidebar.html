@@ -1,0 +1,690 @@
+<!-- templates/fragments/sidebar.html -->
+<div th:fragment="sidebar" id="lfSidebar" class="lf-sidebar" data-collapsed="false" aria-label="사이트 사이드바">
+
+ <!-- SVG SPRITE (이 파일 안에 직접 포함) -->
+  <svg id="lfIconSprite" xmlns="http://www.w3.org/2000/svg"
+       style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+    	<symbol id="lf-menu" viewBox="0 0 24 24">
+	  <path d="M4 6h16M4 12h16M4 18h16"
+	        fill="none" stroke="currentColor" stroke-width="1.8"
+	        stroke-linecap="round" stroke-linejoin="round"/>
+	</symbol>
+	
+	<symbol id="lf-moon" viewBox="0 0 24 24">
+	  <path d="M21 12.3A8.5 8.5 0 1 1 11.7 3a7 7 0 1 0 9.3 9.3z"
+	        fill="none" stroke="currentColor" stroke-width="1.8"
+	        stroke-linecap="round" stroke-linejoin="round"/>
+	</symbol>
+	
+    <symbol id="lf-home" viewBox="0 0 24 24">
+      <path d="M3 10.5L12 3l9 7.5v9A1.5 1.5 0 0 1 19.5 21h-3a1.5 1.5 0 0 1-1.5-1.5V15h-6v4.5A1.5 1.5 0 0 1 7.5 21h-3A1.5 1.5 0 0 1 3 19.5v-9z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="lf-tree" viewBox="0 0 24 24">
+      <path d="M12 21v-4M7 17h10M6 14h12M5 11h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M12 3c3 0 6 2.7 6 6 0 1.3-.4 2.5-1.1 3.5H7.1A6 6 0 0 1 6 9c0-3.3 3-6 6-6z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="lf-cart" viewBox="0 0 24 24">
+      <circle cx="9" cy="20" r="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="18" cy="20" r="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M3 4h2l2.4 11.2A1.6 1.6 0 0 0 9 17h8.3a1.6 1.6 0 0 0 1.5-1.1L21 9H7.4"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="lf-wallet" viewBox="0 0 24 24">
+      <rect x="3" y="6" width="18" height="12" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M16 10h5v4h-5a2 2 0 0 1 0-4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <circle cx="18.5" cy="12" r="0.9" fill="currentColor"/>
+    </symbol>
+
+    <symbol id="lf-points" viewBox="0 0 24 24">
+      <ellipse cx="10" cy="7" rx="6" ry="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M4 7v4c0 1.7 2.7 3 6 3s6-1.3 6-3V7M4 11v4c0 1.7 2.7 3 6 3m6-7v4"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="lf-receipt" viewBox="0 0 24 24">
+      <path d="M6 3h12v18l-2-1.2-2 1.2-2-1.2-2 1.2-2-1.2-2 1.2V3z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="lf-chart" viewBox="0 0 24 24">
+      <path d="M4 20.5h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <rect x="6" y="11" width="2.6" height="7.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <rect x="10.7" y="8" width="2.6" height="10.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <rect x="15.4" y="5.5" width="2.6" height="13" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </symbol>
+
+    <symbol id="lf-calendar" viewBox="0 0 24 24">
+      <rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M8 3v4M16 3v4M3 9h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <rect x="7" y="12" width="3" height="3" rx="0.7" fill="currentColor"/>
+      <rect x="12" y="12" width="3" height="3" rx="0.7" fill="currentColor"/>
+      <rect x="12" y="16" width="3" height="3" rx="0.7" fill="currentColor"/>
+    </symbol>
+
+    <symbol id="lf-slider" viewBox="0 0 24 24">
+      <path d="M4 7h8M4 17h16M12 12h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="16" cy="7" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="8" cy="12" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="10" cy="17" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </symbol>
+
+    <symbol id="lf-carbon" viewBox="0 0 24 24">
+      <path d="M12 21c-5 0-9-4.5-9-9 0-3.3 2.4-6.9 6.8-8.4 5.2 1.5 9.2 5.1 9.2 9 0 4.5-3.8 8.4-7 8.4z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M12 21c1-4.5-.5-9.3-6-12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M15.8 13.7a3.1 3.1 0 1 1 0-3.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="lf-logout" viewBox="0 0 24 24">
+      <path d="M14 7V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M10 12h10M18 9l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+  
+  
+ <!-- 상단 버튼 -->
+	<div class="lf-sidebar__top">
+	  <button class="icon-btn" id="btnSidebarToggle" aria-label="사이드바 접기/펴기">
+	    <svg class="lf-topicon"><use href="#lf-menu"/></svg>
+	  </button>
+	  <button class="icon-btn" id="btnThemeToggle" aria-label="다크모드 전환">
+	    <svg class="lf-topicon" id="themeIcon"><use href="#lf-moon"/></svg>
+	  </button>
+	</div>
+
+
+  <!-- 프로필 -->
+  <a th:href="@{/mypage}" class="lf-sidebar__profile">
+		<div th:if="${userInfo.profile_Photo!=null}">
+			<img class="profile-img" th:src="@{${userInfo.profile_Photo}}">
+			</div>
+			<div th:unless="${userInfo.profile_Photo!=null}">
+			<img class="profile-img" th:src="@{/image/profile.png}">
+		</div>
+       <div class="profile-meta">
+      <strong th:text="${userInfo != null} ? ${userInfo.nickname} : '사용자'">사용자</strong>
+      <span> 님 &gt;</span>
+    </div>
+  </a>
+
+
+
+<nav class="lf-sidebar__nav" aria-label="주요 메뉴">
+  <a class="nav-item" href="/"                     data-route="/"          data-label="홈"               aria-label="홈">
+    <svg class="lf-icon"><use href="#lf-home"/></svg><span>홈</span>
+  </a>
+  <a class="nav-item" href="/growtree"             data-route="/growtree"  data-label="나무 키우기"      aria-label="나무 키우기">
+    <svg class="lf-icon"><use href="#lf-tree"/></svg><span>나무 키우기</span>
+  </a>
+  <a class="nav-item" href="/shop"        data-route="/shop" data-label="상점"        aria-label="상점">
+    <svg class="lf-icon"><use href="#lf-cart"/></svg><span>상점</span>
+  </a>
+  <a class="nav-item" href="/wallet"               data-route="/wallet"    data-label="지갑"             aria-label="지갑">
+    <svg class="lf-icon"><use href="#lf-wallet"/></svg><span>지갑</span>
+  </a>
+  <a class="nav-item" href="/pay"                  data-route="/pay"       data-label="포인트"           aria-label="포인트">
+    <svg class="lf-icon"><use href="#lf-points"/></svg><span>포인트</span>
+  </a>
+  <a class="nav-item" href="/payment"              data-route="/payment"   data-label="결제내역"         aria-label="결제내역">
+    <svg class="lf-icon"><use href="#lf-receipt"/></svg><span>결제내역</span>
+  </a>
+  <a class="nav-item" href="/emission1?tab=month"  data-route="/emission1" data-label="탄소 감축량(차트)"   aria-label="탄소 감축량(차트)">
+    <svg class="lf-icon"><use href="#lf-chart"/></svg><span>탄소 감축량(차트)</span>
+  </a>
+  <a class="nav-item" href="/emission1?tab=year"   data-route="/emission1" data-label="탄소 감축량(달력)"   aria-label="탄소 감축량(달력)">
+    <svg class="lf-icon"><use href="#lf-calendar"/></svg><span>탄소 감축량(달력)</span>
+  </a>
+  <a class="nav-item" href="/slider"               data-route="/slider"    data-label="포인트 적립방법"     aria-label="포인트 적립방법">
+    <svg class="lf-icon"><use href="#lf-slider"/></svg><span>포인트 적립방법</span>
+
+  </a>
+  <a class="nav-item" href="/carbon/point"         data-route="/carbon/point" data-label="탄소중립 포인트" aria-label="탄소중립 포인트">
+    <svg class="lf-icon"><use href="#lf-carbon"/></svg><span>탄소중립 포인트</span>
+  </a>
+  <a class="nav-item" href="/login?logout"         data-route="/login"     data-label="로그아웃"         aria-label="로그아웃">
+    <svg class="lf-icon"><use href="#lf-logout"/></svg><span>로그아웃</span>
+  </a>
+</nav>
+
+
+  <!-- ===== 스타일 ===== -->
+  <style id="lfSidebarInlineFix">
+:root {
+	--sb-w: 240px; /* 펼친 너비 */
+	--sb-w-c: 90px; /* 접힌 너비(조금 더 슬림) */
+	/* 브랜드 톤(그린+하늘): */
+	--sb-grad-1: #eaf7f1;
+	--sb-grad-2: #e7f0ff;
+	--sb-fg: #0f2e1e;
+	--sb-border: rgba(15, 46, 30, .12);
+	--sb-active: #1b8a5a;
+	--sb-hover: rgba(27, 138, 90, .08);
+	--radius: 18px;
+	--gap: 12px;
+	/* 말풍선/글로우 */
+	--chip-bg: #7c5cff; /* 접힘상태 hover 라벨 배경(보라) */
+	--chip-fg: #fff;
+	--chip-shadow: 0 6px 18px rgba(124, 92, 255, .32);
+	--item-pad-y: 7px; /* 아이템 위아래 패딩 (기존 12px -> 7px) */
+	--item-pad-x: 10px; /* 좌우 패딩 살짝만 */
+	--item-gap: 8px; /* 아이콘-텍스트 사이 간격 (기존 12px -> 8px) */
+	--row-gap: 2px; /* 아이템 사이 여백 (기존 6px -> 2px) */
+	--icon-size: 20px; /* 아이콘 크기 살짝 줄임 (22 -> 20) */
+}
+
+/* 다크모드 */
+html[data-theme="dark"] {
+	--sb-grad-1: #0d1714;
+	--sb-grad-2: #101a28;
+	--sb-fg: #e2f1e9;
+	--sb-border: rgba(226, 241, 233, .12);
+	--sb-active: #43c28c;
+	--sb-hover: rgba(67, 194, 140, .12);
+	--chip-bg: #9c82ff;
+	--chip-fg: #0d0f14;
+	--chip-shadow: 0 6px 18px rgba(156, 130, 255, .35);
+}
+
+/* ===== 컨테이너 ===== */
+#lfSidebar {
+	position: sticky !important;
+	top: 16px !important;
+	width: var(--sb-w) !important;
+	/* height: calc(100vh - 32px) !important; */
+	 height: auto !important;                     /* 내용만큼만 */
+	 max-height: calc(100vh - 32px) !important;   /* 너무 길어지면 화면 높이까지만 (옵션) */
+	padding: 12px !important;
+	border-radius: var(--radius) !important;
+	border: 1px solid var(--sb-border) !important;
+	background: linear-gradient(180deg, var(--sb-grad-1), var(--sb-grad-2))
+		!important;
+	backdrop-filter: saturate(1.1) blur(8px);
+	box-shadow: 0 10px 28px rgba(14, 32, 24, .06), inset 0 1px 0
+		rgba(255, 255, 255, .35);
+	color: var(--sb-fg) !important;
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 12px !important;
+	overflow: visible;
+	/* 부드러운 접힘/펼침 */
+	transition: width .32s cubic-bezier(.22, .61, .36, 1), border-color .25s
+		ease, box-shadow .25s ease, background .25s ease;
+	will-change: width;
+	z-index: 10000 !important;   /* ← 메인 컨텐츠보다 확실히 높게 */
+  isolation: isolate;          /* ← 새 스태킹 컨텍스트 생성(자식 z-index 보장) */
+}
+
+#lfSidebar, #lfSidebar * {
+	box-sizing: border-box !important;
+}
+
+#lfSidebar a {
+	color: inherit !important;
+	text-decoration: none !important;
+} /* #lfSidebar img { width: auto !important; height: auto !important; }
+ */
+
+/* SVG만 대상으로 한정 (원래 의도였던 사이드바 아이콘 고정만 유지) */
+/* #lfSidebar svg {
+	max-width: none !important;
+	height: auto !important;
+} */
+
+
+#lfSidebar svg.lf-topicon,
+#lfSidebar .lf-icon {
+  max-width: none !important;
+  height: auto !important;
+}
+
+/* ✅ 스프라이트는 반드시 0×0로 고정 + 이벤트 차단 */
+#lfIconSprite {
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+
+/* 상단 버튼 */
+.lf-sidebar__top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.icon-btn {
+	width: 38px;
+	height: 38px;
+	border-radius: 12px;
+	border: 1px solid var(--sb-border);
+	background: rgba(255, 255, 255, .45);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform .18s ease, background .2s ease, box-shadow .2s
+		ease;
+	box-shadow: 0 2px 8px rgba(15, 46, 30, .05);
+}
+
+.icon-btn:hover {
+	background: rgba(255, 255, 255, .75);
+	transform: translateY(-1px);
+}
+
+.lf-topicon {
+	width: 20px;
+	height: 20px;
+	stroke: currentColor;
+	fill: none;
+	stroke-width: 1.8;
+}
+
+/* 프로필(살짝 더 작게) */
+.lf-sidebar__profile {
+	display: grid;
+	grid-template-columns: 36px 1fr;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+	border: 1px solid var(--sb-border);
+	border-radius: 14px;
+	background: rgba(255, 255, 255, .45);
+	transition: background .2s ease, transform .2s ease;
+}
+
+.lf-sidebar__profile:hover {
+	background: rgba(255, 255, 255, .75);
+	transform: translateY(-1px);
+}
+
+.profile-img {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+/* 메뉴 기본 */
+.lf-sidebar__nav {
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	padding-right: 2px;
+	
+	  gap: var(--row-gap) !important;
+  margin-top: 4px !important;
+	
+}
+
+.lf-sidebar__nav .nav-item {
+	position: relative;
+	display: grid;
+	grid-template-columns: 24px 1fr;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 12px;
+	border-radius: 12px;
+	border: 1px solid transparent;
+	font-size: 15px;
+	font-weight: 500;
+	color: var(--sb-fg);
+	transition: background .18s ease, border .18s ease, color .18s ease,
+		transform .18s ease;
+}
+
+#lfSidebar .lf-icon {
+	width: 22px;
+	height: 22px;
+	flex: 0 0 22px;
+	stroke: currentColor;
+	fill: none;
+	stroke-width: 1.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.lf-sidebar__nav .nav-item:hover {
+	background: var(--sb-hover);
+	transform: translateY(-1px);
+}
+
+.lf-sidebar__nav .nav-item.is-active {
+	border: 1px solid var(--sb-active);
+	background: color-mix(in srgb, var(--sb-active) 12%, transparent);
+	color: var(--sb-active);
+	font-weight: 700;
+}
+
+/* .lf-sidebar__nav .nav-item img { width: 22px; height: 22px; }
+  */
+/* ===== 접힘 상태 ===== */
+#lfSidebar[data-collapsed="true"] {
+	width: var(--sb-w-c) !important;
+}
+
+#lfSidebar[data-collapsed="true"] .profile-meta, #lfSidebar[data-collapsed="true"] .lf-sidebar__nav .nav-item span
+	{
+	display: none !important;
+}
+
+#lfSidebar[data-collapsed="true"] .lf-sidebar__nav .nav-item {
+	grid-template-columns: 24px;
+	justify-content: center;
+	padding: 12px 10px;
+}
+
+
+/* 모바일 */
+@media ( max-width : 992px) {
+	#lfSidebar {
+		position: fixed !important;
+		top: 8px !important;
+		left: 8px !important;
+		height: calc(100vh - 16px) !important;
+		box-shadow: 0 10px 28px rgba(0, 0, 0, .18) !important;
+	}
+}
+
+/* 접근성: 포커스 링 */
+#lfSidebar a:focus-visible, #lfSidebar button:focus-visible {
+	outline: 2px solid color-mix(in srgb, var(--sb-active) 65%, white);
+	outline-offset: 3px;
+	border-radius: 12px;
+}
+
+/* === 극압축 패치 : 반드시 가장 마지막에 === */
+
+/* 목록 전체 간격 거의 0으로 */
+.lf-sidebar__nav{
+  gap: 5 !important;
+  margin-top: 2px !important;
+  padding-right: 2px !important;
+}
+
+/* 각 항목 자체의 높이 줄이기 */
+.lf-sidebar__nav .nav-item{
+  padding: 6px 10px !important;        /* 위아래 6px */
+  gap: 6px !important;                  /* 아이콘-텍스트 간격 */
+  border-radius: 10px !important;
+  font-size: 14.5px !important;
+  margin: 0 !important;                 /* 혹시 모를 기본 마진 제거 */
+}
+
+/* 인접한 항목 사이 여백(사실상 줄바꿈 간격) */
+.lf-sidebar__nav .nav-item + .nav-item{
+  margin-top: 2px !important;
+}
+
+/* 아이콘도 소폭 축소 */
+#lfSidebar .lf-icon{
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 18px !important;
+}
+
+/* 접힘 상태에서도 더 타이트 */
+#lfSidebar[data-collapsed="true"] .lf-sidebar__nav .nav-item{
+  padding: 6px 8px !important;
+  grid-template-columns: 24px !important;
+  justify-content: center !important;
+}
+
+/* 사이드바와 메뉴 리스트의 가로 스크롤 완전 차단 */
+#lfSidebar,
+#lfSidebar .lf-sidebar__nav{
+  overflow-y: auto !important;
+  overflow-x: visible !important;
+}
+
+/* (WebKit) 혹시 남는 수평 스크롤바 높이를 0으로 */
+#lfSidebar .lf-sidebar__nav::-webkit-scrollbar{
+  height: 0 !important;  /* 수평바 제거 */
+}
+
+/* 공통: 네 모든 nav-item에 글래스 툴팁 부여 (접힘/열림 둘 다) */
+#lfSidebar .lf-sidebar__nav .nav-item{
+  position: relative;
+  overflow: visible;
+}
+
+/* 본체(유리 알약) */
+#lfSidebar .lf-sidebar__nav .nav-item::after{
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 12px);      /* 항상 '사이드바 오른쪽 바깥'에 붙임 */
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px) scale(.98);
+  opacity: 0; pointer-events: none;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: 700; font-size: 13px;
+  color: #0f2e1e;
+  background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.62));
+  border: 1px solid rgba(15,46,30,.15);
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,.15), 0 0 0 1px rgba(255,255,255,.35) inset;
+  white-space: nowrap;
+  z-index: 9999;
+  transition: opacity .18s ease, transform .22s cubic-bezier(.22,.61,.36,1);
+}
+
+/* 꼬리(마름모) */
+#lfSidebar .lf-sidebar__nav .nav-item::before{
+  content: "";
+  position: absolute;
+  left: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px) scale(.98);
+  opacity: 0; pointer-events: none;
+  width: 10px; height: 10px; rotate: 45deg; border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.62));
+  border-left: 1px solid rgba(15,46,30,.15);
+  border-top: 1px solid rgba(15,46,30,.15);
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+  transition: opacity .18s ease, transform .22s cubic-bezier(.22,.61,.36,1);
+}
+
+/* 트리거: hover & 키보드 포커스 */
+#lfSidebar .lf-sidebar__nav .nav-item:hover::after,
+#lfSidebar .lf-sidebar__nav .nav-item:focus-visible::after,
+#lfSidebar .lf-sidebar__nav .nav-item:hover::before,
+#lfSidebar .lf-sidebar__nav .nav-item:focus-visible::before{
+  opacity: 1;
+  transform: translateY(-50%) translateX(0) scale(1);
+}
+
+/* 활성 메뉴일 때 살짝 초록빛 강조 */
+#lfSidebar .lf-sidebar__nav .nav-item.is-active::after{
+  box-shadow: 0 10px 24px rgba(27,138,90,.20), 0 0 0 1px rgba(27,138,90,.28) inset;
+  color: #13734a;
+}
+
+/* 다크모드 대비(글자/선명도만 살짝 조정) */
+html[data-theme="dark"] #lfSidebar .lf-sidebar__nav .nav-item::after{
+  color:#e6fff5;
+  background: linear-gradient(180deg, rgba(24,30,36,.78), rgba(24,30,36,.62));
+  border-color: rgba(230,241,235,.18);
+}
+html[data-theme="dark"] #lfSidebar .lf-sidebar__nav .nav-item::before{
+  background: linear-gradient(180deg, rgba(24,30,36,.78), rgba(24,30,36,.62));
+  border-left-color: rgba(230,241,235,.18);
+  border-top-color: rgba(230,241,235,.18);
+}
+
+/* 모션 줄이기 사용자 배려 */
+@media (prefers-reduced-motion: reduce){
+  #lfSidebar .lf-sidebar__nav .nav-item::after,
+  #lfSidebar .lf-sidebar__nav .nav-item::before{
+    transition: none;
+  }
+}
+ 
+ /* ===== 글래스 툴팁 — 접힘/열림 공통 ===== */
+/* ===== 글래스 툴팁 — 접힘/열림 공통, 반드시 '가장 마지막'에 둔다 ===== */
+#lfSidebar .lf-sidebar__nav > a.nav-item{
+  position: relative;
+  overflow: visible;
+}
+
+/* 본체 */
+#lfSidebar .lf-sidebar__nav > a.nav-item::after{
+  content: attr(data-label) !important;
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px) scale(.98);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font: 700 13px/1.1 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color: #0f2e1e;
+  background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.62));
+  border: 1px solid rgba(15,46,30,.15);
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,.15), 0 0 0 1px rgba(255,255,255,.35) inset;
+  white-space: nowrap;
+  z-index: 9999 !important;
+  transition: opacity .18s ease, transform .22s cubic-bezier(.22,.61,.36,1), visibility .18s;
+}
+
+/* 꼬리 */
+#lfSidebar .lf-sidebar__nav > a.nav-item::before{
+  content: "" !important;
+  position: absolute;
+  left: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px) scale(.98);
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none;
+  width: 10px; height: 10px; rotate: 45deg; border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.62));
+  border-left: 1px solid rgba(15,46,30,.15);
+  border-top: 1px solid rgba(15,46,30,.15);
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+  z-index: 9998 !important;
+  transition: opacity .18s ease, transform .22s cubic-bezier(.22,.61,.36,1), visibility .18s;
+}
+
+/* 트리거 */
+#lfSidebar .lf-sidebar__nav > a.nav-item:hover::after,
+#lfSidebar .lf-sidebar__nav > a.nav-item:focus-visible::after,
+#lfSidebar .lf-sidebar__nav > a.nav-item:hover::before,
+#lfSidebar .lf-sidebar__nav > a.nav-item:focus-visible::before{
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(-50%) translateX(0) scale(1) !important;
+}
+
+/* 다크모드 */
+html[data-theme="dark"] #lfSidebar .lf-sidebar__nav > a.nav-item::after{
+  color:#e6fff5;
+  background: linear-gradient(180deg, rgba(24,30,36,.78), rgba(24,30,36,.62));
+  border-color: rgba(230,241,235,.18);
+}
+html[data-theme="dark"] #lfSidebar .lf-sidebar__nav > a.nav-item::before{
+  background: linear-gradient(180deg, rgba(24,30,36,.78), rgba(24,30,36,.62));
+  border-left-color: rgba(230,241,235,.18);
+  border-top-color:  rgba(230,241,235,.18);
+}
+
+ #lfSidebar {
+  z-index: 9999;
+  isolation: isolate;
+}
+#lfSidebar .lf-sidebar__nav .nav-item::after,
+#lfSidebar .lf-sidebar__nav .nav-item::before {
+  z-index: 10000; /* 툴팁이 확실히 위로 올라오게 */
+}
+ 
+ 
+</style>
+
+  <!-- ===== 스크립트 ===== -->
+  <script>
+  
+  document.addEventListener('DOMContentLoaded', () => {
+	  // 메뉴 아이템: title 완전 제거 + 라벨 보정
+	  document.querySelectorAll('#lfSidebar .lf-sidebar__nav .nav-item').forEach(a => {
+	    // 이 링크 자체
+	    a.removeAttribute('title');
+
+	    // 자식 중 어딘가에 title이 있으면 모두 제거 (svg/use/span 등)
+	    a.querySelectorAll('[title]').forEach(el => el.removeAttribute('title'));
+
+	    // data-label이 비었다면 aria-label 또는 텍스트로 세팅
+	    if (!a.hasAttribute('data-label') || !a.getAttribute('data-label').trim()) {
+	      const label = a.getAttribute('aria-label') || a.textContent.trim();
+	      if (label) a.setAttribute('data-label', label);
+	    }
+	    // aria-label도 보강
+	    if (!a.getAttribute('aria-label')) {
+	      a.setAttribute('aria-label', a.getAttribute('data-label'));
+	    }
+	  });
+
+	  // 프로필 링크의 title 제거
+	  const prof = document.querySelector('#lfSidebar .lf-sidebar__profile');
+	  if (prof) {
+	    prof.removeAttribute('title');
+	    prof.querySelectorAll('[title]').forEach(el => el.removeAttribute('title'));
+	  }
+	});
+  
+    (function () {
+      const KEY_COLLAPSE = 'lf-sidebar-collapsed';
+      const KEY_THEME = 'lf-theme';
+      const sidebar = document.getElementById('lfSidebar');
+      const btnToggle = document.getElementById('btnSidebarToggle');
+      const btnTheme = document.getElementById('btnThemeToggle');
+
+      // 저장된 상태 복원
+      if (localStorage.getItem(KEY_COLLAPSE) === 'true') {
+        sidebar.setAttribute('data-collapsed', 'true');
+        document.body.classList.add('has-collapsed-sidebar');
+      }
+      if (localStorage.getItem(KEY_THEME) === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+
+      // 현재 페이지 active 표시
+      function markActive() {
+        const path = location.pathname;
+        document.querySelectorAll('.lf-sidebar__nav .nav-item').forEach(a => {
+          const route = a.getAttribute('data-route');
+          const active = path === route || (route !== '/' && path.startsWith(route));
+          a.classList.toggle('is-active', active);
+        });
+      }
+      markActive();
+
+      btnToggle.addEventListener('click', () => {
+        const collapsed = sidebar.getAttribute('data-collapsed') === 'true';
+        sidebar.setAttribute('data-collapsed', String(!collapsed));
+        document.body.classList.toggle('has-collapsed-sidebar', !collapsed);
+        localStorage.setItem(KEY_COLLAPSE, String(!collapsed));
+      });
+
+      btnTheme.addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem(KEY_THEME, next);
+      });
+    })();
+  </script>
+</div>
+

@@ -1,0 +1,970 @@
+@charset "UTF-8";
+
+:root {
+	--header-h: 80px;
+	--footer-h: 100px;
+	--footer-safe: calc(var(--footer-h) + var(--footer-gap));
+}
+
+
+body {
+	background-image: url('/image/treebgd.png');
+	font-family: 'Arial', sans-serif;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	background-repeat: no-repeat;
+	/* 배경 이미지가 반복되지 않도록 설정 */
+
+	background-position: center top;
+	/* 상단 기준 */
+	background-size: cover;
+	/* 화면 꽉 채움 */
+	height: 900px;
+	/* body 높이 고정 */
+	overflow-x: hidden;
+
+}
+.image_wrap {
+  position: relative; 
+  display: block; 
+}
+.meadow {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 35%;
+  pointer-events: none;
+  overflow: hidden;
+z-index: 100;
+}
+
+.weed {
+  position: absolute;
+  bottom: 50px;
+  width: 4px;
+  left: var(--x, 0);     /* JS에서 넣은 --x 사용 */
+  height: var(--h, 100px); /* JS에서 넣은 --h 사용 */
+  background: linear-gradient(to top, #2e7d32, #66bb6a);
+  border-radius: 2px;
+  transform-origin: bottom center;
+  animation: grow 2s ease-out forwards, sway 3s ease-in-out infinite;
+  animation-delay: var(--delay, 0s); /* JS에서 넣은 --delay 사용 */
+}
+
+
+.weed::before, .weed::after {
+  content: '';
+  position: absolute;
+  bottom: 50%;
+  width: 20px; height: 10px;
+  background: #66bb6a;
+  border-radius: 50%;
+}
+
+.weed::before { left: -20px; transform: rotate(-30deg); }
+.weed::after  { right: -20px; transform: rotate(30deg); }
+
+@keyframes grow { 0% { transform: scaleY(0); } 100% { transform: scaleY(1); } }
+@keyframes sway { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(3deg); } }
+
+/* 제목 공통 스타일 */
+.page-title {
+	/* 위치/여백 */
+	margin: 24px 16px;
+	padding: 10px 14px;
+
+	/* 타이포 */
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+	font-weight: 800;
+	font-size: clamp(22px, 4.2vw, 34px);
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+}
+
+/* 귀여운 새싹 아이콘 */
+.page-title::before {
+	content: "🌱";
+	margin-right: 8px;
+	font-size: 0.95em;
+	vertical-align: -1px;
+}
+
+.speech-bubble {
+	position: absolute;
+	top: 10%;
+	/* 나무/새싹 위쪽으로 */
+	left: 50%;
+	transform: translateX(-50%);
+
+	max-width: 200px;
+	padding: 10px 14px;
+
+	background: #ffffff;
+	color: #14532d;
+	/* 짙은 초록 글씨 */
+	font-size: 18px;
+	font-weight: 600;
+	font-family: "Noto Sans KR", sans-serif;
+
+	border-radius: 14px;
+	border: 2px solid #1E821E;
+	/* 민트색 테두리 */
+
+	text-align: center;
+	animation: bubbleFloat 3s ease-in-out infinite;
+}
+
+/* 말풍선 꼬리 */
+.speech-bubble::after {
+	content: "";
+	position: absolute;
+	bottom: -10px;
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 10px 8px 0;
+	border-style: solid;
+	border-color: #1E821E transparent transparent transparent;
+	filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* 살짝 둥실둥실 뜨는 애니메이션 */
+@keyframes bubbleFloat {
+
+	0%,
+	100% {
+		transform: translate(-50%, 0);
+	}
+
+	50% {
+		transform: translate(-50%, -6px);
+	}
+}
+
+
+
+/* ☀️ 햇살 */
+.sun {
+	position: fixed;
+	/* 화면 고정 */
+	top: 30px;
+	right: 50px;
+	width: 100px;
+	height: 100px;
+	background: radial-gradient(circle, #ffeb3b 40%, #fdd835 70%);
+	border-radius: 50%;
+	box-shadow: 0 0 60px rgba(255, 235, 59, 0.6);
+	animation: pulse 3s ease-in-out infinite;
+	pointer-events: none;
+	/* 클릭 방해 안되게 */
+	z-index: 1;
+}
+
+@keyframes pulse {
+
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 0.95;
+	}
+
+	50% {
+		transform: scale(1.05);
+		opacity: 1;
+	}
+}
+
+.cloud {
+	position: absolute;
+	/* 스크롤 따라 움직임 */
+	pointer-events: none;
+	z-index: 0;
+	/* 버튼/제목 뒤 */
+	top: 40px;
+}
+
+.cloud1 {
+	left: -200px;
+	width: 180px;
+	animation: moveCloud1 30s linear infinite;
+	/* 속도 빠르게 */
+}
+
+.cloud2 {
+	top: 130px;
+	left: -250px;
+	width: 220px;
+	animation: moveCloud2 50s linear infinite;
+}
+
+.cloud3 {
+	top: 100px;
+	left: -300px;
+	width: 150px;
+	animation: moveCloud3 40s linear infinite;
+}
+
+@keyframes moveCloud1 {
+	from {
+		left: -250px;
+	}
+
+	to {
+		left: 110%;
+	}
+}
+
+@keyframes moveCloud2 {
+	from {
+		left: -300px;
+	}
+
+	to {
+		left: 110%;
+	}
+}
+
+@keyframes moveCloud3 {
+	from {
+		left: -350px;
+	}
+
+	to {
+		left: 110%;
+	}
+}
+
+/* 햇살 */
+.sun {
+	position: absolute;
+	/* 스크롤 따라 움직임 */
+	top: 30px;
+	right: 50px;
+	width: 100px;
+	height: 100px;
+	background: radial-gradient(circle, #ffeb3b 40%, #fdd835 70%);
+	border-radius: 50%;
+	box-shadow: 0 0 60px rgba(255, 235, 59, 0.6);
+	animation: pulse 3s ease-in-out infinite;
+	pointer-events: none;
+	z-index: 1;
+	/* 구름 위 */
+}
+
+@keyframes pulse {
+
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 0.95;
+	}
+
+	50% {
+		transform: scale(1.05);
+		opacity: 1;
+	}
+}
+
+/* 비료/물 버튼 컨테이너 */
+.bottom-right-buttons {
+	position: absolute;
+	bottom: 40px;
+	right: 30px;
+	display: flex;
+	flex-direction: row;
+	gap: 15px;
+
+	background: rgba(255, 255, 255, 0.7);
+	/* 반투명 배경 */
+	padding: 12px 18px;
+	border-radius: 20px;
+	/* 둥글게 */
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	/* 살짝 뜨는 느낌 */
+	backdrop-filter: blur(6px);
+	/* 유리 느낌 */
+}
+
+/* 버튼 기본 스타일 */
+.bottom-right-buttons button {
+	background: linear-gradient(#FFE1E6);
+	color: white;
+	font-weight: bold;
+	border: none;
+	border-radius: 12px;
+	padding: 12px 20px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 호버 효과 */
+.bottom-right-buttons button:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+/* .button {
+	display: inline-block;
+	margin: 10px;
+	padding: 15px 25px;
+	font-size: 16px;
+	border: none;
+	border-radius: 10px;
+	background-color: #a3d977;
+	color: #fff;
+	cursor: pointer;
+}
+
+.button:hover {
+	background-color: #8cc464;
+} */
+
+.button {
+	display: inline-flex;
+	/* 아이콘 + 글자 정렬 */
+	align-items: center;
+	/* 세로 가운데 */
+	gap: 8px;
+	/* 아이콘과 글자 간격 */
+	margin: 8px;
+	padding: 12px 20px;
+	font-size: 15px;
+	font-weight: bold;
+	border: none;
+	border-radius: 30px;
+	background: linear-gradient(#B4E5FF);
+	color: #3b5d36;
+	cursor: pointer;
+	box-shadow: 0 3px 0 #82B3ED;
+	transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 5px 0 #32AAFF;
+	background: linear-gradient(#5AD2FF);
+}
+
+.button:active {
+	transform: translateY(1px);
+	box-shadow: 0 2px 0 #6fa86c;
+}
+
+.button .btn-icon {
+	width: 20px;
+	height: 20px;
+}
+
+.side-buttons {
+	position: absolute;
+	top: 50px;
+	/* 기존 150px -> 50px */
+	left: 50px;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+/* 공통 버튼 크기 강제 */
+.side-buttons button {
+	width: 220px;
+	/* 원하는 고정 너비 */
+	min-width: 200px;
+	/* 텍스트 길이 상관없이 최소 너비 유지 */
+	height: 50px;
+	/* 버튼 높이 통일 */
+	display: flex;
+	justify-content: center;
+	/* 글자/아이콘 가로 중앙 */
+	align-items: center;
+	/* 글자/아이콘 세로 중앙 */
+	gap: 8px;
+	/* 아이콘과 텍스트 간격 */
+}
+
+
+/* 레벨 표시 박스(.tree-details) */
+.tree-details {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	margin-top: 0px;
+	/* 위로 올림 */
+	padding: 16px;
+	background: rgba(255, 255, 255, 0.7);
+	border-radius: 16px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+
+	position: relative;
+	/* 위치 조정 가능하게 */
+	top: -50px;
+	/* 위로 50px 이동, 필요시 더 조정 */
+}
+
+.tree-container {
+	position: relative;
+	margin: 60px auto 0;
+	width: fit-content;
+	transform: none;
+	left: auto;
+	text-align: center;
+	/* 이미지 가운데 정렬 */
+	margin-top: 1px;
+	/* 전체 컨테이너 위쪽 여백 */
+}
+
+.tree-image-placeholder {
+	width: 200px;
+	height: 200px;
+	background-color: #cde5b4;
+	border-radius: 50%;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+	color: #555;
+}
+
+.tree_location {
+	/*top: 50%;
+	left: 50%;*/
+	top: auto;
+	left: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/*transform: translate(-50%, -50%);*/
+	transform: none;
+	position: relative;
+}
+
+.tree_location p {
+	margin: 0;
+	padding: 0;
+}
+
+.tree_img {
+	position: relative;
+	width: 500px;
+	height: 500px;
+	margin: auto;
+	object-fit: cover;
+}
+
+.waterjson {
+	position: absolute;
+	width: 700px;
+	height: 700px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1200;
+}
+
+.tree_modal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 1000px;
+	height: 1000px;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.center-bottom-button {
+	margin-top: 30px;
+}
+
+/* 비료/물 버튼 컨테이너 */
+.bottom-right-buttons {
+	position: absolute;
+	bottom: 40px;
+	right: 30px;
+	display: flex;
+	flex-direction: row;
+	gap: 18px;
+
+	background: rgba(255, 255, 255, 0.85);
+	/* 밝은 유리 느낌 */
+	padding: 14px 20px;
+	border-radius: 24px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* 비료/물 버튼 컨테이너 */
+.bottom-right-buttons {
+	position: absolute;
+	bottom: 40px;
+	right: 30px;
+	display: flex;
+	flex-direction: row;
+	gap: 18px;
+}
+
+/* 비료/물 버튼 컨테이너 */
+.bottom-right-buttons {
+	position: absolute;
+	bottom: 40px;
+	right: 30px;
+	display: flex;
+	flex-direction: row;
+	gap: 18px;
+
+	background: transparent;
+	/* 배경 제거 → 버튼만 강조 */
+}
+
+/* 공통 버튼 스타일 */
+.bottom-right-buttons button {
+	color: #fff;
+	font-weight: 600;
+	border: none;
+	border-radius: 14px;
+	padding: 12px 22px;
+	cursor: pointer;
+	font-size: 15px;
+	letter-spacing: 0.5px;
+
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+
+/* 물 버튼 (파스텔 블루) */
+.bottom-right-buttons #waterbtn {
+	background: linear-gradient(145deg, #a5d8ff);
+	box-shadow: 0 6px 14px rgba(116, 192, 252, 0.25);
+}
+
+.bottom-right-buttons #waterbtn:hover {
+	background: linear-gradient(145deg, #74c0fc);
+	box-shadow: 0 8px 18px rgba(77, 171, 247, 0.35);
+}
+
+/* 비료 버튼 (모카 브라운) */
+.bottom-right-buttons .fertilizer-btn {
+	background: linear-gradient(145deg, #d8a373);
+	box-shadow: 0 6px 14px rgba(185, 122, 86, 0.25);
+}
+
+.bottom-right-buttons .fertilizer-btn:hover {
+	background: linear-gradient(145deg, #c58960);
+	box-shadow: 0 8px 18px rgba(156, 102, 68, 0.35);
+}
+
+/* 클릭 효과 (공통) */
+.bottom-right-buttons button:active {
+	transform: scale(0.95);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal.show {
+	display: block;
+}
+
+/* 추가 */
+.modal2 {
+	display: none;
+	/* 기본은 숨김 */
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+	/* 반투명 배경 */
+}
+
+.modalseed {
+	display: none;
+	position: fixed;
+	z-index: 500;
+	margin: 0;
+	padding: 5px;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal3 {
+	display: none;
+	position: fixed;
+	z-index: 1100;
+	margin: 0;
+	padding: 5px;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+	background-color: #fff;
+	margin: 15% auto;
+	padding: 30px;
+	border-radius: 10px;
+	width: 800px;
+	text-align: center;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+	position: relative;
+	text-align: center;
+	/* 모달창안에 x표시(닫기버튼) */
+}
+
+.modal-content2 {
+	background: #ffffff;
+	margin: 20px auto;
+	padding: 20px;
+	border-radius: 16px;
+
+	width: 85%;
+	max-width: 400px;
+
+	text-align: center;
+
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+	border: 1px solid #f0f0f0;
+
+	font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+}
+
+.counter {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+}
+
+.counter-btn {
+	width: 36px;
+	height: 36px;
+	border: none;
+	border-radius: 50%;
+	background: #f5f5f5;
+	color: #333;
+	font-size: 20px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.counter-btn:hover {
+	background: #e0e0e0;
+}
+
+.counter-value {
+	font-size: 18px;
+	font-weight: 600;
+	min-width: 24px;
+	text-align: center;
+	color: #333;
+}
+
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+	position: absolute;
+	right: 15px;
+	top: 10px;
+}
+
+.close:hover {
+	color: #000;
+}
+
+.soil {
+	display: block;
+	position: absolute;
+	top: 0;
+	width: 1000px;
+	height: 1000px;
+	object-fit: contain;
+	opacity: 0.8;
+	/* 사각형 모자이크 느낌을 위해 border-radius 제거 */
+}
+
+.tree-content {
+	position: relative;
+	/* absolute 요소 기준점으로만 사용 */
+	min-height: 100vh;
+	/* 화면 전체 높이 확보 */
+}
+
+.tree-page img {
+	max-width: 100%;
+	height: auto;
+}
+
+.site-logo img,
+.header img,
+.topbar img {
+	height: 40px;
+	width: auto;
+	object-fit: contain;
+}
+
+
+body.tree-page footer,
+body.tree-page .site-footer,
+body.tree-page .footer {
+	position: static !important;
+	margin-top: var(--footer-gap);
+}
+
+
+.tree-container p {
+	margin: 6px 0;
+}
+
+.tree-details {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	margin-top: 20px;
+	padding: 16px;
+	background: rgba(255, 255, 255, 0.7);
+	/* 반투명 박스 */
+	border-radius: 16px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* 레벨 표시 */
+.tree-details p {
+	font-size: 18px;
+	font-weight: bold;
+	color: #3b5d36;
+	margin: 0;
+}
+
+/* 경험치 바 */
+.bamboo-bar {
+	width: 200px;
+	height: 24px;
+	border-radius: 12px;
+	background: linear-gradient(145deg, #cce6b6, #a6d98c);
+	position: relative;
+	overflow: hidden;
+	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+	font-size: 12px;
+	color: #fff;
+	text-align: center;
+	line-height: 24px;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+.tree-details p,
+.tree-name {
+	background: linear-gradient(145deg, #eaffd5, #c5f0a4);
+	/* 연한 연두 그라데이션 */
+	padding: 10px 18px;
+	border-radius: 14px;
+	font-size: 18px;
+	font-weight: bold;
+	color: #2d5e26;
+	margin: 8px 0;
+	display: inline-block;
+	border: 2px solid #9ed989;
+	/* 테두리 */
+	box-shadow: 2px 3px 0 #7dbb68;
+	/* 살짝 픽셀 버튼 같은 그림자 */
+	letter-spacing: 1px;
+	text-shadow: 1px 1px 0 #fff;
+	/* 글씨 밝게 */
+	font-family: "Press Start 2P", "Arial", sans-serif;
+	/* 픽셀 글씨체 느낌 */
+}
+
+.side-buttons {
+	gap: 10px;
+}
+
+
+/* 모달 배경 */
+#randomeventpopup {
+	display: none;
+	/* 초기에는 숨김 */
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 50, 0, 0.6);
+	/* 자연 느낌 초록 반투명 */
+	backdrop-filter: blur(3px);
+	/* 약간 흐림 효과 */
+	font-family: 'Arial', sans-serif;
+}
+
+/* 모달 내용 */
+#randomeventpopup .modal-content {
+	background: linear-gradient(to bottom, #e8f5e9, #a5d6a7);
+	/* 연한 나무/초록색 그라데이션 */
+	margin: 10% auto;
+	padding: 20px 30px;
+	border: 3px solid #4caf50;
+	/* 진한 초록 테두리 */
+	border-radius: 15px;
+	width: 400px;
+	text-align: center;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	color: #2e7d32;
+	/* 텍스트 초록 계열 */
+}
+
+/* 모달 제목 */
+#randomeventpopup .modal-content h2 {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+/* 모달 설명 */
+#randomeventpopup .modal-content p {
+	font-size: 16px;
+	margin-bottom: 20px;
+}
+
+/* 버튼 공통 */
+#randomeventpopup .modal-content button {
+	background-color: #81c784;
+	/* 연초록 */
+	border: none;
+	color: white;
+	padding: 10px 18px;
+	margin: 5px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: all 0.2s;
+}
+
+/* 버튼 호버 효과 */
+#randomeventpopup .modal-content button:hover {
+	background-color: #4caf50;
+	/* 진초록으로 변함 */
+	transform: scale(1.05);
+}
+
+/* 닫기 버튼 */
+#randomeventpopup .close {
+	position: absolute;
+	top: 12px;
+	right: 15px;
+	color: #2e7d32;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: color 0.2s;
+}
+
+#randomeventpopup .close:hover {
+	color: #1b5e20;
+}
+
+
+/* 공통 팝업 배경 */
+.modalcom {
+	display: none;
+	/* 기본 숨김 */
+	position: fixed;
+	z-index: 1200;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+	/* 반투명 배경 */
+}
+
+/* 공통 팝업 박스 */
+.modalcom .modal-content {
+	background-color: #fff;
+	margin: 15% auto;
+	padding: 30px;
+	border-radius: 10px;
+	width: 800px;
+	/* 기본 팝업 폭 */
+	text-align: center;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+	position: relative;
+}
+
+/* 팝업 제목 */
+.modalcom .modal-content h1 {
+	font-size: 22px;
+	font-weight: bold;
+	color: #2d5e26;
+	/* 녹색 계열 */
+	margin-bottom: 20px;
+}
+
+/* 팝업 내 버튼 */
+.modalcom .modal-content .button {
+	display: inline-block;
+	margin-top: 20px;
+	padding: 10px 18px;
+	font-size: 15px;
+	font-weight: bold;
+	border: none;
+	border-radius: 8px;
+	background: linear-gradient(145deg, #a5d8ff, #74c0fc);
+	/* 파스텔 블루 */
+	color: #fff;
+	cursor: pointer;
+	transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.modalcom .modal-content .button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modalcom .modal-content .button:active {
+	transform: translateY(1px);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+

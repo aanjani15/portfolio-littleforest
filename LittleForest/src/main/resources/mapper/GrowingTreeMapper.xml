@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.GrowingTreeMapper">
+
+
+<select id="getAllStock" parameterType="int" resultType="com.fintecho.littleforest.vo.GrowingTreeVO">
+select * from growing_tree_table
+where user_id=#{user_Id}
+</select>
+
+<select id="ifTree" resultType="int" parameterType="int">
+select count(*) from growing_tree_table
+where user_id=#{user_Id}
+</select>
+
+<select id="getuserTree" resultType="com.fintecho.littleforest.vo.GrowingTreeVO">
+select * from growing_tree_table
+where user_id=#{user_Id}</select>
+
+<insert id="insertTree" parameterType="com.fintecho.littleforest.vo.GrowingTreeVO">
+insert into growing_tree_table(id,user_id,tree_level,tree_name,carbon_saved,water_count,water_stock,biyro_stock,last_updated)
+values(
+growing_tree_Seq.nextval,
+#{user_Id},
+1,
+#{tree_Name},
+0,
+0,
+0,
+0,
+SYSDATE
+)
+</insert>
+
+<insert id="insertStockByUserId" parameterType="com.fintecho.littleforest.vo.GrowingTreeVO">
+insert into growing_tree_table(id,user_id,tree_level,tree_name,carbon_saved,water_count,water_stock,biyro_stock,biyro_used_at,last_updated)
+values(
+growing_tree_Seq.nextval,
+#{user_Id},
+1,
+#{tree_Name},
+0,
+0,
+#{water_Stock},
+#{biyro_Stock},
+#{biyro_Used_At, jdbcType=DATE},
+SYSDATE
+)
+</insert>
+
+<update id="updatestock" parameterType="com.fintecho.littleforest.vo.GrowingTreeVO">
+update growing_tree_table set biyro_stock=biyro_stock + #{quantity} where user_id=#{user_Id}
+</update>
+
+<update id="updatews" parameterType="com.fintecho.littleforest.vo.GrowingTreeVO">
+update growing_tree_table set water_stock=water_stock+1 where user_id=#{user_Id}
+</update>
+
+<update id="updatewater" parameterType="com.fintecho.littleforest.vo.GrowingTreeVO">
+update growing_tree_table set water_stock=water_stock-1, water_count=water_count+1, last_updated=sysdate where user_id=#{user_Id}
+</update>
+
+<update id="updatelevel" parameterType="com.fintecho.littleforest.vo.GrowingTreeVO">
+update growing_Tree_table set tree_level=#{tree_Level} where user_id=#{user_Id}
+</update>
+
+<update id="updatebiyro" parameterType="com.fintecho.littleforest.vo.GrowingTreeVO">
+		update growing_Tree_table set biyro_stock=biyro_Stock-1,
+		biyro_used_at=sysdate where user_id=#{user_Id}
+		<!--=======
+update growing_Tree_table set biyro_stock=#{biyro_Stock}-1, biyro_used_at=sysdate where user_id=#{user_Id}
+>>>>>>> jinhee-->
+</update>
+<update id="updateburning" parameterType="com.fintecho.littleforest.vo.GrowingTreeVO">
+  <![CDATA[
+    UPDATE growing_Tree_table
+    SET water_stock=water_stock-1,water_count = water_count + 2
+    WHERE user_id = #{user_Id}
+      AND biyro_used_at IS NOT NULL
+      AND sysdate - biyro_used_at <= 3
+  ]]>
+</update>
+<delete id="deletetree" parameterType="GrowingTreeVO">
+delete from growing_tree_table where user_id=#{user_Id}
+</delete>
+</mapper>

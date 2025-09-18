@@ -1,0 +1,101 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.fintecho.littleforest.mapper.admin.AdminChatMapper">
+
+	<select id="getChatRoomNameById" parameterType="int" resultType="String">
+
+		SELECT name FROM chat_room_table WHERE user_id = #{id}
+
+	</select>
+
+	<select id="getLastMessageByChatRoomId" parameterType="int" resultType="String">
+		SELECT content
+		FROM (
+		SELECT content
+		FROM chat_message_table
+		WHERE chat_room_id = #{chat_Room_Id}
+		ORDER BY timestamp DESC
+		)
+		WHERE ROWNUM = 1
+
+	</select>
+	
+	<select id="getOtherUserByUserId" parameterType="int" resultType="int">
+	SELECT DISTINCT user_id
+	FROM chat_room_table
+	WHERE id IN (
+	    SELECT id 
+	    FROM chat_room_table 
+	    WHERE user_id = #{user_Id}
+	)
+	AND user_id &lt;&gt; <!-- <>, 포함하지 않다 라는 뜻 --> #{user_Id}
+	</select>
+	
+	<select id="getChatRoomDTO" parameterType="int" resultType="com.fintecho.littleforest.dto.ChatRoomDTO">
+		SELECT
+			mr.id                                     AS id,                   <!-- 채팅방 아이디 --> 
+			mr.name                                   AS name,                 <!-- 채팅방 이름 --> 
+			u.nickname                                AS other_User_Nickname,  <!-- 상대 유저 닉네임 -->
+		    u.profile_photo                           AS other_User_Profile,   <!-- 상대 유저 프로필 사진 -->
+		    lm.content                                AS last_Message          <!-- 해당 채팅방 마지막 채팅 -->
+		FROM (
+		<!-- 내가 속한 방 목록 현재는 고정값 -->
+		    SELECT DISTINCT id, name
+		    FROM chat_room_table
+		    WHERE user_id = #{user_Id}
+		) mr
+		JOIN chat_room_table o
+		  ON o.id = mr.id
+		 AND o.user_id &lt;&gt; <!-- <>, 포함하지 않다 라는 뜻 --> #{user_Id}   <!-- 나와 같은 방의 내가 아닌 참가자 Id 가져오기(상대 Id)-->
+		JOIN user_table u
+		  ON u.id = o.user_id <!-- 상대의 Id로 user_table에 join -->
+		LEFT JOIN (
+		<!-- 방별 최신 메시지 1건 -->
+		    SELECT chat_room_id, content, timestamp
+		    FROM (
+		        SELECT
+		            chat_room_id,
+		            content,
+		            timestamp,
+		            ROW_NUMBER() OVER (PARTITION BY chat_room_id ORDER BY timestamp DESC) AS rn
+		        FROM chat_message_table
+		    )
+		    WHERE rn = 1
+		) lm
+		  ON lm.chat_room_id = mr.id
+		ORDER BY lm.timestamp DESC NULLS LAST
+	</select>
+	
+	
+	<select id="getOtherUserInfoById" resultType="com.fintecho.littleforest.dto.ChatOtherUserDTO">
+		SELECT
+		  u.profile_photo AS other_User_Profile,
+		  u.nickname      AS other_User_Name
+		FROM (
+		  SELECT DISTINCT sender
+		  FROM chat_message_table
+		  WHERE sender &lt;&gt; #{user_Id}
+		  AND chat_room_id = #{room_Id}
+		) t
+		JOIN user_table u
+		  ON u.id = t.sender
+
+	</select>
+
+	<select id="countChatRoom" resultType="int">
+		SELECT COUNT(*)
+    	FROM chat_room_table
+    	WHERE user_id=#{user_Id}
+	</select>
+
+	<insert id = "insertChatRoom">
+		INSERT INTO chat_room_table 
+		VALUES (chat_room_seq.NEXTVAL, '유저와 채팅', #{user_Id})
+	</insert>
+
+	<insert id = "insertChatRoomAdmin">
+		INSERT INTO chat_room_table 
+		VALUES (chat_room_seq.CURRVAL, '유저와 채팅', 2)
+	</insert>
+	
+</mapper>

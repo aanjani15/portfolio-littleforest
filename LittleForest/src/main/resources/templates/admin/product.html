@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<meta name="_csrf" th:content="${_csrf.token}">
+<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+<body th:replace="~{admin/layout :: layout(~{::section}, ~{::#page-scripts})}">
+
+	<section>
+		<div class ="product-form">
+			<div>상품 만들기</div>
+			
+			사진(선택) <input type="file" id="productPhoto">
+			<div><input id="name" type="text" placeholder="상품 이름" /></div>
+			<div><input id="price" type="text" placeholder="가격" /></div>
+			<div><input id="category" type="text" placeholder="카테고리" /></div>
+			<div><input id="des" type="text" placeholder="상품 설명" /></div>
+		</div>
+		<button id= "makeButton">만들기</button>
+		
+		<script>
+		
+		document.addEventListener("DOMContentLoaded", () => {
+			  const makeButtonElement = document.getElementById("makeButton");
+			  const imageUploadButtonElement = document.getElementById("imgUploadButton");
+			  const imageFileInputElement = document.getElementById("productPhoto");
+
+			  makeButtonElement?.addEventListener("click", handleCreateProduct);
+			  // 필요 시 이미지 업로드 단독 버튼 로직도 추가하세요.
+			  // imageUploadButtonElement?.addEventListener("click", handleOnlyImageUpload);
+			});
+
+			async function uploadImageToCloudinary(imageFile) {
+			  const cloudinaryCloudName = "dkaeihkco";
+			  const cloudinaryUnsignedUploadPreset = "community";
+			  const cloudinaryApiUrl = `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`;
+
+			  const formData = new FormData();
+			  formData.append("upload_preset", cloudinaryUnsignedUploadPreset);
+			  formData.append("file", imageFile);
+
+			  const response = await fetch(cloudinaryApiUrl, { method: "POST", body: formData });
+			  if (!response.ok) {
+			    const responseBodyText = await response.text().catch(() => "");
+			    throw new Error("Cloudinary 업로드 실패: " + response.status + " " + responseBodyText);
+			  }
+
+			  const responseData = await response.json();
+			  if (!responseData.secure_url) {
+			    throw new Error("Cloudinary 응답에 secure_url이 존재하지 않습니다.");
+			  }
+			  return responseData.secure_url;
+			}
+
+			async function handleCreateProduct(event) {
+			  event?.preventDefault();
+
+			  const makeButtonElement = document.getElementById("makeButton");
+			  const imageFileInputElement = document.getElementById("productPhoto");
+
+			  if (makeButtonElement) {
+			    makeButtonElement.disabled = true;
+			    makeButtonElement.textContent = "만드는 중...";
+			  }
+
+			  let imageSecureUrl = "";
+			  try {
+			    const selectedImageFile = imageFileInputElement?.files?.[0] ?? null;
+			    if (selectedImageFile) {
+			      // 업로드가 끝날 때까지 대기 → 완료 후에만 서버로 전송됨
+			      imageSecureUrl = await uploadImageToCloudinary(selectedImageFile);
+			    }
+
+			    const productPayload = {
+			      name:       document.getElementById("name")?.value.trim() ?? "",
+			      price:      Number(document.getElementById("price")?.value ?? 0),
+			      category:   document.getElementById("category")?.value.trim() ?? "",
+			      des:        document.getElementById("des")?.value.trim() ?? "",
+			      image_Path: imageSecureUrl,
+			    };
+
+			    const csrfTokenMetaElement = document.querySelector('meta[name="_csrf"]');
+			    const csrfHeaderNameMetaElement = document.querySelector('meta[name="_csrf_header"]');
+			    const csrfToken = csrfTokenMetaElement ? csrfTokenMetaElement.getAttribute("content") : null;
+			    const csrfHeaderName = csrfHeaderNameMetaElement ? csrfHeaderNameMetaElement.getAttribute("content") : null;
+
+			    const requestHeaders = { "Content-Type": "application/json" };
+			    if (csrfToken && csrfHeaderName) {
+			      requestHeaders[csrfHeaderName] = csrfToken; 
+			    }
+
+			    const response = await fetch("/admin/product/make", {
+			      method: "POST",
+			      headers: requestHeaders,
+			      credentials: "same-origin",
+			      body: JSON.stringify(productPayload),
+			    });
+
+			    const responseBodyText = await response.text(); 
+			    if (!response.ok) {
+			      throw new Error(`서버 오류 ${response.status}: ${responseBodyText}`);
+			    }
+
+			    console.log("상품 생성 성공:", responseBodyText);
+			    alert("상품이 생성되었습니다.");
+			    window.location.reload();
+			    
+			  } catch (error) {
+			    console.error(error);
+			    alert("에러: " + (error?.message ?? String(error)));
+			  } finally {
+			    if (makeButtonElement) {
+			      makeButtonElement.disabled = false;
+			      makeButtonElement.textContent = "만들기";
+			    }
+			  }
+			}
+		</script>
+				
+		<th:block id="page-scripts"></th:block>
+	</section>
+</body>
+
+</html>

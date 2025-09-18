@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Little Forest</title>
+	<link rel="stylesheet" th:href="@{/css/tree.css}" />
+	<link rel="stylesheet" th:href="@{/css/levelbar.css}" />
+	<link rel="stylesheet" th:href="@{/css/mainpagestyle.css}" />
+	<link rel="stylesheet" th:href="@{/css/attendance.css}">
+
+	<!-- FullCalendar (attendance 전용) -->
+	<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body class="tree-page">
+
+	<input type="hidden" id="id" name="id" th:value="${users.id}" />
+
+	<!-- 페이지 상단 제목 -->
+	<h1 class="page-title">
+		자라나라 나무나무 !!
+	</h1>
+	<!-- 햇살 & 구름 -->
+	<div class="sun"></div>
+
+	<!-- 다운받은 구름 이미지 -->
+	<img src="/image/cloud2.png" class="cloud cloud1" alt="구름1">
+	<img src="/image/cloud2.png" class="cloud cloud2" alt="구름2">
+	<img src="/image/cloud2.png" class="cloud cloud3" alt="구름3">
+
+	<main class="tree-content">
+
+		<div class="side-buttons">
+			<button class="button" onclick="openAttendanceModal()">
+				<img src="/image/check.png" alt="출석 아이콘" class="btn-icon"> 출석 체크
+			</button>
+
+			<button class="button" onclick="openInfoModal()">
+				<img src="/image/notice.png" alt="안내사항 아이콘" class="btn-icon"> 이용 안내
+			</button>
+			<button class="button" id="community">
+				<img src="/image/antenna.png" alt="커뮤니티 아이콘" class="btn-icon"> 커뮤니티
+			</button>
+			<button class="button" id="historyBtn">
+				<img src="/image/treeicon.png" alt="나무일지 아이콘" class="btn-icon"> 나의 나무 일지
+			</button>
+			<div th:if="${iftree}">
+				<button class="button" id="buy">
+					<img src="/image/biryo.png" alt="비료구매 아이콘" class="btn-icon"> 비료 구매
+				</button>
+			</div>
+			<div th:if="${iftree}">
+				<button class="button" id="water">
+					<img src="/image/water.png" alt="물 받기 아이콘" class="btn-icon">
+					물 받기<br><span id="giver">0</span><br><span id="timewatch">타이머</span>
+				</button>
+			</div>
+			<div th:if="${iftree}">
+				<button class="button" onclick="location.href='/'">
+					<img src="/image/home.png" alt="홈으로 가기 아이콘" class="btn-icon">
+					<span id="home">홈으로 가기</span>
+				</button>
+			</div>
+		</div>
+
+		<div class="tree-container">
+			<div th:if="${iftree}">
+				<div class="tree_location">
+					<div class="waterjson" id="waterjson" style="display:none">
+						<lottie-player src="/json/Watering.json" background="transparent" speed="2"
+							style="width:100%; height:100%;" loop autoplay></lottie-player>
+					</div>
+					<!--<img class="tree_img" id="tree_img" th:src="@{${tree_Image}}">
+
+					<div class="speech-bubble">나 오늘도 쑥쑥~ 🌱</div>-->
+
+					<div class="speech-bubble">나 오늘도 쑥쑥~ 🌱</div>
+					<div class="image_wrap">
+						<div id="son7">
+							<img class="tree_img" id="tree_img" th:src="@{${tree_Image}}">
+						</div>
+						<div class="meadow">
+
+						</div>
+					</div>
+
+					<div id="soil-container"
+						style="position:absolute; width:100px; height:400px; bottom:30%; overflow:hidden; pointer-events:none; background:transparent; display:none;">
+						<img class="soil" src="/image/비료.png">
+					</div>
+				</div>
+
+				<div class="tree-details">
+					<div id="son77">
+						<p>
+							레벨 <span id="tree_Level" th:text="${stock.tree_Level}">0</span>
+						</p>
+					</div>
+					<div class="bamboo-bar" id="bambooBar">경험치</div>
+				</div>
+
+				<p class="tree-name">나무이름 : <span th:text="${stock.tree_Name}">나무</span></p>
+				<input type="hidden" id="water_Count" name="water_Count" th:value="${stock.water_Count}">
+			</div>
+
+			<div th:unless="${iftree}">
+				<div class="tree-image-placeholder" id="wantseed">씨앗을 심어주세요</div>
+				<div class="center-bottom-button">
+					<button class="button" id="seed">씨앗 심기</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="bottom-right-buttons" th:if="${iftree}">
+			<button class="button fertilizer-btn" id="biyrobtn">
+				<img src="/image/givebiryo.png" alt="비료 아이콘" class="btn-icon">
+				<div class="btn-text">
+					<input type="hidden" id="biyro_Used_At" name="biyro_Used_At"
+						th:value="${#dates.format(stock.biyro_Used_At,'yyyy-MM-dd HH:mm:ss')}">
+					<div id="biyrotimer">타이머</div>
+					보유 비료 : <span id="biyro_Stock" th:text="${stock.biyro_Stock}">0</span><br> 비료 주기
+				</div>
+			</button>
+			<button class="button" id="waterbtn">
+				<img src="/image/givewater.png" alt="물 아이콘" class="btn-icon">
+				<div class="btn-text">
+					보유 물: <span id="water_Stock" th:text="${stock.water_Stock}">0</span><br> 물 주기
+				</div>
+			</button>
+		</div>
+
+		<!-- 팝업창 -->
+		<div id="popupModal" class="modal" th:if="${iftree}">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h2><span th:text="${users.nickname}">닉네임</span></h2>
+				<p>
+					비료 재고 : <span id="biyroStockm" th:text="${stock.biyro_Stock}">0</span>
+				</p>
+				<p>
+					보유 포인트 : <span id="point" th:text="${users.point}">0</span>
+				</p>
+				<div class="modal-content2">
+					<p><img src="/image/비료.png" width="80px" height="100px"></p>
+					가격 :<span id="price">500</span>p<br>
+					<div class="counter">
+						<button id="minus" class="counter-btn">−</button>
+						<span id="soo" class="counter-value">1</span>
+						<button id="plus" class="counter-btn">＋</button>
+					</div>
+				</div>
+				<button class="button" id="purchase">구매</button>
+			</div>
+		</div>
+
+		<!-- 나무심기 팝업창 -->
+		<div id="popupseed" class="modalseed" th:unless="${iftree}">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h1>키우고 싶은 나무의 이름을 적어주세요</h1>
+				<input type="text" name="tree_Name" id="tree_Name" required maxlength="5">
+				<button class="button" id="treenaming">이름 등록</button>
+			</div>
+		</div>
+
+		<!-- 이용안내 모달 -->
+		<div id="infoModal" class="modal">
+			<div class="modal-content">
+				<span class="close" onclick="closeInfoModal()">&times;</span>
+				<h3>이용 안내</h3>
+				<p>- 출석 체크 시 평일: 물 1개, 주말: 물 2개 지급</p>
+				<p>- 10/20/30일 출석마다 비료 1개 지급</p>
+				<p>- 물 → 성장률 증가, 비료 → 물 줄 때 성장률 2배</p>
+			</div>
+		</div>
+
+		<!-- 레벨7 달성시 팝업창 -->
+		<div id="congrulationpopup" class="modal2">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<p>축하합니다. 레벨 7 달성!</p>
+				<p>나무를 다시 키우시겠습니까?</p>
+				<button class="button" id="morebtn">다시 키우기</button>
+				<button class="button" id="nobtn">거절</button>
+			</div>
+		</div>
+
+		<div id="son7_pose" class="modal2">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<p>나무 사진을 저장하겠습니까?</p>
+				<p>찍기 버튼을 누를시 스크린샷 미리페이지 보기로 이동</p>
+				<p>사진 찍기 거부시 다시키우기 화면으로 이동</p>
+				<button class="button" id="sontrue">찍기</button>
+				<button class="button" id="sonfalse">사진찍기 거부</button>
+			</div>
+		</div>
+
+		<!-- 스크린샷 미리보기 창-->
+		<div id="beforeServer" class="modal2">
+			<div class="modal-content5">
+				<span class="close">&times;</span>
+				<p align="center">사진이 맘에 안드신다면 &times;버튼을 눌러주세요.</p>
+				<div id="preview"></div>
+				<button class="button" id="goodBtn">사진 확정</button>
+			</div>
+		</div>
+		<!--랜덤이벤트 팝업창 -->
+		<div id="randomeventpopup" th:if="${iftree}">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h1 align="center"><span th:text="${users.nickname}">닉네임</span>님!!</h1>
+				<h1 align="center">키우시는 나무에 잡초가 자라났어요! 잡초를 제거해 주세요!</h1>
+				<button type="button" id="adbtn">광고보고 잡초제거</button>
+				<button type="button" id="removebtn">100포인트 쓰고 잡초제거</button><br>
+				현재 보유 포인트 : <span th:text="${users.point}" id="point0">남은금액</span> P<br>
+				<span style="font-size:15px; text-align:center">선택 1. 광고를 보고 잡초를 제거한다 (포인트 차감 X)</span><br>
+				<span style="font-size:15px; text-align:center">선택 2. 100포인트를 쓰고 잡초를 제거한다 (포인트 차감 O)</span>
+			</div>
+		</div>
+		<div id="completepopup" class="modalcom" th:if="${iftree}">
+			<div class="modal-content">
+				<h1 align="center">잡초제거에 성공하였습니다</h1>
+				<div id="pointHtml"></div>
+				<button class="button" id="sucbtn">확인</button>
+			</div>
+		</div>
+		<div id="purchasepopup" class="modalcom" th:if="${iftree}">
+			<div class="modal-content">
+				<h1 align="center">비료구매 성공하였습니다</h1>
+				<div id="pointHtml2"></div>
+				<button class="button" id="sucbtn2">확인</button>
+			</div>
+		</div>
+		<div id="lessthenpopup" class="modalcom" th:if="${iftree}">
+			<div class="modal-content">
+				<h1 align="center">포인트가 부족합니다</h1>
+				<div id="pointHtml3"></div>
+				<button class="button" id="sucbtn3">포인트 충전하러 가기</button>
+				<button class="button" id="sucbtn4">확인</button>
+			</div>
+		</div>
+		<div id="stock0popup" class="modalcom" th:if="${iftree}">
+			<div class="modal-content">
+				<h1 align="center">비료 재고 부족</h1>
+				<div id="pointHtml4"></div>
+				<button class="button" id="sucbtnb2">확인</button>
+			</div>
+		</div>
+		<div id="stock0popupw" class="modalcom" th:if="${iftree}">
+			<div class="modal-content">
+				<h1 align="center">물 재고 부족</h1>
+				<div id="pointHtml5"></div>
+				<button class="button" id="sucbtnb5">확인</button>
+			</div>
+		</div>
+
+		<div id="biyroLimitModal" class="modalcom" th:if="${iftree}" style="display:none;">
+			<div class="modal-content">
+				<h1 align="center">아직 비료 재사용 시간이 되지 않았습니다.</h1>
+				<button class="button" id="biyroLimitOk">확인</button>
+			</div>
+		</div>
+
+
+		<div th:replace="~{fragments/attendance :: modal(user=${users})}"></div>
+
+		<!-- 스크립트 -->
+		<script th:src="@{/js/attendance.js}"></script>
+		<script src="/js/info.js"></script>
+		<script src="/js/seed.js"></script>
+		<!--<script src="/js/treesize.js"></script>-->
+		<script src="/js/time.js"></script>
+		<script src="/js/water.js"></script>
+		<script src="/js/community.js"></script>
+		<script src="/js/purchase.js"></script>
+		<script src="/js/biyrousedat.js"></script>
+		<script src="/js/randomevent.js"></script>
+		<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+		<script src="/js/biyrojs.js"></script>
+		<script src="/js/grownhistory.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/party-js@latest/dist/party.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+	</main>
+</body>
+
+</html>

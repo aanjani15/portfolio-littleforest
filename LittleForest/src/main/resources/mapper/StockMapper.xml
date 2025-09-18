@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.StockMapper">
+<select id="getSaveStock" parameterType="StockVO">
+select * from stock_table where user_id=#{user_Id}
+</select>
+
+<select id="getOneSaveStock" parameterType="StockVO">
+select * from stock_table where user_id=#{user_Id}
+</select>
+
+<insert id="insertStock" parameterType="StockVO">
+insert into stock_table values(stock_seq.nextval, #{user_Id}, #{biyro_Stock},#{water_Stock},#{biyro_Used_At, jdbcType=DATE},
+sysdate,sysdate)
+	</insert>
+<update id="updateStock" parameterType="StockVO">
+update stock_table set biyro_stock=#{biyro_Stock}, water_Stock=#{water_Stock}, biyro_used_At=#{biyro_Used_At, jdbcType=DATE}, update_date=sysdate
+where user_id=#{user_Id}
+</update>
+</mapper>

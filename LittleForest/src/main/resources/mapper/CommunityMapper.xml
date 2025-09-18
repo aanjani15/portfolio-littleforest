@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.CommunityMapper">
+
+	<select id="selectCommunity" parameterType="CommunityVO">
+		select * from community_table order by id desc
+	</select>
+	<select id="selectCommunityasc" parameterType="CommunityVO">
+		select * from community_table order by id asc
+	</select>
+
+	<select id="selectUserCommunity" parameterType="CommunityVO">
+		select * from community_table where user_id=#{user_Id}
+	</select>
+
+<select id="selectTypeCommunity" parameterType="map" resultType="CommunityVO">
+  select c.id, c.user_id,c.type,c.title,c.content,c.created_At,c.photo,c.likes,u.id as user_table_id,u.nickname
+  from community_table c left outer join user_table u on c.user_id=u.id
+    <where>
+    <if test="userId!=null">
+    user_id=#{user_Id}
+    </if>
+        <if test="type != null and type.size() > 0">
+          "TYPE" IN
+            <foreach item="t" collection="type" open="(" separator="," close=")">
+                #{t}
+            </foreach>
+        </if>
+    </where>
+    <choose>
+        <when test="sort != null and sort=='asc'">
+            ORDER BY id ASC
+        </when>
+        <when test="sort != null and sort=='desc'">
+            ORDER BY id DESC
+        </when>
+        <when test="sort != null and sort=='likes'">
+            ORDER BY likes DESC
+        </when>
+        <otherwise>
+            ORDER BY id DESC
+        </otherwise>
+    </choose>
+</select>
+
+
+	<select id="selectlikesCommunity" parameterType="CommunityVO">
+		select * from community_table order by likes desc
+	</select>
+
+	<select id="selectOneCommunity" parameterType="CommunityVO">
+		 select c.id, c.user_id,c.type,c.title,c.content,c.created_At,c.photo,c.likes,u.id as user_table_id,u.nickname
+  from community_table c left outer join user_table u on c.user_id=u.id where c.id=#{id}
+	</select>
+
+	<select id="selectOwnCommunity" parameterType="CommunityVO">
+		select * from community_table where id=#{id} and user_id=#{user_Id}
+	</select>
+	<insert id="insertCommunity" parameterType="CommunityVO">
+		insert into community_table values(
+		community_seq.nextval,
+		#{user_Id},
+		#{type},
+		#{title},
+		#{content},
+		sysdate,
+		#{photo,jdbcType=VARCHAR},
+		0)
+	</insert>
+
+	<update id="updateCommunity" parameterType="CommunityVO">
+		update community_table set
+		type=#{type},title=#{title},content=#{content},created_at=sysdate,
+		photo=#{photo,jdbcType=VARCHAR} where id=#{id} and user_id=#{user_Id}
+	</update>
+
+	<delete id="deleteCommunity" parameterType="CommunityVO">
+		delete from community_table where id=#{id} and user_id=#{user_Id}
+	</delete>
+	<delete id="deleteAdmin" parameterType="CommunityVO">
+	delete from community_table where id=#{id}
+	</delete>
+
+	<update id="updatelikesplus" parameterType="CommunityVO">
+		update community_table set likes=likes+1 where id=#{id}
+	</update>
+
+	<update id="updatelikesminus" parameterType="CommunityVO">
+		update community_table set likes=likes-1 where id=#{id}
+	</update>
+
+	<select id="finallyTest" parameterType="CommunityVO">
+		select likes from community_table where id=#{id}
+	</select>
+</mapper>

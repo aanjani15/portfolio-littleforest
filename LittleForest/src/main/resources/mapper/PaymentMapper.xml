@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fintecho.littleforest.mapper.PaymentMapper">
+
+
+<resultMap id="paymentMap" type="com.fintecho.littleforest.vo.PaymentVO">
+  <id     property="id"         column="id"/>
+  <result property="tran_At"    column="tran_at"/>
+  <result property="type"       column="type"/>
+  <result property="amount"     column="amount"/>
+  <result property="description" column="description"/>
+  <result property="bank_Name"  column="bank_name"/>
+  <result property="earnedPoint" column="earned_point"/>
+  <!-- 09.02결제로 절감된 kg -->
+    <result property="savedEmission" column="saved_emission"/>
+</resultMap>
+
+<!-- Emission 계산 공통 조각 p는 payment_table의 별칭-->
+<!-- 결제 설명(p.description)에서 수량을 뽑아 g 단위로 계산(정수) -->
+  <sql id="calcEmissionGramInt">
+    NVL((
+      SELECT ROUND(pr.coef *
+             CASE
+               WHEN pr.unit = 'CASE' THEN 1
+               WHEN pr.unit IN ('KM','KG') THEN
+                 NVL(TO_NUMBER(
+                       REGEXP_SUBSTR(
+                         DBMS_LOB.SUBSTR(p.description, 4000, 1),
+                         '([0-9]+(\.[0-9]+)?)', 1, 1, 'i', 1
+                       )
+                     ), 0)
+               ELSE 0
+             END)
+        FROM (
+          SELECT keyword, unit, co2_g_per_unit AS coef
+            FROM point_rule_table
+           WHERE INSTR(DBMS_LOB.SUBSTR(p.description, 4000, 1), keyword) > 0
+           ORDER BY LENGTH(keyword) DESC
+           FETCH FIRST 1 ROWS ONLY
+        ) pr
+    ), 0)
+  </sql>
+  
+ <!-- kg(표시용) : g/1000.0 -->
+  <sql id="calcEmissionKg">
+    ( <include refid="calcEmissionGramInt"/> / 1000.0 )
+  </sql>
+  
+
+	<!--p.id, 추가 09.02  -->
+	<select id="getPaymentListByUserId" resultMap="paymentMap">
+	  SELECT 
+	  	p.id,
+	    p.tran_at,
+	    p.type,
+	    p.amount,
+	    p.description,
+	    w.bank_name 
+	  FROM payment_table p
+	  JOIN wallet_table w ON p.wallet_id = w.id
+	  WHERE w.user_id = #{userId}
+	  ORDER BY p.tran_at DESC
+	</select>
+
+<!-- 결제내역 + 포인트 계산 -->
+  <!-- 결제 + 적립포인트 + 이번 결제로 절감된 탄소(kg 표시) -->
+<select id="selectPaymentWithPoints" parameterType="int" resultMap="paymentMap">
+    SELECT
+      p.id,
+      p.tran_at,
+      p.type,
+      p.amount,
+      DBMS_LOB.SUBSTR(p.description, 4000, 1) AS description,
+      w.bank_name,
+      NVL((
+        SELECT MAX(
+                 CASE r.unit
+                   WHEN 'CASE' THEN r.reward
+                   WHEN 'KM'   THEN NVL(TO_NUMBER(REGEXP_SUBSTR(DBMS_LOB.SUBSTR(p.description, 4000, 1),'([0-9]+)[[:space:]]*km',1,1,NULL,1)),0) * r.reward
+                   WHEN 'KG'   THEN NVL(TO_NUMBER(REGEXP_SUBSTR(DBMS_LOB.SUBSTR(p.description, 4000, 1),'([0-9]+)[[:space:]]*kg',1,1,NULL,1)),0) * r.reward
+                   ELSE 0
+                 END
+               )
+          FROM point_rule_table r
+         WHERE INSTR(DBMS_LOB.SUBSTR(p.description, 4000, 1), r.keyword) > 0
+      ), 0) AS earned_point,
+      <include refid="calcEmissionKg"/> AS saved_emission
+    FROM payment_table p
+    JOIN wallet_table w ON w.id = p.wallet_id
+    WHERE w.user_id = #{userId}
+    ORDER BY p.tran_at DESC, p.id DESC
+  </select>
+
+<insert id = "InsertPaymentByShop">
+
+	INSERT INTO payment_table VALUES(
+		payment_seq.nextval,
+		#{wallet_Id},
+		#{product_Id},
+		#{amount},
+		'desopit',
+		'리틀 포레스트 샵 이용',
+		SYSTIMESTAMP )
+
+</insert>
+
+  
+ <!-- emission 테이블 upsert : 저장은 g 단위 정수 -->
+   <update id="upsertEmissionsForUser">
+    MERGE INTO emission_table e
+    USING (
+      SELECT
+        w.user_id,
+        <include refid="calcEmissionGramInt"/> AS emission,
+        p.tran_at AS emission_date,
+        p.id      AS payment_id
+      FROM payment_table p
+      JOIN wallet_table w ON w.id = p.wallet_id
+      WHERE w.user_id = #{userId}
+        AND <include refid="calcEmissionGramInt"/> > 0
+    ) src
+    ON (e.payment_id = src.payment_id)
+    WHEN MATCHED THEN UPDATE SET
+      e.emission      = src.emission,
+      e.emission_date = src.emission_date
+    WHEN NOT MATCHED THEN
+      INSERT (user_id, emission, emission_date, payment_id)
+      VALUES (src.user_id, src.emission, src.emission_date, src.payment_id)
+  </update>
+  
+    
+</mapper>
+
+
+

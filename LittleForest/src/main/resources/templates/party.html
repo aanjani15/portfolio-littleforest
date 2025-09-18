@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>Party.js Test</title>
+</head>
+<body>
+
+<button id="celebrateBtn">축하하기!</button>
+
+<script src="https://cdn.jsdelivr.net/npm/party-js@latest/dist/party.min.js"></script>
+<script>
+  document.getElementById('celebrateBtn').addEventListener('click', () => {
+    party.confetti(document.getElementById('celebrateBtn'), {
+      count: party.variation.range(30, 50),
+      spread: 90,
+    });
+  });
+</script>
+
+</body>
+</html>

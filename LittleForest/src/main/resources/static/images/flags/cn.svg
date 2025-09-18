@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600">
+  <rect width="900" height="600" fill="#de2910"></rect>
+  <g fill="#ffde00" transform="translate(150,120)">
+    <polygon points="0,0 24,0 30,-24 36,0 60,0 40,14 48,36 30,22 12,36 20,14"></polygon>
+  </g>
+  <!-- 보조별 간략 배치 -->
+  <g fill="#ffde00">
+    <polygon transform="translate(240,60) rotate(20)" points="0,0 14,0 18,-14 22,0 36,0 24,9 28,24 18,16 8,24 12,9"></polygon>
+    <polygon transform="translate(280,110) rotate(45)" points="0,0 14,0 18,-14 22,0 36,0 24,9 28,24 18,16 8,24 12,9"></polygon>
+    <polygon transform="translate(280,170) rotate(0)" points="0,0 14,0 18,-14 22,0 36,0 24,9 28,24 18,16 8,24 12,9"></polygon>
+    <polygon transform="translate(240,220) rotate(-20)" points="0,0 14,0 18,-14 22,0 36,0 24,9 28,24 18,16 8,24 12,9"></polygon>
+  </g>
+</svg>

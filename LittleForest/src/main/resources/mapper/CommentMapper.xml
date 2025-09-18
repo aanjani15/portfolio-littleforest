@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.CommentMapper">
+<select id="selectComment" parameterType="CommentVO">
+select * from comment_table where community_id=#{community_Id} order by id desc
+</select>
+<select id="selectUserComment" parameterType="CommentVO">
+select * from comment_table where user_id=#{user_Id} order by id desc
+</select>
+<insert id="insertComment" parameterType="CommentVO">
+insert into comment_table values(comment_seq.nextval, #{user_Id},#{community_Id},#{comment_Id},sysdate,0)
+</insert>
+
+<select id="countComment" parameterType="int" resultType="int">
+select count(*) from comment_table where community_id=#{community_Id}
+</select>
+<update id="updateComment" parameterType="CommentVO">
+update comment_table set comment_id=#{comment_Id}, created_at=sysdate where id=#{id} and user_id=#{user_Id} and community_id=#{community_Id}
+</update>
+<delete id="deleteComment" parameterType="CommentVO">
+delete from comment_table where id=#{id} and user_Id=#{user_Id} and community_id=#{community_Id}</delete>
+<delete id="deleteadmin2" parameterType="commentVO">
+    DELETE FROM comment_table c
+    WHERE c.id = #{id}
+      AND EXISTS (
+          SELECT 1
+          FROM user_table u
+          WHERE u.id = #{user_Id}   -- 현재 로그인한 사용자 id
+            AND u.role = 'ADMIN'
+      )
+</delete>
+<delete id="deleteCommentAll" parameterType="CommentVO">
+delete from comment_Table where community_id=#{community_Id}
+</delete>
+<select id="selectOneComment" parameterType="CommentVO">
+select * from comment_table where id=#{id}</select>
+
+<update id="updatelikesplus2" parameterType="CommentVO">
+update comment_table set likes=likes+1 where id=#{id} and user_id=#{user_Id}
+</update>
+<update id="updatelikesminus2" parameterType="CommentVO">
+update comment_table set likes=likes-1 where id=#{id} and user_id=#{user_Id}
+</update>
+<select id="total" parameterType="CommentVO">
+select * from comment_table where id=#{id}</select>
+</mapper>

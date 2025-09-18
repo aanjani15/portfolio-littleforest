@@ -1,0 +1,23 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.admin.AdminUserMapper">
+
+  <select id="findAdminById" parameterType="int"
+          resultType="com.fintecho.littleforest.vo.UserVO">
+    SELECT
+      id,
+      oauth_id       AS oauth_Id,
+      password       AS password,        
+      name,
+      role,
+      badge,
+      TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_At,
+      address,
+      nickname,
+      point,
+      profile_photo  AS profile_Photo
+    FROM user_table
+    WHERE id = #{id}
+      AND role = 'admin'
+  </select>
+
+</mapper>

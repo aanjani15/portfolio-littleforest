@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>1:1문의</title>
+	<link rel="stylesheet" href="/css/inquery.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="/css/style.css"> <!-- 공통 header/footer용 -->
+
+</head>
+
+<body>
+	<!-- 공통 header 삽입 -->
+	<div th:replace="fragments/header :: header"></div>
+	<h1 align="center">1:1문의</h1>
+	<div class="YourInquery">
+		<div th:each="in, iterStat:${inquery}" class="YourOneInquery">
+			<input type="hidden" name="id" class="inqueryId" th:value="${in.id}">
+			<input type="hidden" name="user_Id" class="inqueryUserId" th:value="${in.user_Id}">
+
+			<!-- 닉네임 + 카테고리 -->
+			<div class="YourOneInquery-header">
+				<span class="YourOneInquery-nickname" th:text="${in.nickname}">닉네임</span>
+				<span class="YourOneInquery-category" th:text="${in.category}">카테고리</span>
+				<span class="YourOneInquery-date" th:text="${#dates.format(in.created_At,'yyyy-MM-dd HH:mm')}">날짜</span>
+			</div>
+
+			<!-- 제목 -->
+			<div class="YourOneInquery-title" th:text="${in.title}">제목</div>
+
+			<!-- 내용 -->
+			<div class="YourOneInquery-content" th:text="${in.content}">내용</div>
+
+			<!-- 버튼 -->
+			<div th:if="${in.user_Id==user.id}">
+				<button class="inqueryU">문의수정</button>
+				<button class="inqueryD">문의삭제</button>
+			</div>
+			<div th:unless="${in.user_Id==user.id}">
+				없엉
+			</div>
+			<div th:each="an, iterStat:${answer}" class="oneAnswer">
+				<div th:if="${an.inquery_Id==in.id}">
+					<input type="hidden" name="id" class="aid" th:value="${an.id}">
+					- <span th:text="${an.nickname}">닉네임</span>
+					<span th:text="${an.content}">답변</span>
+					<div th:if="${an.nickname!=user.nickname}">
+						<button class="answerAdminBtn">답변달기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<button class="button" id="inqueryI">문의 등록</button>
+	<div style="text-align:center;"><span id="careful" style="cursor:pointer">주의사항보기</span></div>
+	<div id="inqueryUPopup" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h3 align="center"><span id="readupdater" style="cursor: pointer;">수정시 주의사항</span><-- 선택</h3>
+					<div id="htmlupdater"></div>
+					<input type=hidden id="iid">
+					<input type="hidden" id="iuserId">
+					<span th:text id="inickname">닉네임</span>
+					<select id="icategory">
+						<option value="">--선택--</option>
+						<option value="개인정보">개인정보</option>
+						<option value="나무키우기">나무키우기</option>
+						<option value="커뮤니티">커뮤니티</option>
+						<option value="포인트">포인트</option>
+						<option value="이벤트">이벤트</option>
+						<option value="지갑">지갑</option>
+						<option value="기타">기타</option>
+					</select><br>
+					<input type="text" name="title" id="ititle"><br>
+					<textarea cols="20" rows="5" name="content" id="icontent"></textarea><br>
+					<button class="button" id="resetreset">초기화</button>
+					<button class="button" id="inqueryUp">수정하기</button>
+		</div>
+	</div>
+	<div id="inqueryIPopup" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h3 align="center"><span id="readregister" style="cursor: pointer;">등록시 주의사항</span><-- 선택</h3>
+					<div id="htmlregister"></div>
+					<span th:text="${user.nickname}" id="iqnickname">닉네임</span>
+					<select id="iqcategory">
+						<option value="">--선택--</option>
+						<option value="개인정보">개인정보</option>
+						<option value="나무키우기">나무키우기</option>
+						<option value="커뮤니티">커뮤니티</option>
+						<option value="포인트">포인트</option>
+						<option value="이벤트">이벤트</option>
+						<option value="지갑">지갑</option>
+						<option value="기타">기타</option>
+					</select><br>
+					<input type="text" name="title" id="iqtitle" placeholder="제목을 입력해주세요"><br>
+					<textarea cols="20" rows="5" name="content" id="iqcontent" placeholder="내용을 입력해주세요"></textarea><br>
+					<button class="button" id="inqueryIn">등록하기</button>
+		</div>
+	</div>
+	<div class="modal" id="carefulPopup">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			📌 1:1 문의 작성 안내<br><br>
+			문의는 최대한 구체적으로 작성해주세요.<br>
+			(서비스 이용 중 겪으신 문제나 요청사항을 명확히 적어주시면 빠른 답변이 가능합니다.)<br><br>
+
+			중복 문의는 지양해주세요.<br>
+			– 같은 내용의 반복 문의는 처리 지연의 원인이 될 수 있습니다.<br><br>
+
+			답변 소요 시간<br>
+			– 평일 기준 ○시간~○일 이내 순차적으로 답변드리며, 주말·공휴일은 지연될 수 있습니다.<br><br>
+
+			비속어, 욕설, 광고성 내용은 삭제되며, 서비스 이용에 제한이 있을 수 있습니다.<br>
+		</div>
+	</div>
+	<div id="goodgood" class="modal">
+		<div class="modal-content2">
+			<div id="goodMessage"></div>
+			<button class="button" id="goodDelete">닫기</button>
+		</div>
+	</div>
+	<div id="jonglo3" class="modal">
+			<div class="modal-content2">
+				<span class="close">&times;</span>
+				답변입력 <textarea cols="20" rows="5" id=answerContent required placeholder="답변을 입력해주세요"></textarea>
+				<button class="button" id="answerToAnswer">등록</button>
+			</div>
+		</div>
+	<!-- 공통 footer 삽입 -->
+	<div th:replace="fragments/footer :: footer"></div>
+
+	<script src="/js/inquery.js"></script>
+</body>
+
+</html>

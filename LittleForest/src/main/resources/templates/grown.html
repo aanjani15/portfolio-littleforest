@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>나의 나무 역사</title>
+	<link rel="stylesheet" href="/css/style.css"> <!-- 공통 header/footer용 -->
+	<style>
+		body {
+			font-family: 'Arial', sans-serif;
+			background-color: #f9f9f9;
+			margin: 0;
+			padding: 20px;
+		}
+		h1 {
+			text-align: center;
+			color: #2e7d32;
+			margin-bottom: 20px;
+		}
+		.card-container {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+			gap: 20px;
+		}
+		.card {
+			background: #fff;
+			border-radius: 15px;
+			padding: 20px;
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+		.card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+		}
+		
+		.card h3 {
+			margin: 0;
+			font-size: 18px;
+			color: #388e3c;
+			margin-bottom: 10px;
+		}
+		.card p {
+			margin: 5px 0;
+			color: #555;
+			font-size: 14px;
+		}
+		.back-link {
+			display: block;
+			margin: 30px auto;
+			text-align: center;
+			background: #4caf50;
+			color: #fff;
+			padding: 10px 20px;
+			border-radius: 10px;
+			width: 200px;
+			text-decoration: none;
+			transition: background 0.3s;
+		}
+		.back-link:hover {
+			background: #388e3c;
+		}
+		.card2 {
+					left:5px;
+					background: rgb(128, 128, 192);
+					border-radius: 15px;
+					padding: 20px;
+					box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+					transition: transform 0.2s ease, box-shadow 0.2s ease;
+					width:350px;
+					height:120px;
+				}
+				.card2:hover {
+					transform: translateY(-5px);
+					box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+				}
+	</style>
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+	<div class="card2">
+	최초 수정시간&nbsp;&nbsp;<span style='color:rgb(0, 0, 160); font-size:25px;' th:text="${#dates.format(stock.update_Date,'yyyy-MM-dd HH:mm:ss')}">0</span><br>
+	남은 비료 재고 : <span th:text="${stock.biyro_Stock}">0</span><br>
+	남은 물 재고 : <span th:text="${stock.water_Stock}">0</span><br>
+	비료 준 시간 : <span th:text="${#dates.format(stock.biyro_Used_At,'yyyy-MM-dd HH:mm:ss')}">0</span><br>
+	비료 버프 종료 시간 : <span th:text="${#dates.format(after3,'yyyy-MM-dd HH:mm:ss')}">0</span></div>
+	<h1>🌳 나의 나무 역사</h1>
+
+	<div class="card-container">
+		<div class="card" th:each="tree : ${tree}">
+			<h3 th:text="'나무 ID: ' + ${tree.growing_Tree_Id}"></h3>
+			<p><strong>아이디:</strong> <span th:text="${tree.id}"></span></p>
+			<p><strong>유저아이디:</strong> <span th:text="${tree.user_Id}"></span></p>
+			<p><strong>나무 완료일:</strong> <span th:text="${tree.complete_Tree}"></span></p>
+			<p><strong>마지막 상태:</strong> <span th:text="${tree.ident_Tree}"></span></p>
+		</div>
+	</div>
+	
+
+	<a href="/growtree" class="back-link">🌱 나무 다시 키우러 가기</a>
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

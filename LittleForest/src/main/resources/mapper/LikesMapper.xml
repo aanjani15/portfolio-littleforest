@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.LikesMapper">
+<select id="likesSelect" parameterType="LikesVO">
+select * from likes_table where user_id=#{user_Id} order by 5 desc
+</select>
+<insert id="likesInsert" parameterType="LikesVO">
+insert into likes_table values(likes_Seq.nextval,#{user_Id},#{table_Type},
+    <choose>
+      <when test="table_Type == 'community'">
+        #{community_Id}
+      </when>
+      <otherwise>
+        null
+      </otherwise>
+    </choose>,
+    <choose>
+      <when test="table_Type == 'comment'">
+        #{comment_Id}
+      </when>
+      <otherwise>
+        null
+      </otherwise>
+    </choose>,sysdate)
+</insert>
+<delete id="likesDelete" parameterType="LikesVO">
+delete from likes_table where (community_id=#{community_Id} or comment_id=#{comment_Id}) and user_id=#{user_Id}
+</delete>
+<delete id="likesDeleteAll" parameterType="LikesVO">
+delete from likes_table where (community_id=#{community_Id} or comment_id=#{comment_Id}) and  table_type=#{table_Type} 
+</delete>
+<select id="iflikes" parameterType="LikesVO" resultType="int">
+select count(*) from likes_table where (community_id=#{community_Id} or comment_id=#{comment_Id}) and user_id=#{user_Id}
+</select>
+<select id="checklikes" parameterType="int">
+select community_id, comment_id from likes_table where user_id=#{user_Id}
+</select>
+</mapper>

@@ -1,0 +1,480 @@
+@charset "UTF-8";
+   
+/* 전체 배경 설정 */
+/* body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('/image/forest5.jpg'); 배경 이미지 경로
+  background-size: cover; 화면에 꽉 차게
+  background-position: center; 가운데 정렬
+  background-repeat: no-repeat; 반복 없음
+ */   /* display: flex; */
+/*   justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;  */
+/* } */
+
+.mypage-container {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 350px;
+  margin: 24px auto;
+  background: rgba(255, 255, 255, 0.4); /* 훨씬 더 투명 */
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 12px; /* 컴팩트하게 */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* 내부 요소 간격 */
+  box-sizing: border-box;
+}
+
+/* 상단 오른쪽 버튼 스타일 */
+.header-right {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.header-right a,
+.header-right button {
+    background-color: #33C975; /* 밝기 조금 낮춘 초록 */
+    color: #fff;
+    border: none;
+    padding: 10px 16px;        /* 버튼 크기 통일 */
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;                  /* 아이콘과 글자 사이 간격 */
+    font-size: 0.9rem;         /* 버튼 폰트 크기 통일 */
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.header-right a:hover,
+.header-right button:hover {
+    background-color: #39E86A; /* 마우스 오버 시 약간 더 진한 초록 */
+    transform: translateY(-2px);
+}
+
+
+
+/* 프로필 */
+.profile-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ddd;
+}
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.profile-info strong {
+  font-size: 1rem;
+}
+.sub {
+  font-size: 0.8rem;
+  color: gray;
+}
+
+/* 상태 박스 */
+.status-box {
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 0;
+  border-bottom: 1px solid #ddd;
+}
+.status-box i {
+  font-size: 1.2rem;
+  color: green;
+  margin-bottom: 2px;
+}
+
+/* 배너 */
+.banner img {
+  width: 100%;
+  margin: 6px 0;
+  border-radius: 12px;
+}
+
+/* 메뉴 */
+.menu li a {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  text-decoration: none;
+  color: black;
+}
+
+/* 버튼 */
+.mypage-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+.mypage-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 12px;
+  background-color: #3DB76D;
+  color: #fff;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+.mypage-links a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+  background-color: #33A75F;
+}
+
+
+/*    반딧불 효과 */
+body,
+html {
+  margin: 0px;
+  padding: 0px;
+  /* position: fixed; */ /* 스크롤막힘 원인 */
+  /* background-image: url('https://external-preview.redd.it/Tf2MC-orVRAI8OL5tjyF4k4H2Q6QLHTWllekGfqdt3c.png?width=960&crop=smart&auto=webp&s=be4ab9a2fa3ca2f7011799377f118a8dbc64aacb');
+ */  
+ background-image:
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),  /* 어둡게: 0.25~0.5 사이로 조절 */
+    url('/image/forest5.jpg');
+ background-size: cover;
+ /* 추가 */
+ background-position: center;
+ background-repeat: no-repeat;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0; 
+/*   min-height: 100vh; */
+}
+canvas{
+  filter: blur(1px);
+}
+
+#canvas {
+  position: fixed;
+  inset: 0;           /* top:0; right:0; bottom:0; left:0 */
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;         /* 맨 뒤 */
+  pointer-events: none; /* 클릭 이벤트 통과 */
+  filter: blur(1px);
+}
+
+.mypage-container {
+  position: relative;
+  z-index: 1;         /* 캔버스 위 */
+  width: 100%;
+  max-width: 400px;
+  margin: 24px auto;
+  background: rgba(255,255,255,0.9); /* 배경 살짝 불투명 */
+  border: 1px solid #ccc;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+/* 헤더가 있으면 필요시 */
+header, .header, .site-header { position: relative; z-index: 2; }
+
+.modal {
+   display: none;
+   position: fixed;
+   z-index: 1000;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   overflow: auto;
+   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+   background-color: #fff;
+   margin: 15% auto;
+   padding: 30px;
+   border-radius: 10px;
+   width: 800px;
+   height: 400px;
+   text-align: center;
+   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+   position: relative;
+   /* 모달창안에 x표시(닫기버튼) */
+}
+#userPopup2 .modal-content {
+   background-color: #fff;
+   margin: 15% auto;
+   padding: 30px;
+   border-radius: 10px;
+   width: 800px;
+   height: 1000px;
+   text-align: center;
+   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+   position: relative;
+   /* 모달창안에 x표시(닫기버튼) */
+}
+
+#userPassPopup .modal-content {
+   background-color: #fff;
+   margin: 15% auto;
+   padding: 30px;
+   border-radius: 10px;
+   width: 800px;
+   height: 510px;
+   text-align: center;
+   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+   position: relative;
+   /* 모달창안에 x표시(닫기버튼) */
+}
+
+#userInfoPopup .modal-content {
+   background-color: #fff;
+   margin: 15% auto;
+   padding: 30px;
+   border-radius: 10px;
+   width: 800px;
+   height: 750px;
+   text-align: center;
+   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+   position: relative;
+   /* 모달창안에 x표시(닫기버튼) */
+}
+
+.close {
+   color: #aaa;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+   cursor: pointer;
+   position: absolute;
+   right: 15px;
+   top: 10px;
+}
+
+.close:hover {
+   color: #000;
+}
+
+.button {
+   background-color: #4CAF50;
+   /* 초록색 */
+   color: white;
+   border: none;
+   padding: 14px 14px;
+   border-radius: 6px;
+   cursor: pointer;
+   font-weight: bold;
+   white-space: nowrap;
+   /* 글자가 줄바꿈 안 되도록 */
+}
+
+.button:hover {
+   background-color: #45a049;
+}
+
+/* 컨테이너 박스 */
+.login-container {
+   background: rgba(255, 255, 255, 0.85);
+   padding: 40px 30px;
+   border-radius: 12px;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   text-align: center;
+   width: 600px;
+   position: relative;
+   margin: 0 auto;
+}
+
+/* 제목 */
+.login-container h2 {
+   color: #333;
+   font-size: 26px;
+   margin-bottom: 8px;
+}
+
+/* 부제목 */
+.login-container .subtitle {
+   color: #666;
+   font-size: 14px;
+   margin-bottom: 25px;
+}
+
+/* 공통 입력 필드 스타일 */
+.login-container input[type="text"],
+.login-container input[type="email"],
+.login-container input[type="password"],
+.login-container input[type="date"] {
+   /* date 추가 */
+   width: 100%;
+   padding: 12px;
+   margin-bottom: 12px;
+   border: 1px solid #ddd;
+   border-radius: 5px;
+   font-size: 15px;
+   box-sizing: border-box;
+}
+
+#userPassPopup input {
+   width: 80%;
+   padding: 12px;
+   margin-bottom: 12px;
+   border: 1px solid #ddd;
+   border-radius: 5px;
+   font-size: 15px;
+   box-sizing: border-box;
+}
+
+#userPassPopup input[type="password"]#newPassword2,
+#userInfoPopup input {
+   width: 70%;
+   padding: 12px;
+   margin-bottom: 12px;
+   border: 1px solid #ddd;
+   border-radius: 5px;
+   font-size: 15px;
+   box-sizing: border-box;
+}
+
+#userInfoPopup input[type="text"]#oauth_IdAll {
+   width: 57%;
+   padding: 12px;
+   margin-bottom: 12px;
+   border: 1px solid #ddd;
+   border-radius: 5px;
+   font-size: 15px;
+   box-sizing: border-box;
+}
+
+#userInfoPopup input[type="checkbox"] {
+   width: 10%;
+   padding: 12px;
+   margin-bottom: 12px;
+   border: 1px solid #ddd;
+   border-radius: 5px;
+   font-size: 15px;
+   box-sizing: border-box;
+}
+
+.id_input {
+   width: 60%;
+}
+
+.address-wrapper {
+   display: flex;
+   gap: 10px;
+   /* 주소창과 버튼 사이 간격 */
+   align-items: center;
+   /* 수직 가운데 정렬 */
+   margin-bottom: 10px;
+}
+
+.address-btn {
+   background-color: #4CAF50;
+   /* 초록색 */
+   color: white;
+   border: none;
+   padding: 14px 14px;
+   border-radius: 6px;
+   cursor: pointer;
+   font-weight: bold;
+   white-space: nowrap;
+   /* 글자가 줄바꿈 안 되도록 */
+}
+
+.address-btn:hover {
+   background-color: #45a049;
+}
+
+
+/* 이메일 인증코드 입력 + 버튼 한 줄 */
+.email-code-wrapper {
+   display: flex;
+   gap: 8px;
+   margin-bottom: 15px;
+}
+
+.email-code-wrapper input[type="text"] {
+   flex-grow: 1;
+}
+
+.email-code-wrapper button {
+   background-color: #4CAF50;
+   color: white;
+   border: none;
+   padding: 0 12px;
+   border-radius: 5px;
+   font-size: 14px;
+   font-weight: bold;
+   cursor: pointer;
+   transition: background-color 0.3s;
+   white-space: nowrap;
+   /* 글자가 줄바꿈 안 되도록 */
+}
+
+.email-code-wrapper button:hover {
+   background-color: #45a049;
+}
+
+#userImagePopup {
+   position: fixed;
+   z-index: 1500;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   cursor: move;
+   display: none;
+   /* 기본 숨김 */
+   justify-content: center;
+   align-items: center;
+}
+
+#userImagePopup img {
+   width: 600px;
+   height: 600px;
+   border-radius: 10px;
+   transition: transform 0.2s ease;
+}
+
+#userImagePopup img:hover {
+   transform: translateY(-5px) rotate(-2deg);
+}
+
+.photo-area {
+   display: flex;
+   justify-content: space-around;
+   margin-bottom: 20px;
+}
+
+.photo-box {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.photo-box img {
+   cursor: pointer;
+   width: 170px;
+   height: 170px;
+   object-fit: cover;
+   border-radius: 50%;
+   border: 2px solid #ccc;
+   margin-top: 5px;
+}

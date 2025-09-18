@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- ▼ 공통 언어 스위처 (국기 + 드롭다운 + 스크립트) -->
+<div th:fragment="langSwitcher">
+  <div class="lang-switch" style="position:fixed;top:70px;right:16px;z-index:1000;font-family:system-ui,-apple-system;">
+    <button id="langToggle" class="lang-btn" type="button" aria-haspopup="listbox" aria-expanded="false"
+            style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #d0d5dd;background:#fff;border-radius:8px;cursor:pointer;">
+      <img id="langFlag" src="/images/flags/kr.svg" alt="Korean" style="width:18px;height:12px;border:1px solid #e5e7eb;object-fit:cover;">
+      <span id="langText">한국어</span>
+    </button>
+    <div id="langMenu" role="listbox" aria-labelledby="langToggle"
+         style="position:absolute;margin-top:6px;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(16,24,40,.12);width:180px;display:none;">
+      <div class="lang-item" role="option" data-lang="KO"    data-flag="/images/flags/kr.svg" style="display:flex;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;"><img src="/images/flags/kr.svg" style="width:20px;height:14px;border:1px solid #e5e7eb;"><span>한국어</span></div>
+      <div class="lang-item" role="option" data-lang="EN-US" data-flag="/images/flags/us.svg" style="display:flex;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;"><img src="/images/flags/us.svg" style="width:20px;height:14px;border:1px solid #e5e7eb;"><span>English</span></div>
+      <div class="lang-item" role="option" data-lang="JA"    data-flag="/images/flags/jp.svg" style="display:flex;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;"><img src="/images/flags/jp.svg" style="width:20px;height:14px;border:1px solid #e5e7eb;"><span>日本語</span></div>
+      <div class="lang-item" role="option" data-lang="ZH"    data-flag="/images/flags/cn.svg" style="display:flex;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;"><img src="/images/flags/cn.svg" style="width:20px;height:14px;border:1px solid #e5e7eb;"><span>中文</span></div>
+    </div>
+  </div>
+
+  <!-- 스크립트: 페이지 하단에 삽입되도록 프래그먼트 위치는 body 끝쪽에 두는 걸 권장 -->
+  <script>
+  (function(){
+    const KEY='lf.lang';
+    const toggle = document.getElementById('langToggle');
+    const menu   = document.getElementById('langMenu');
+    const flagEl = document.getElementById('langFlag');
+    const textEl = document.getElementById('langText');
+
+    toggle?.addEventListener('click', ()=>{
+      const open = menu.style.display !== 'block';
+      menu.style.display = open ? 'block' : 'none';
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', (e)=>{
+      if(!menu.contains(e.target) && !toggle.contains(e.target)){
+        menu.style.display='none'; toggle.setAttribute('aria-expanded','false');
+      }
+    });
+
+    function replaceNoI18n(scope){
+      const markers=[];
+      scope.querySelectorAll('[data-no-i18n]').forEach((el,i)=>{
+        const m=`__NOI18N_${i}__`; markers.push({m,html:el.outerHTML}); el.outerHTML=m;
+      });
+      return markers;
+    }
+    function restoreNoI18n(html,markers){
+      let out=html; markers.forEach(({m,html})=> out=out.replace(m,html)); return out;
+    }
+
+    async function translateAllScopes(targetLang){
+      const scopes = Array.from(document.querySelectorAll('.i18n-scope'));
+      for(const scope of scopes){
+        const markers = replaceNoI18n(scope);
+        const html = scope.outerHTML;
+        const res = await fetch('/i18n/block',{
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ html, source:'KO', target: targetLang })
+        });
+        let translated = await res.text();
+        translated = restoreNoI18n(translated, markers);
+        scope.outerHTML = translated;
+      }
+      
+   // (루프가 있다면) 모든 scope 교체가 끝난 뒤에 한 번만 호출
+      if (window.LF?.about?.init) window.LF.about.init();  // 번역 후 재바인딩
+
+    }
+
+    menu.querySelectorAll('.lang-item').forEach(item=>{
+      item.addEventListener('click', async ()=>{
+        const lang = item.dataset.lang; const flag=item.dataset.flag; const label=item.innerText.trim();
+        flagEl.src=flag; textEl.textContent=label; menu.style.display='none'; toggle.setAttribute('aria-expanded','false');
+        if(lang==='KO'){ localStorage.setItem(KEY,'KO'); location.reload(); return; }
+        await translateAllScopes(lang);
+        localStorage.setItem(KEY, lang);
+      });
+    });
+
+    const saved = localStorage.getItem(KEY) || 'KO';
+    const cur = menu.querySelector(`.lang-item[data-lang="${saved}"]`);
+    if(cur){
+      flagEl.src = cur.dataset.flag; textEl.textContent = cur.innerText.trim();
+      if(saved!=='KO'){ translateAllScopes(saved); }
+    }
+  })();
+  </script>
+</div>
+</body>
+</html>

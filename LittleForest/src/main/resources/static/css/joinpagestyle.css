@@ -1,0 +1,196 @@
+/* 전체 배경 설정 */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('/image/forest5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* 컨테이너 박스 */
+.login-container {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 340px;
+}
+
+/* 제목 */
+.login-container h2 {
+  color: #333;
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+/* 부제목 */
+.login-container .subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+/* 공통 입력 필드 스타일 */
+.login-container input[type="text"],
+.login-container input[type="email"],
+.login-container input[type="password"],
+.login-container input[type="date"] {   /* date 추가 */
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+
+.address-wrapper {
+  display: flex;
+  gap: 10px; /* 주소창과 버튼 사이 간격 */
+  align-items: center; /* 수직 가운데 정렬 */
+  margin-bottom: 10px;
+}
+
+.address-btn {
+  background-color: #4CAF50; /* 초록색 */
+  color: white;
+  border: none;
+  padding: 14px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  white-space: nowrap; /* 글자가 줄바꿈 안 되도록 */
+}
+
+.address-btn:hover {
+  background-color: #45a049;
+}
+
+
+/* 이메일 인증코드 입력 + 버튼 한 줄 */
+.email-code-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.email-code-wrapper input[type="text"] {
+  flex-grow: 1;
+}
+
+.email-code-wrapper button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.email-code-wrapper button:hover {
+  background-color: #45a049;
+}
+
+/* 회원가입 버튼 */
+.login-container button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 5px;
+}
+
+.login-container button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* 홈으로 가기 버튼 */
+.btn.home {
+  background-color: #c8c8c8;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 0;
+  width: 100%;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 12px; /* 위와 간격 */
+}
+
+.btn.home:hover {
+  background-color: #969696;
+}
+
+
+/*    반딧불 효과 */
+body,
+html {
+  margin: 0px;
+  padding: 0px;
+  /* position: fixed; */ /* 스크롤막힘 원인 */
+  /* background-image: url('https://external-preview.redd.it/Tf2MC-orVRAI8OL5tjyF4k4H2Q6QLHTWllekGfqdt3c.png?width=960&crop=smart&auto=webp&s=be4ab9a2fa3ca2f7011799377f118a8dbc64aacb');
+ */  
+ background-image:
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),  /* 어둡게: 0.25~0.5 사이로 조절 */
+    url('/image/forest5.jpg');
+ background-size: cover;
+ /* 추가 */
+ background-position: center;
+ background-repeat: no-repeat;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0; 
+/*   min-height: 100vh; */
+}
+canvas{
+  filter: blur(1px);
+}
+
+#canvas {
+  position: fixed;
+  inset: 0;           /* top:0; right:0; bottom:0; left:0 */
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;         /* 맨 뒤 */
+  pointer-events: none; /* 클릭 이벤트 통과 */
+  filter: blur(1px);
+}
+
+.mypage-container {
+  position: relative;
+  z-index: 1;         /* 캔버스 위 */
+  width: 100%;
+  max-width: 400px;
+  margin: 24px auto;
+  background: rgba(255,255,255,0.9); /* 배경 살짝 불투명 */
+  border: 1px solid #ccc;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+/* 헤더가 있으면 필요시 */
+header, .header, .site-header { position: relative; z-index: 2; }

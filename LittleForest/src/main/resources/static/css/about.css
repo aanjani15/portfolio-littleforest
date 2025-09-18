@@ -1,0 +1,495 @@
+@charset "UTF-8";
+
+/* 네임스페이스: .lf-about 이하에서만 동작 (전역 오염 방지) */
+.lf-about {
+	/* 	--bg: #0c1a22;
+	--bg-soft: #0f2430; */
+	--bg: #1f352a;
+	/* 메인 배경 */
+	--bg-soft: #486b53;
+	/* 보조 색상 */
+
+	--ink: #e7f6ff;
+	--muted: #a6c2cf;
+	--accent: #e6b86a;
+	--card: #0f1f27;
+	--radius: 18px;
+	--gutter: clamp(16px, 4vw, 40px);
+	font-family: "Pretendard", system-ui, -apple-system, "Segoe UI",
+		"Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+	color: var(--ink);
+	background: var(--bg);
+	min-height: 100dvh;
+}
+
+/* 상단 헤더 */
+.lf-about__header {
+	position: fixed;
+	inset: 0 0 auto 0;
+	height: 64px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 var(--gutter);
+	z-index: 20;
+	backdrop-filter: blur(4px);
+	background: linear-gradient(to bottom, rgba(8, 14, 20, .55),
+			rgba(8, 14, 20, 0));
+}
+
+.lf-about__brand {
+	font-weight: 700;
+	letter-spacing: .16em;
+	text-decoration: none;
+	color: var(--ink)
+}
+
+.lf-about__nav a,
+.lf-about__account {
+	color: var(--muted);
+	text-decoration: none;
+	margin-left: 24px;
+	font-size: 14px
+}
+
+.lf-about__nav a:hover,
+.lf-about__account:hover {
+	color: #fff
+}
+
+/* 사이드 인디케이터 */
+.lf-about__steps {
+	position: fixed;
+	right: clamp(8px, 2vw, 24px);
+	top: 120px;
+	z-index: 30;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.lf-about__steps button {
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	border: 1px solid rgba(255, 255, 255, .18);
+	background: rgba(255, 255, 255, .04);
+	color: #cfe7f5;
+	cursor: pointer;
+	transition: transform .25s ease, background .25s ease, border-color .25s ease;
+}
+
+.lf-about__steps button.is-active,
+.lf-about__steps button:hover {
+	background: rgba(255, 255, 255, .14);
+	border-color: rgba(255, 255, 255, .4);
+	transform: translateX(-2px);
+}
+
+.lf-about__steps span {
+	font-weight: 700
+}
+
+/* 공통 섹션 래퍼 */
+.section {
+	position: relative;
+	min-height: 100dvh;
+	display: grid;
+	place-items: center;
+}
+
+/* 00: 히어로 */
+.lf-about__hero {
+	isolation: isolate;
+}
+
+.lf-about__hero-video {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	filter: saturate(1.05) contrast(1.02);
+}
+
+.lf-about__hero-grad {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg,
+			rgba(12, 26, 34, .15) 0%,
+			/* 기존 .35 → .15 */
+			rgba(12, 26, 34, .60) 65%,
+			/* 기존 .85 → .45 */
+			var(--bg) 100%);
+	/* 		rgba(12, 26, 34, .35) 0%,	
+		rgba(12, 26, 34, .85) 65%, 
+		var(--bg) 100%); */
+}
+
+/* ← 위쪽부터 35% 어두운 필터 */
+/* ← 중간쯤 85% 어둡게 */
+/* ← 맨 아래는 완전 어두운 배경 */
+
+.lf-about__hero-content {
+	position: relative;
+	z-index: 1;
+	width: min(1080px, 92vw);
+	margin-top: 80px;
+}
+
+.lf-about .eyebrow {
+	color: var(--accent);
+	letter-spacing: .22em;
+	font-size: 12px;
+	margin-bottom: 14px;
+}
+
+.lf-about .display {
+	font-family: "Playfair Display", serif;
+	font-weight: 700;
+	line-height: 1.05;
+	font-size: clamp(36px, 6vw, 64px);
+}
+
+.lf-about .scrolldown {
+	color: #e6b86a;
+	margin-top: 12px;
+	font-size: 20px;
+	font-family: "Playfair Display", serif;
+}
+
+/* 01/02/03 패널 레이아웃 */
+.lf-about__panel {
+	background: radial-gradient(1000px 500px at 20% 0%, rgba(255, 255, 255, .06),
+			transparent 60%), var(--bg);
+}
+
+.lf-about__panel.is-alt {
+	background: radial-gradient(1000px 500px at 80% 0%, rgba(255, 255, 255, .06),
+			transparent 60%), var(--bg);
+}
+
+.lf-about__panel-inner {
+	width: min(1200px, 92vw);
+	margin-inline: auto;
+	display: grid;
+	gap: clamp(24px, 3vw, 56px);
+	grid-template-columns: repeat(12, 1fr);
+	align-items: center;
+	position: relative;
+	padding-block: clamp(80px, 12vh, 140px);
+}
+
+.lf-about__panel-col {
+	grid-column: 1/span 6;
+}
+
+.lf-about__panel.is-alt .lf-about__panel-col {
+	grid-column: 7/span 6;
+}
+
+.lf-about__panel-media {
+	grid-column: 7/span 6;
+	margin: 0;
+	border-radius: var(--radius);
+	overflow: hidden;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+}
+
+.lf-about__panel-media img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+.lf-about__panel.is-alt .lf-about__panel-media {
+	grid-column: 1/span 6;
+}
+
+.lf-about .title {
+	font-family: "Playfair Display", serif;
+	font-weight: 700;
+	font-size: clamp(28px, 3.4vw, 40px);
+	line-height: 1.2;
+	margin: 8px 0 12px;
+}
+
+.lf-about .copy {
+	color: #cfe0ea;
+	line-height: 1.75;
+	margin: 6px 0 14px;
+}
+
+.lf-about .bullet {
+	margin: 10px 0 18px;
+	padding-left: 18px;
+	color: #cfe0ea
+}
+
+.lf-about .bullet li {
+	margin: 6px 0;
+}
+
+.metrics {
+	display: flex;
+	gap: 28px;
+	flex-wrap: wrap;
+	margin: 10px 0 16px;
+}
+
+.metric {
+	background: var(--card);
+	border: 1px solid rgba(255, 255, 255, .08);
+	padding: 16px 18px;
+	border-radius: 14px;
+	min-width: 220px;
+}
+
+.metric__num {
+	font-weight: 800;
+	font-size: clamp(22px, 4vw, 36px);
+	letter-spacing: -.01em;
+}
+
+.metric__label {
+	color: var(--muted);
+	font-size: 14px;
+	margin-top: 6px
+}
+
+.pill-grid {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin: 10px 0 14px
+}
+
+.pill {
+	padding: 8px 12px;
+	border-radius: 999px;
+	border: 1px solid rgba(255, 255, 255, .14);
+	background: rgba(255, 255, 255, .03);
+	font-size: 12px;
+	color: #d5e8f2
+}
+
+.note {
+	color: #b8d0dc;
+	font-size: 14px
+}
+
+.link-more {
+	display: inline-block;
+	margin-top: 6px;
+	color: #e9f2f9;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(233, 242, 249, .4);
+	padding-bottom: 2px
+}
+
+.link-more:hover {
+	border-color: #fff
+}
+
+/* 섹션 넘버 워터마크 */
+.lf-about__panel-no {
+	position: absolute;
+	inset: auto auto 24px 0;
+	font-weight: 800;
+	font-size: clamp(64px, 14vw, 160px);
+	color: rgba(255, 255, 255, .08);
+	/* 살짝 더 보이게 0.05 → 0.08 */
+	line-height: 1;
+	pointer-events: none;
+}
+
+/* 01 섹션 숫자 위치 */
+#sec01 .lf-about__panel-no {
+	top: 90px;
+	/* 원하는 위치로 */
+	left: 5px;
+}
+
+/* 02 섹션 숫자 위치 */
+#sec02 .lf-about__panel-no {
+	top: 50px;
+	right: 5px;
+	/* 오른쪽 배치도 가능 */
+	left: auto;
+	/* 왼쪽 기본값 무효화 */
+}
+
+/* 03 섹션 숫자 위치 */
+#sec03 .lf-about__panel-no {
+	/* 아래쪽에 두고 싶으면 */
+	top: 120px;
+	/* 위쪽 기본값 무효화 */
+	left: 30%;
+}
+
+
+/* 푸터 */
+.lf-about__footer {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 24px;
+	width: min(1200px, 92vw);
+	margin: 40px auto 80px;
+	color: #d8e9f3;
+}
+
+.lf-about__footer .brand {
+	font-weight: 800;
+	letter-spacing: .16em;
+	margin-bottom: 8px
+}
+
+.lf-about__footer .muted {
+	color: #bcd0db;
+}
+
+.lf-about__footer a {
+	color: #cfe7f5;
+	text-decoration: none;
+	display: block;
+	margin: 6px 0
+}
+
+.lf-about__footer a:hover {
+	color: #fff
+}
+
+.lf-about__footer .legal {
+	color: #9fb6c3;
+	margin-top: 12px;
+	font-size: 12px
+}
+
+/* 반응형 */
+@media (max-width : 900px) {
+	.lf-about__panel-inner {
+		grid-template-columns: 1fr;
+	}
+
+	.lf-about__panel-col,
+	.lf-about__panel-media {
+		grid-column: 1/-1;
+	}
+
+	.lf-about__panel-media {
+		order: -1;
+	}
+
+	.lf-about__steps {
+		right: 8px;
+		top: 96px;
+	}
+}
+
+
+
+/* 01, 03 섹션의 이미지 카드 폭 살짝 축소 */
+#sec01 .lf-about__panel-media,
+#sec03 .lf-about__panel-media {
+	max-width: 450px;
+	/* 원하시면 480~560px 사이로 조절 */
+}
+
+@media (max-width: 900px) {
+
+	/* 모바일은 카드 폭을 화면에 맞게 유지 */
+	#sec01 .lf-about__panel-media,
+	#sec03 .lf-about__panel-media {
+		max-width: none;
+	}
+}
+
+#sec01 {
+	background: linear-gradient(rgba(31, 53, 42, 0.7), rgba(31, 53, 42, 0.9)),
+		url('/images/forest_back2.jpg') center/cover no-repeat;
+}
+
+#sec02 {
+	background: linear-gradient(rgba(34, 54, 47, 0.7), rgba(34, 54, 47, 0.9)),
+		url('/images/forest_back3.jpg') center/cover no-repeat;
+}
+
+#sec03 {
+	background: linear-gradient(rgba(26, 45, 37, 0.7), rgba(26, 45, 37, 0.9)),
+		url('/images/forest_back6.jpg') center/cover no-repeat;
+}
+
+/* 커밋커밋 */
+/* ========== Glass Card (큰 카드) ========== */
+
+/* 섹션 기본 패딩이 카드 높이에 영향 주지 않게 */
+#sec01 .lf-about__panel-inner {
+	padding-block: 0;
+}
+
+.lf-glass {
+	/* ---- 원하는 값으로 조절 ---- */
+	--card-w: min(1000px, 92vw);
+	/* 가로폭 */
+	--card-h: 360px;
+	/* 세로: auto(내용맞춤) or 520px(고정) */
+	--card-px: clamp(24px, 3vw, 40px);
+	/* 좌우 패딩 */
+	--card-py: clamp(28px, 3vh, 44px);
+	/* 상하 패딩 */
+	/* -------------------------------- */
+
+	width: var(--card-w);
+	/* 고정높이를 원하면 'height', 내용에 맞추려면 'min-height' 사용 */
+	min-height: var(--card-h);
+	/* height: var(--card-h);  /* ← 진짜 고정(넘치면 아래 overflow로 결정) */
+
+	padding: var(--card-py) var(--card-px);
+	margin: clamp(40px, 6vh, 64px) auto;
+	/* 섹션 안에서 카드 위·아래 여백 */
+
+	/* (기존 유리질감 유지) */
+	position: relative;
+	border-radius: 28px;
+	padding: clamp(28px, 3vw, 40px);
+	/* 배경: 아주 옅은 흰/초록 그라디언트 + 유리 질감 */
+	background:
+		radial-gradient(120% 120% at 20% 20%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02) 60%),
+		linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	box-shadow:
+		0 20px 60px rgba(0, 0, 0, 0.35),
+		0 2px 10px rgba(0, 0, 0, 0.15) inset;
+	/* 은은한 안쪽 음영 */
+
+	/* 핵심: 배경 흐림 */
+	-webkit-backdrop-filter: blur(18px) saturate(120%);
+	backdrop-filter: blur(18px) saturate(120%);
+}
+
+/* 모서리 주변 부드러운 빛 퍼짐(예시 이미지 느낌) */
+.lf-glass::before {
+	content: "";
+	position: absolute;
+	inset: -1px;
+	border-radius: inherit;
+	background: radial-gradient(1200px 600px at 15% 10%, rgba(255, 255, 255, 0.12), transparent 55%);
+	pointer-events: none;
+}
+
+/* 큰 카드 안의 그리드를 깨지지 않게 유지 */
+.lf-glass {
+	width: min(1200px, 92vw);
+	margin-inline: auto;
+}
+
+/* ========== Glass Token (작은 메트릭 카드) ========== */
+/* 기존 .metric 스타일을 유리 질감으로 업그레이드 */
+.metric {
+	background: linear-gradient(180deg, rgba(8, 16, 14, 0.32), rgba(8, 16, 14, 0.18));
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	-webkit-backdrop-filter: blur(10px) saturate(110%);
+	backdrop-filter: blur(10px) saturate(110%);
+	border-radius: 18px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}

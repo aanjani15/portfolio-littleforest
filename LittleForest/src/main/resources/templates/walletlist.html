@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>지갑 목록</title>
+
+	<link rel="stylesheet" href="/css/mainpagestyle.css">
+	<link rel="stylesheet" href="/css/wallet.css"> <!-- wallet.css -->
+	<!-- 기부 모달 CSS -->
+	<link rel="stylesheet" href="/css/donate.css">
+	<link rel="stylesheet" href="/css/sidebar.css?v=7">
+	
+	
+	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+</head>
+
+<body>
+
+	<!-- ⬇️ confetti 라이브러리 로드-->
+	<script src="/js/confetti.min.js"></script>
+
+
+	<!-- 공통 header 삽입 -->
+	<div th:replace="fragments/header :: header"></div>
+
+	<!-- 🌙/☀️ 다크모드 토글 버튼 -->
+	<button id="lfThemeToggle" class="lf-theme-toggle" aria-label="다크 모드 토글">
+		<img id="lfThemeIcon" src="/images/sidebar/darkmode.png" alt="다크 모드로 전환" />
+	</button>
+
+
+	<!-- 사이드바 + 본문 래퍼 시작 -->
+	<div class="page-with-sidebar">
+		<!-- [좌] 사이드바 프래그먼트 -->
+		<div th:replace="fragments/sidebar :: sidebar"></div>
+
+		<div class="page-content">
+			<div class="passbook-wrapper">
+				<div class="passbook-bg">
+					<!-- 항상 깔린 배경 (처음엔 닫힌 그림) -->
+					<img id="passbookBg" src="/image/passbook_closed.png" class="passbook-background" alt="통장 배경">
+
+					<!-- ✅ 종이 넘김 컨테이너(비워둠) -->
+					<div class="paper-frame" aria-hidden="true"></div>
+
+					<div class="wallet-tabs wallet-tabs--over">
+						<button class="tab" th:each="bank : ${bankNames}" th:attr="data-bank=${bank}"
+							th:text="${bank}">은행</button>
+						<button class="tab" id="addBank">⊕ 계좌 추가하기</button>
+						<span class="tabs-help"> 탭을 눌러 통장 상세를 확인하세요.</span>
+					</div>
+
+					<!-- 상단 공통 영역 (기부 버튼 항상 이 자리) -->
+					<div class="passbook-top section-narrow">
+						<div class="info-section">
+							<p class="username">
+								<strong th:text="${userInfo.nickname}">홍길동</strong> 님
+							</p>
+							<p class="summary">
+								총 자산: <strong
+									th:text="${#numbers.formatInteger(totalBalance,3,'COMMA')} + '원'">0원</strong>
+							</p>
+							<p class="banks">
+								보유 은행:
+								<span th:text="${#strings.listJoin(bankNames, ', ')}">-</span>
+							</p>
+						</div>
+						
+						<button id = "addBalance">잔액 추가하기</button>
+					</div>
+					<!-- 기부하기버튼 -->
+					<div class="passbook-cta">
+						<button type="button" id="openDonateModal" class="btn btn-primary btn-jittery"
+							aria-label="기부 모달 열기">기부하기</button>
+					</div>
+
+					<!-- 은행별 패널 : 탭 클릭 시 해당 은행만 표시 -->
+					<div class="passbook-content bank-panel" th:each="bankName : ${bankNames}"
+						th:attr="data-bank=${bankName}">
+						<!-- 위쪽 영역 (표) -->
+						<section class="panel-top">
+							<table class="wallet-table">
+								<thead>
+									<tr>
+										<th>은행명</th>
+										<th>계좌번호</th>
+										<th>잔액</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="wallet : ${walletList}" th:if="${wallet.bank_Name == bankName}">
+										<td th:text="${wallet.bank_Name}">은행명</td>
+										<td th:text="${wallet.account_Number}">계좌번호</td>
+										<td th:text="${#numbers.formatInteger(wallet.account_Balance,3,'COMMA')} + '원'">
+											0원</td>
+									</tr>
+								</tbody>
+							</table>
+						</section>
+
+						<!-- 아래쪽 영역 (상세/안내) -->
+						<section class="panel-bottom">
+							<div class="bank-details">
+								<p>가입신청일: <span>2005년 1월 1일</span></p>
+								<p>통장발행일: <span>2015년 1월 1일</span></p>
+								<p>가입신청점포: 국회지점</p>
+								<p>통장발행점포: LF지점</p>
+							</div>
+							<div class="bank-notice">
+								<p>💡 본 통장은 Little Forest 서비스에서 발급되었습니다.</p>
+								<p>💡 자세한 사항은 고객센터 또는 홈페이지를 참조해 주세요.</p>
+							</div>
+						</section>
+					</div>
+
+					<!-- ===========================기부 모달========================== -->
+					<div id="donateModal" class="donate-modal" aria-hidden="true" style="display:none">
+						<div class="donate-dialog" role="dialog" aria-modal="true" aria-labelledby="donateTitle">
+							<div class="donate-header">
+								<div class="donate-tabs">
+									<button class="donate-tab donate-tab--pay" type="button">포인트 충전하러가기</button>
+									<button class="donate-tab" data-pane="recurring">정기기부하기</button>
+									<button class="donate-tab active" data-pane="oneoff">보유금액 기부하기</button>
+								</div>
+								<button type="button" class="donate-close" id="closeDonateModal"
+									aria-label="닫기">×</button>
+							</div>
+
+							<div class="donate-body">
+								<h2 id="donateTitle" class="donate-quote">
+									“기부자님의 소중한 마음으로 만드는 작은 숲, <p>놀라운 변화가 시작됩니다.”
+								</h2>
+								<p class="donate-sub">투명한 기부 후기로 그 변화를 소개하고 보답하겠습니다!</p>
+
+								<div class="donate-pane active" data-pane="oneoff">
+									<div class="donate-grid">
+										<!-- 금액 입력 영역 -->
+										<div class="donate-left">
+											<div class="amount-row">
+												<label for="donationAmount">기부할 포인트</label>
+												<div class="amount-input-wrap">
+													<input id="donationAmount" type="number" inputmode="numeric"
+														min="1000" step="100" placeholder="금액을 입력하세요(원)"
+														aria-describedby="amountHelp">
+													<span class="unit">원</span>
+												</div>
+												<div id="amountHelp" class="help">＊기부를 원하는 금액을 입력한 후 <b>기부하기</b>를 눌러주세요.
+												</div>
+												<div class="quick-buttons">
+													<button type="button" data-amt="1000">1천원</button>
+													<button type="button" data-amt="5000">5천원</button>
+													<button type="button" data-amt="10000">1만원</button>
+													<button type="button" data-amt="20000">2만원</button>
+													<button type="button" data-amt="30000">3만원</button>
+												</div>
+											</div>
+
+											<div class="method-row">
+												<div class="method-pill">보유 포인트</div>
+												<span class="point-balance" th:attr="data-balance=${pointBalance}"
+													th:text="'보유 ' + ${#numbers.formatInteger(pointBalance, 3, 'COMMA')} + ' P'">
+													보유 0 P
+												</span>
+											</div>
+
+											<!-- 안내/확인 영역 -->
+											<aside class="donate-right">
+												<div class="notice-box">
+													<p class="title">수수료 없이 100% 기부</p>
+													<p class="desc">결제하신 금액은 수수료 없이 <b>단체로 100% 전달</b>됩니다.</p>
+												</div>
+
+												<div class="org-box">
+													<label class="checkbox">
+														<input type="checkbox" id="agreeOrg" checked>
+														<span>포인트 기부 동의하기</span>
+													</label>
+													<label class="checkbox">
+														<input type="checkbox" id="agreeInfo">
+														<span>(선택) 리틀포레스트 마케팅 알림 수신에 동의합니다.</span>
+													</label>
+												</div>
+
+												<button type="button" id="btnDonate"
+													class="donate-btn donate-btn--wave">
+													<span class="wave" aria-hidden="true"></span>
+													<span class="label">기부하기</span>
+												</button>
+											</aside>
+										</div>
+									</div>
+								</div>
+								
+
+								<!-- =========================정기기부 pane==================== -->
+								<div class="donate-pane" data-pane="recurring">
+									<div class="donate-grid">
+										<!-- 왼쪽: 금액/스케줄 -->
+										<div class="donate-left">
+											<div class="amount-row">
+												<label for="recurringAmount">매월 기부할 포인트</label>
+												<div class="amount-input-wrap">
+													<input id="recurringAmount" type="number" inputmode="numeric"
+														min="20000" step="1000" placeholder="금액을 입력하세요(원)">
+													<span class="unit">원</span>
+												</div>
+												<div class="help">＊정기기부는 <b>20,000원 이상</b>부터 가능합니다.</div>
+												<div class="quick-buttons">
+													<button type="button" data-amt="20000">2만원</button>
+													<button type="button" data-amt="30000">3만원</button>
+													<button type="button" data-amt="50000">5만원</button>
+													<button type="button" data-amt="100000">10만원</button>
+												</div>
+											</div>
+
+											<!-- 날짜 선택 -->
+											<div class="schedule-row">
+												<label class="radio">
+													<input type="radio" name="rc_daytype" value="day" checked>
+													매월
+													<select id="rcDaySelect" aria-label="매월 며칠">
+														<!-- 1~28일: 모든 달에서 안전 -->
+														<option value="1">1일</option>
+														<option value="5">5일</option>
+														<option value="10">10일</option>
+														<option value="15" selected>15일</option>
+														<option value="20">20일</option>
+														<option value="25">25일</option>
+														<option value="28">28일</option>
+													</select>
+													에 자동 기부
+												</label>
+												<label class="radio">
+													<input type="radio" name="rc_daytype" value="last">
+													매월 <b>말일</b>에 자동 기부
+												</label>
+											</div>
+											<div class="help schedule-help">＊2월 등 짧은 달에는 선택일이 없으면 자동으로 말일에 처리됩니다.</div>
+										</div>
+
+										<!-- 오른쪽: 안내/동의/버튼 -->
+										<aside class="donate-right">
+											<div class="notice-box">
+												<p class="title">정기기부 안내</p>
+												<p class="desc">설정한 날짜에 보유 포인트에서 <b>자동 차감</b>됩니다.</p>
+											</div>
+
+											<div class="org-box">
+												<label class="checkbox">
+													<input type="checkbox" id="agreeOrgRc" checked>
+													<span>정기기부에 동의합니다</span>
+												</label>
+											</div>
+											<button type="button" id="btnRecurring" class="donate-btn">
+												정기기부 신청
+											</button>
+										</aside>
+									</div>
+								</div> <!-- donate-panel -->
+							</div> <!-- /donate-body -->
+						</div><!-- /donate-dialog -->
+					</div><!-- /donateModal -->
+				</div> <!-- passbook-bg -->
+			</div>
+		</div>
+	</div>
+	
+	<!-- Add Bank Modal -->
+	<div class="lf-modal" id="addBankModal" hidden>
+	  <div class="lf-modal__overlay" data-dismiss></div>
+	  <div class="lf-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="addBankTitle">
+	    <button class="lf-modal__close" type="button" data-dismiss aria-label="닫기">×</button>
+	    <h2 class="lf-modal__title" id="addBankTitle">계좌 추가</h2>
+	
+	    <form id="addBankForm" class="lf-form">
+	      <label class="lf-field">
+	        <span class="lf-label">은행명</span>
+	        <input id="bankName" name="bankName" type="text" required placeholder="통장 이름 입력" />
+	      </label>
+	
+	      <label class="lf-field">
+	        <span class="lf-label">계좌번호</span>
+	        <input id="accountNumber" name="accountNumber" type="text" required inputmode="numeric" placeholder="계좌번호 입력" />
+	      </label>
+	
+	      <div class="lf-actions">
+	        <button class="lf-btn lf-btn--primary" type="submit">추가</button>
+	        <button class="lf-btn" type="button" data-dismiss>취소</button>
+	      </div>
+	    </form>
+	  </div>
+	</div>
+	
+	<!-- Add Balance Modal -->
+	<div class="lf-modal" id="addBalanceModal" hidden>
+	  <div class="lf-modal__overlay" data-dismiss></div>
+	  <div class="lf-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="addBalanceTitle">
+	    <button class="lf-modal__close" type="button" data-dismiss aria-label="닫기">×</button>
+	    <h2 class="lf-modal__title" id="addBalanceTitle">잔액 추가</h2>
+	
+	    <form id="addBalanceForm" class="lf-form">
+	      <p class="lf-help">선택된 은행 통장에 금액을 추가합니다.</p>
+	      <label class="lf-field">
+	        <span class="lf-label">추가할 금액</span>
+	        <input id="addAmount" name="amount" type="number" inputmode="numeric"
+	               min="1" step="1" required placeholder="예: 50000" />
+	      </label>
+	
+	      <div class="lf-actions">
+	        <button class="lf-btn lf-btn--primary" type="submit">추가</button>
+	        <button class="lf-btn" type="button" data-dismiss>취소</button>
+	      </div>
+	    </form>
+	  </div>
+	</div>
+
+
+	<!-- 공통 footer 삽입 -->
+	<div th:replace="fragments/footer :: footer"></div>
+
+	<!-- ⬇️ confetti 타깃 + 초기화 (한 번만) -->
+	<script>
+		// 1) 화면 전체를 덮는, 눈에 안 보이는 타깃(클릭 이벤트만 받음)
+		const _confettiTarget = document.createElement('button');
+		_confettiTarget.id = 'confettiTarget';
+		_confettiTarget.type = 'button';
+		_confettiTarget.style.cssText = 'position:fixed;inset:0;opacity:0;pointer-events:none;';
+		document.body.appendChild(_confettiTarget);
+
+		// 2) confetti 인스턴스 생성
+		const confetti = new Confetti('confettiTarget');
+		confetti.destroyTarget(false);  // 타깃을 숨기지 않도록
+		confetti.setCount(120);         // 파티클 수
+		confetti.setPower(40);          // 터지는 세기
+		confetti.setSize(1.2);          // 파티클 크기
+		confetti.setFade(true);         // 서서히 사라짐
+
+		// 3) 호출 함수: 중앙에서 발사
+		function shootConfetti() {
+			const x = window.innerWidth / 2;
+			const y = window.innerHeight / 2;
+			_confettiTarget.dispatchEvent(new MouseEvent('click', {clientX: x, clientY: y}));
+		}
+	</script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+
+			// 혹시 남아있는 half.png 이미지가 있으면 정리
+			document.querySelectorAll('img.passbook-flip').forEach(el => el.remove());
+
+			// paper-frame 안에 가짜 종이(div) 준비
+			const frame = document.querySelector('.paper-frame');
+			let flip = frame?.querySelector('.passbook-flip.fx');
+			if (!flip && frame) {
+				flip = document.createElement('div');
+				flip.className = 'passbook-flip fx';
+				frame.appendChild(flip);
+			}
+
+
+			const tabs = document.querySelectorAll('.wallet-tabs .tab[data-bank]');
+			const addBankBtn = document.getElementById('addBank');
+			
+			const panels = document.querySelectorAll('.bank-panel');
+			const bg = document.getElementById('passbookBg');
+			const infoBox = document.querySelector('.passbook-top .info-section');
+			let opened = false;
+			let currentBank = null;
+
+			function updateAddBalanceBtn(visible){
+				  if(!addBalanceBtn) return;
+				  if(visible && currentBank){
+				    addBalanceBtn.style.display = 'inline-flex';   // 보이기
+				    addBalanceBtn.setAttribute('aria-label', `${currentBank} 잔액 추가하기`);
+				  }else{
+				    addBalanceBtn.style.display = 'none';          // 숨기기
+				  }
+				}
+			
+			function showPanel(bank) {
+				// 기존 탭/패널 로직 유지
+				currentBank = bank;
+				tabs.forEach(t => t.classList.toggle('selected', t.dataset.bank === bank));
+				panels.forEach(p => {
+					const on = p.dataset.bank === bank;
+					p.style.display = on ? 'block' : 'none';
+					p.classList.toggle('is-visible', on);
+				});
+				if (infoBox) infoBox.style.display = 'block';
+
+				  // 통장 펼친 그림으로 변경
+				  if (!opened){
+				    bg.src = '/image/passbook.png';
+				    opened = true;
+				  }
+
+				  updateAddBalanceBtn(true);
+				
+				// 끝나면 초기화
+				const done = (e) => {
+					if (e.animationName === 'lfFlipUp3D') {
+						flip.classList.remove('run');
+						flip.removeEventListener('animationend', done);
+					}
+				};
+				flip.addEventListener('animationend', done);
+			}
+			
+			addBankBtn?.addEventListener('click', () => {
+				  updateAddBalanceBtn(false);
+			});
+
+			tabs.forEach(tab => tab.addEventListener('click', () => showPanel(tab.dataset.bank)));
+
+
+			// === 기부 모달 ===
+			const modal = document.getElementById('donateModal');
+			const openBtn = document.getElementById('openDonateModal');
+			const closeBtn = document.getElementById('closeDonateModal');
+			const addBalanceBtn = document.getElementById('addBalance');
+			const donateBtn = document.getElementById('btnDonate');
+			const balEl = document.querySelector('.point-balance');
+			const currentBalance = Number(balEl?.dataset.balance || 0); // 서버 값
+			
+			const selectedBank = document.querySelector('.tab[data-bank]');
+			const selectedBankName = selectedBank.dataset.bank;
+
+			
+			
+			// 금액 입력 시 보유 초과 방지(선제적 캡)
+			const amountInput = document.getElementById('donationAmount');
+			amountInput.addEventListener('input', () => {
+				const v = Number(amountInput.value || 0);
+				if (v > currentBalance) amountInput.value = currentBalance;
+			});
+
+			openBtn.addEventListener('click', () => {
+				modal.style.display = 'block';
+				modal.setAttribute('aria-hidden', 'false');
+				amountInput.focus();
+			});
+			closeBtn.addEventListener('click', () => {
+				modal.style.display = 'none';
+				modal.setAttribute('aria-hidden', 'true');
+			});
+			modal.addEventListener('click', (e) => {
+				if (e.target === modal) closeBtn.click(); // 바깥 클릭 닫기
+			});
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape' && modal.style.display === 'block') closeBtn.click();
+			});
+
+			
+			addBalanceBtn.addEventListener('click', async () => {
+				
+				
+			})
+			// 기부하기 클릭
+			donateBtn.addEventListener('click', async () => {
+				const amt = Number(amountInput.value || 0);
+				if (Number.isNaN(amt) || amt < 1000) {
+					alert('1,000원 이상부터 기부할 수 있습니다.');
+					amountInput.focus();
+					return;
+				}
+				if (!document.getElementById('agreeOrg').checked) {
+					alert('단체 확인에 동의해 주세요.');
+					return;
+				}
+
+				try {
+					const res = await fetch('/donations/point', {
+						method: 'POST',
+						headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+						body: new URLSearchParams({amount: amt})
+					});
+
+					if (!res.ok) {
+						const msg = await res.text();
+						throw new Error(msg || '기부 처리 중 오류가 발생했습니다.');
+					}
+
+					const data = await res.json();
+
+					shootConfetti();                 // confetti효과
+
+					alert('기부가 완료되었습니다. 감사합니다!');
+
+					// 포인트 잔액 갱신 표시 (모델로 내려준 영역이 있으면 업데이트)
+					// 표시 갱신
+					balEl.dataset.balance = data.newBalance;
+					balEl.textContent = '보유 ' + Number(data.newBalance).toLocaleString() + ' P';
+					amountInput.value = '';
+					closeBtn.click();
+				} catch (e) {alert(e.message);}
+			});
+
+			//============ 계좌 추가 모달 ================
+			const addModal = document.getElementById('addBankModal');
+			const form = document.getElementById('addBankForm');
+
+			function openModal() {
+			    addModal.hidden = false;
+			    document.body.style.overflow = 'hidden';
+			    // 첫 입력 포커스
+			    setTimeout(() => document.getElementById('bankName')?.focus(), 0);
+			  }
+			  function closeModal() {
+			    addModal.hidden = true;
+			    document.body.style.overflow = '';
+			    form.reset();
+			  }
+
+			  addBankBtn?.addEventListener('click', (e) => {
+			    e.preventDefault();
+			    openModal();
+			  });
+
+			  // 닫기 (오버레이, 취소, X 버튼)
+			  addModal?.addEventListener('click', (e) => {
+			    if (e.target.matches('[data-dismiss]')) closeModal();
+			  });
+			  document.addEventListener('keydown', (e) => {
+			    if (!modal.hidden && e.key === 'Escape') closeModal();
+			  });
+
+			  // 제출
+			  form?.addEventListener('submit', (e) => {
+			    e.preventDefault();
+			    const fd = new FormData(form);
+			    const bankName = fd.get('bankName');
+			    const account_Number = fd.get('accountNumber');
+				
+			    fetch('/wallet/addBank', {
+		    		  method: 'POST',
+		    		  headers: {
+		    		    'Content-Type': 'application/json'
+		    		  },
+		    		  body: JSON.stringify({
+		    			  bankName,
+		    			  account_Number
+		    		  })
+		    		});
+
+			    closeModal();
+			    
+			    window.location.reload()
+			  });
+
+
+
+			// ---------- 모달 탭 전환 ----------
+			const donateTabBtns = document.querySelectorAll('.donate-tabs .donate-tab[data-pane]');
+			const donatePanes = document.querySelectorAll('.donate-pane');
+
+			function setDonateTab(target) { // 'oneoff' | 'recurring'
+				donateTabBtns.forEach(b => b.classList.toggle('active', b.dataset.pane === target));
+				donatePanes.forEach(p => p.classList.toggle('active', p.dataset.pane === target));
+			}
+
+			// 모달 열 때 항상 일시(보유금액) 먼저
+			openBtn.addEventListener('click', () => {
+				setDonateTab('oneoff');
+			});
+
+			// 탭 클릭으로 전환
+			donateTabBtns.forEach(btn => {
+				btn.addEventListener('click', () => setDonateTab(btn.dataset.pane));
+			});
+
+			// ---------- 빠른 금액 버튼(두 pane 공통) ----------
+			document.querySelectorAll('.quick-buttons button').forEach(b => {
+				b.addEventListener('click', () => {
+					// 자신이 속한 pane 안의 number input에 주입
+					const pane = b.closest('.donate-pane');
+					const input = pane.querySelector('input[type="number"]');
+					if (input) input.value = b.dataset.amt;
+				});
+			});
+
+			// ---------- 정기기부 신청 ----------
+			const rcAmountInput = document.getElementById('recurringAmount');
+			const rcDaySelect = document.getElementById('rcDaySelect');
+			const rcBtn = document.getElementById('btnRecurring');
+
+			// 말일 선택 시 day select 비활성화
+			document.querySelectorAll('input[name="rc_daytype"]').forEach(r => {
+				r.addEventListener('change', () => {
+					const v = document.querySelector('input[name="rc_daytype"]:checked')?.value;
+					rcDaySelect.disabled = (v !== 'day');  // 'last'면 비활성화
+				});
+			});
+
+			rcBtn.addEventListener('click', async () => {
+				const amt = Number(rcAmountInput.value || 0);
+				if (Number.isNaN(amt) || amt < 20000) {
+					alert('정기기부는 20,000원 이상부터 가능합니다.');
+					rcAmountInput.focus(); return;
+				}
+				if (!document.getElementById('agreeOrgRc').checked) {
+					alert('정기기부 동의가 필요합니다.');
+					return;
+				}
+
+				const dayType = document.querySelector('input[name="rc_daytype"]:checked')?.value; // 'day' | 'last'
+				const dueDay = (dayType === 'day') ? Number(rcDaySelect.value) : null;
+
+				try {
+					// 서버에 맞게 엔드포인트만 바꿔주세요.
+					const res = await fetch('/donations/recurring', {
+						method: 'POST',
+						headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+						body: new URLSearchParams({
+							amount: amt,                       // 금액(원)
+							schedule: dayType === 'last' ? 'LASTDAY' : `DAY:${dueDay}` // 스케줄
+						})
+					});
+
+					if (!res.ok) {
+						const msg = await res.text();
+						throw new Error(msg || '정기기부 신청 중 오류가 발생했습니다.');
+					}
+
+					alert('정기기부가 설정되었습니다. 감사합니다!');
+					rcAmountInput.value = '';
+					setDonateTab('oneoff'); // 완료 후 일시 탭으로 돌려놓기(선택)
+				} catch (e) {
+					alert(e.message);
+				}
+			});
+
+			/*     포인트 충전하러가기  */
+			document.querySelector('.donate-tab--pay')?.addEventListener('click', () => {
+				window.location.href = '/pay';
+			});
+
+		});
+
+
+
+
+		/* ========================= dark mode ========================= */
+		(function () {
+			const KEY = 'lfTheme'; // 'light' | 'dark'
+			const root = document.documentElement; // <html>
+
+			function applyTheme(mode) {
+				if (mode === 'dark') {
+					root.classList.add('theme-dark');
+					swapIcon('dark');
+					localStorage.setItem(KEY, 'dark');
+				} else {
+					root.classList.remove('theme-dark');
+					swapIcon('light');
+					localStorage.setItem(KEY, 'light');
+				}
+			}
+
+			function swapIcon(mode) {
+				const img = document.getElementById('lfThemeIcon');
+				if (!img) return;
+				if (mode === 'dark') {
+					img.src = '/images/whitemode.png';
+					img.alt = '라이트 모드로 전환';
+				} else {
+					img.src = '/images/sidebar/darkmode.png';
+					img.alt = '다크 모드로 전환';
+				}
+			}
+
+			// 초기 상태: 저장값 → 없으면 OS 설정 따름
+			(function init() {
+				const saved = localStorage.getItem(KEY);
+				const preferDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+				const initial = saved || (preferDark ? 'dark' : 'light');
+				applyTheme(initial);
+			})();
+
+			// 버튼 이벤트
+			const btn = document.getElementById('lfThemeToggle');
+			btn?.addEventListener('click', () => {
+				const isDark = document.documentElement.classList.contains('theme-dark');
+				applyTheme(isDark ? 'light' : 'dark');
+			});
+		})();
+
+
+	</script>
+	
+	<script>
+(function () {
+  const addBalanceBtn = document.getElementById('addBalance');          // 페이지 상단 버튼
+  const modal = document.getElementById('addBalanceModal');
+  const form  = document.getElementById('addBalanceForm');
+  const input = document.getElementById('addAmount');
+
+  // 현재 선택된 은행 탭의 data-bank 읽기 (없으면 첫 탭)
+  function getCurrentBank() {
+    const selected = document.querySelector('.wallet-tabs .tab.selected[data-bank]');
+    if (selected) return selected.dataset.bank;
+    const first = document.querySelector('.wallet-tabs .tab[data-bank]');
+    return first ? first.dataset.bank : null;
+  }
+
+  function openModal() {
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => input?.focus(), 0);
+  }
+  function closeModal() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    form.reset();
+  }
+
+  // 열기
+  addBalanceBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const bank = getCurrentBank();
+    if (!bank) return alert('은행 탭을 먼저 선택하세요.');
+    openModal();
+  });
+
+  // 닫기 (오버레이/취소/X)
+  modal?.addEventListener('click', (e) => {
+    if (e.target.matches('[data-dismiss]')) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!modal.hidden && e.key === 'Escape') closeModal();
+  });
+
+  // 제출
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const bankName = getCurrentBank();
+    if (!bankName) return alert('은행 탭을 먼저 선택하세요.');
+
+    const amount = Number((new FormData(form)).get('amount') || 0);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      input.focus(); return alert('1원 이상 입력해 주세요.');
+    }
+    const merchantUid = 'littleForest_wallet_addBalance' + Date.now();
+	
+	// 카카오페이 결제창 호출
+	const IMP = window.IMP;
+	try {IMP?.init?.('imp76384566');} catch (_) { }
+	IMP.request_pay({
+		pg: 'kakaopay',
+		pay_method: 'card',
+		merchant_uid: merchantUid,
+		name: '결제하기',
+		amount: amount
+	}, async (rsp) => {
+		if (!rsp.success) {
+
+			alert('결제가 취소되었거나 실패했습니다.\n' + (rsp.error_msg || ''));
+			return;
+		}
+    try {
+      const res = await fetch('/wallet/addBalance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bankName, amount })
+      });
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || '잔액 추가 중 오류가 발생했습니다.');
+      }
+      closeModal();
+      // 필요하면 confetti 등 효과 가능
+      // shootConfetti?.();
+      window.location.reload();
+    } catch (err) {
+      alert(err.message);
+    }
+  });
+  });
+})();
+	
+	
+	
+</script>
+
+
+</body>
+
+</html>

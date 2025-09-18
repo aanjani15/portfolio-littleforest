@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>mypage</title>
+<link rel="stylesheet" href="/css/style.css">
+<!-- 공통 header/footer용 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="/css/shopmain.css">
+
+
+</head>
+<body>
+	
+	<!-- 공통 header 삽입 -->
+	<div th:replace="fragments/header :: header"></div>
+		
+	<div class="products_wrapper">
+	    <a th:each="item : ${products}"
+	       th:href="@{/product?product_Id={id}(id=${item.id})}"
+	       class="product_card"
+	       style="text-decoration: none;">
+	       
+	        <img th:src="@{${item.image_Path}}" alt="제품 이미지" class="product_img">
+	        <div class="product_name" th:text="${item.name}"></div>
+	        <div class="product_price" th:text="${item.price} + '원'"></div>
+	        <div class="product_desc" th:text="${item.description}"></div>
+	    </a>
+	</div>
+	
+	<!-- 공통 footer 삽입 -->
+	<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

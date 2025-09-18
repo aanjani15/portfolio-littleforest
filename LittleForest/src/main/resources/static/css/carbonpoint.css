@@ -1,0 +1,720 @@
+@charset "UTF-8";
+
+/* 이 페이지(.wrap.nz-scope) 안에서만 적용 */
+
+/* ===== Hero(상단 연한 그린 배경) ===== */
+.nz-scope.nz-hero {
+	background: #eaf6ef;
+	padding: 56px 0 48px;
+	margin: 0 0 24px;
+	text-align: center;
+}
+
+.nz-scope.nz-hero h1 {
+	font-size: 48px;
+	font-weight: 800;
+	color: #0f2e1e;
+	letter-spacing: -0.02em;
+}
+
+/* ===== 비밀번호 인증 카드 ===== */
+.nz-scope.cp-auth {
+	display: flex;
+	justify-content: center;
+}
+
+.nz-scope .cp-card {
+	width: min(720px, 90vw);
+	background: #fff;
+	border: 1px solid #e6ece9;
+	border-radius: 16px;
+	padding: 32px 28px 28px;
+	box-shadow: 0 8px 28px rgba(16, 24, 40, .06);
+}
+
+.nz-scope .cp-help {
+	text-align: center;
+	color: #3b4a40;
+	margin: 4px 0 18px;
+	font-size: 18px;
+}
+
+/* 시각적으로 숨김(스크린리더용 라벨) */
+.nz-scope .sr-only {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* 입력 그룹(아이콘 버튼 포함) */
+.nz-scope .cp-input-group {
+	position: relative;
+	display: flex;
+	align-items: center;
+	margin-bottom: 16px;
+}
+
+.nz-scope .cp-input-group input[type="password"],
+.nz-scope .cp-input-group input[type="text"] {
+	width: 100%;
+	padding: 14px 44px 14px 16px;
+	border: 1px solid #dfe7e3;
+	border-radius: 10px;
+	background: #fff;
+	font-size: 16px;
+}
+
+.nz-scope .cp-input-group input::placeholder {
+	color: #9aa7a1;
+}
+
+.nz-scope .cp-input-group input:focus {
+	outline: none;
+	border-color: #2e7d32;
+	box-shadow: 0 0 0 3px rgba(46, 125, 50, .12);
+}
+
+.nz-scope .cp-eye {
+	position: absolute;
+	right: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 36px;
+	border: 0;
+	border-radius: 8px;
+	background: #f3f7f5;
+	color: #3b6b45;
+	cursor: pointer;
+}
+
+.nz-scope .cp-eye:hover {
+	background: #eaf4ef;
+}
+
+/* 확인 버튼 */
+.nz-scope .cp-btn {
+	display: block;
+	width: 100%;
+	padding: 14px 18px;
+	border: 1px solid #2e7d32;
+	background: #2e7d32;
+	color: #fff;
+	font-weight: 700;
+	font-size: 18px;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: filter .15s ease;
+}
+
+.nz-scope .cp-btn:hover {
+	filter: brightness(1.04);
+}
+
+/* 작은 화면 최적화 */
+@media (max-width: 560px) {
+	.nz-scope.nz-hero h1 {
+		font-size: 36px;
+	}
+
+	.nz-scope .cp-help {
+		font-size: 16px;
+	}
+}
+
+
+/* =================삭제 ==================== */
+.wrap.nz-scope {
+	max-width: 960px;
+	margin: 24px auto;
+}
+
+.wrap.nz-scope .card {
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	padding: 16px;
+	margin-bottom: 16px;
+}
+
+.wrap.nz-scope table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.wrap.nz-scope th,
+.wrap.nz-scope td {
+	border: 1px solid #eee;
+	padding: 8px;
+	text-align: left;
+}
+
+.wrap.nz-scope .muted {
+	color: #777;
+	font-size: 0.9rem;
+}
+
+.wrap.nz-scope .error {
+	color: #c00;
+	font-weight: 600;
+}
+
+.wrap.nz-scope .ok {
+	color: #0a7;
+	font-weight: 600;
+}
+
+.wrap.nz-scope input[type="text"],
+.wrap.nz-scope input[type="password"],
+.wrap.nz-scope select {
+	width: 100%;
+	padding: 8px;
+}
+
+.wrap.nz-scope label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: 600;
+}
+
+.wrap.nz-scope .grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+
+.wrap.nz-scope .btn {
+	padding: 10px 16px;
+	border: 1px solid #333;
+	background: #fafafa;
+	cursor: pointer;
+	border-radius: 8px;
+}
+
+
+
+/* ==========================================================================
+   NetZero(Carbon Point) page — SCOPED CSS ONLY
+   사용법: 페이지 루트 컨테이너에 class="nz-scope" 를 추가하세요
+   (예: <div class="wrap nz-scope"> … </div> 또는 <body class="nz-scope">)
+   전역(body/html/table 등) 선택자 사용 없음
+   ========================================================================== */
+
+.nz-scope {
+	--brand: #2e7d32;
+	/* 메인 그린 */
+	--brand-weak: #e8f3ec;
+	/* 연한 그린 배경 */
+	--line: #e6ece9;
+	/* 연한 경계선 */
+	--text-muted: #6b7280;
+	/* 보조 텍스트 */
+}
+
+/* 레이아웃 폭(컨테이너가 .wrap 인 경우와 아닐 경우 모두 대응) */
+.nz-scope.wrap,
+.nz-scope .wrap {
+	max-width: 1100px;
+	margin: 28px auto 40px;
+}
+
+/* 제목/보조문구 */
+.nz-scope>h2,
+.nz-scope .wrap>h2 {
+	font-size: 22px;
+	font-weight: 700;
+	color: #111;
+	margin-bottom: 8px;
+}
+
+.nz-scope .muted {
+	color: var(--text-muted);
+}
+
+/* 카드 */
+.nz-scope .card {
+	border: 1px solid var(--line);
+	border-radius: 14px;
+	background: #fff;
+	padding: 18px 20px;
+	margin-bottom: 18px;
+	box-shadow: 0 6px 18px rgba(16, 24, 40, .04);
+}
+
+/* 폼/버튼 */
+.nz-scope .grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 12px;
+}
+
+.nz-scope label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: 600;
+	color: #222;
+}
+
+.nz-scope input[type=text],
+.nz-scope input[type=password],
+.nz-scope select {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	background: #fff;
+}
+
+.nz-scope .btn {
+	padding: 12px 18px;
+	border: 1px solid var(--brand);
+	background: var(--brand);
+	color: #fff;
+	border-radius: 10px;
+	font-weight: 600;
+	transition: filter .15s ease;
+}
+
+.nz-scope .btn:hover {
+	filter: brightness(1.03);
+}
+
+/* 상태 배너 */
+.nz-scope .ok,
+.nz-scope .error {
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-weight: 600;
+}
+
+.nz-scope .ok {
+	color: #106f43;
+	background: #eaf6ef;
+	border: 1px solid #d6ecdf;
+}
+
+.nz-scope .error {
+	color: #a40000;
+	background: #fdeaea;
+	border: 1px solid #f6d2d2;
+}
+
+/* 표(전역 table 미사용: nz-scope 하위에만 적용) */
+.nz-scope table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+}
+
+.nz-scope thead th {
+	background: #f7f9f8;
+	border-bottom: 1px solid var(--line);
+	color: #222;
+	font-weight: 700;
+	text-align: center;
+	padding: 10px;
+}
+
+.nz-scope tbody td,
+.nz-scope tbody th {
+	border-bottom: 1px solid #f2f4f3;
+	padding: 10px;
+	vertical-align: middle;
+}
+
+.nz-scope tbody tr:nth-child(even) {
+	background: #fcfdfc;
+}
+
+.nz-scope th,
+.nz-scope td {
+	text-align: center;
+}
+
+.nz-scope table small {
+	color: var(--text-muted);
+}
+
+/* 섹션 제목 하이라이트 */
+.nz-scope .card>h3 {
+	font-size: 18px;
+	margin: 4px 0 10px;
+}
+
+.nz-scope .card>h4 {
+	font-size: 15px;
+	margin: 14px 0 6px;
+	color: #111;
+}
+
+.nz-scope .card>h3::after {
+	content: "";
+	display: block;
+	height: 2px;
+	margin-top: 8px;
+	background: linear-gradient(90deg, var(--brand) 0 120px, transparent 120px);
+	border-radius: 2px;
+}
+
+/* 요약 KPI 타일(요약 카드에 summary-card 클래스 사용 권장) */
+.nz-scope .summary-card table tbody {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 10px;
+}
+
+.nz-scope .summary-card table tbody tr {
+	display: grid;
+	grid-template-columns: 1fr;
+	border: none;
+	background: var(--brand-weak);
+	border: 1px solid #d8e9df;
+	border-radius: 12px;
+	padding: 10px 12px;
+}
+
+.nz-scope .summary-card table tbody tr th {
+	border: 0;
+	background: transparent;
+	text-align: left;
+	padding: 0;
+	color: #1b4332;
+	font-size: 13px;
+	margin-bottom: 6px;
+}
+
+.nz-scope .summary-card table tbody tr td {
+	border: 0;
+	background: transparent;
+	text-align: left;
+	padding: 0;
+	font-size: 22px;
+	font-weight: 800;
+	color: #0b5d2a;
+}
+
+/* 설명 리스트 */
+.nz-scope .notes {
+	margin: 8px 0 0;
+	color: var(--text-muted);
+	line-height: 1.6;
+}
+
+.nz-scope .notes li {
+	margin-left: 16px;
+	list-style: disc;
+}
+
+/* 반응형 */
+@media (max-width:1024px) {
+	.nz-scope .grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width:640px) {
+	.nz-scope .grid {
+		grid-template-columns: 1fr;
+	}
+
+	.nz-scope.wrap,
+	.nz-scope .wrap {
+		padding: 0 12px;
+	}
+
+	.nz-scope .card {
+		padding: 14px;
+	}
+
+	.nz-scope table {
+		display: block;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+}
+
+
+
+
+
+
+
+/* ===== 공통(결과 섹션) ===== */
+.nz-scope .nz-result {
+	border: 1px solid #e6ece9;
+	border-radius: 14px;
+	box-shadow: 0 6px 18px rgba(16, 24, 40, .04);
+}
+
+.nz-scope .nz-result>h3 {
+	font-size: 20px;
+	margin: 6px 0 14px;
+	font-weight: 800;
+	color: #1b1b1b;
+}
+
+.nz-scope .nz-result>h3::after {
+	content: "";
+	display: block;
+	height: 2px;
+	margin-top: 8px;
+	background: linear-gradient(90deg, #2e7d32 0 120px, transparent 120px);
+	border-radius: 2px;
+}
+
+.nz-scope .nz-result .sub {
+	margin: 18px 0 8px;
+	font-size: 16px;
+}
+
+/* 상태 배너를 연한 그린 박스로 */
+.nz-scope .status-card {
+	background: #fff;
+}
+
+.nz-scope .status-card .ok,
+.nz-scope .status-card .error {
+	border-radius: 10px;
+	padding: 10px 14px;
+	font-weight: 700;
+	border: 1px solid;
+	box-shadow: 0 4px 12px rgba(16, 24, 40, .06) inset;
+}
+
+.nz-scope .status-card .ok {
+	color: #0f5a36;
+	background: #e9f6ee;
+	border-color: #d5eade;
+}
+
+.nz-scope .status-card .error {
+	color: #a40000;
+	background: #fdeaea;
+	border-color: #f6d2d2;
+}
+
+/* ===== 연간 현황: KPI 타일 ===== */
+.nz-scope .summary-card table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0 10px;
+}
+
+.nz-scope .summary-card tbody {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 12px;
+}
+
+/* 첫 두 행(이름/등급)은 본문 표처럼 아래로 빼고, 4개의 KPI만 타일화 */
+.nz-scope .summary-card tbody tr:nth-child(-n+2) {
+	grid-column: 1/-1;
+	display: block;
+	margin: 4px 0 0;
+}
+
+.nz-scope .summary-card tbody tr:nth-child(-n+2) th,
+.nz-scope .summary-card tbody tr:nth-child(-n+2) td {
+	display: inline-block;
+	padding: 6px 0;
+	border: 0;
+	color: #333;
+}
+
+.nz-scope .summary-card tbody tr:nth-child(-n+2) th {
+	width: 100px;
+	color: #666;
+}
+
+.nz-scope .summary-card tbody tr:nth-child(n+3) {
+	display: grid;
+	grid-template-columns: 1fr;
+	align-content: center;
+	background: #ffffff;
+	border: 1px solid #d8e9df;
+	border-radius: 12px;
+	padding: 14px 16px;
+	box-shadow: 0 2px 10px rgba(16, 24, 40, .04);
+}
+
+.nz-scope .summary-card tbody tr:nth-child(n+3) th {
+	border: 0;
+	background: transparent;
+	color: #276749;
+	font-size: 13px;
+	text-align: left;
+	margin-bottom: 6px;
+}
+
+.nz-scope .summary-card tbody tr:nth-child(n+3) td {
+	border: 0;
+	background: transparent;
+	color: #0b5d2a;
+	font-size: 24px;
+	font-weight: 800;
+	text-align: left;
+}
+
+/* KPI 하단 주석 */
+.nz-scope .summary-card .kpi-footnote {
+	color: #6b7280;
+	margin-top: 8px;
+	font-size: 13px;
+}
+
+/* ===== 월별 표 ===== */
+.nz-scope .monthly-card .notes {
+	margin: 6px 0 12px;
+	color: #475569;
+	line-height: 1.6;
+}
+
+.nz-scope .monthly-card .notes li {
+	margin-left: 16px;
+	list-style: disc;
+}
+
+.nz-scope .table-monthly {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.nz-scope .table-monthly thead th {
+	background: #f7f9f8;
+	border-bottom: 1px solid #e6ece9;
+	color: #222;
+	font-weight: 700;
+	text-align: center;
+	padding: 10px;
+}
+
+.nz-scope .table-monthly tbody td {
+	border-bottom: 1px solid #f2f4f3;
+	padding: 12px 10px;
+	text-align: center;
+}
+
+.nz-scope .table-monthly tbody tr:nth-child(even) {
+	background: #fcfdfc;
+}
+
+/* “조회된 내용이 없습니다.” 중앙 정렬(비어있을 때) */
+.nz-scope .table-monthly tbody:empty::after,
+.nz-scope .table-detail tbody:empty::after {
+	content: "조회된 내용이 없습니다.";
+	display: block;
+	padding: 28px 0;
+	color: #6b7280;
+}
+
+/* 상세 내역 표(얇게) */
+.nz-scope .table-detail {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 8px;
+}
+
+.nz-scope .table-detail thead th {
+	background: #fafafa;
+	border-bottom: 1px solid #e6ece9;
+	color: #333;
+	padding: 8px 10px;
+}
+
+.nz-scope .table-detail tbody td {
+	border-bottom: 1px solid #f2f4f3;
+	padding: 10px;
+	text-align: center;
+}
+
+.nz-scope .table-detail tbody tr:nth-child(even) {
+	background: #fcfdfc;
+}
+
+/* ===== 항목별 표(녹색 헤더 + 좌측 열 강조) ===== */
+.nz-scope .table-type {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.nz-scope .table-type thead th {
+	background: #eaf6ef;
+	color: #0f2e1e;
+	border: 1px solid #d6e9de;
+	padding: 10px;
+	text-align: center;
+	font-weight: 800;
+}
+
+.nz-scope .table-type tbody td {
+	border: 1px solid #edf2ef;
+	padding: 10px;
+	text-align: center;
+}
+
+.nz-scope .table-type tbody td:first-child {
+	background: #f7fbf9;
+	font-weight: 600;
+	text-align: left;
+	padding-left: 14px;
+}
+
+.nz-scope .table-type tbody tr:last-child td {
+	font-weight: 700;
+}
+
+/* 여백/폭 보정 */
+.nz-scope.wrap,
+.nz-scope .wrap {
+	max-width: 1100px;
+	margin: 28px auto 40px;
+}
+
+
+/* ======================= 조회 성공 화면 전용 전체 배경 ==================== */
+body.nz-success {
+	min-height: 100vh;
+	position: relative;
+	/* ::before 기준 */
+}
+
+/* 화면 가득 채우는 고정 배경 */
+body.nz-success::before {
+	content: "";
+	position: fixed;
+	/* 스크롤과 무관하게 고정 */
+	inset: 0;
+	background: url('/images/forest_back3.jpg') center / cover no-repeat;
+	z-index: -1;
+	/* 모든 내용 뒤로 */
+	filter: saturate(1) contrast(1.02);
+	filter: brightness(0.95);
+	/*살짝 어둡게 */
+
+}
+
+/* 성공 화면에서 카드/표 가독성(반투명 화이트) */
+body.nz-success .nz-result,
+body.nz-success .card {
+	background: rgba(255, 255, 255, 0.86);
+	backdrop-filter: blur(2px);
+}
+
+/* 요약 KPI 타일 내부 텍스트 색상 약간 진하게 */
+body.nz-success .summary-card tbody tr:nth-child(n+3) td {
+	color: #0b5d2a;
+}
+
+/* 작은 화면에서도 배경이 꽉 차도록 */
+@media (max-width: 640px) {
+	body.nz-success::before {
+		background-position: center;
+	}
+}

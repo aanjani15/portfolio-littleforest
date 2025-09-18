@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fintecho.littleforest.mapper.AttendanceMapper">
+
+	<insert id="insertAttendance">
+		INSERT INTO attendance_table (user_id, attend_date)
+		VALUES (#{user_Id}, TRUNC(SYSDATE))
+  </insert>
+  
+	<select id="getAttendanceDates" resultType="string">
+		SELECT DISTINCT TO_CHAR(TRUNC(attend_date), 'YYYY-MM-DD') AS ymd
+		FROM attendance_table
+		WHERE user_id = #{user_Id}
+		ORDER BY TO_DATE(TO_CHAR(TRUNC(attend_date), 'YYYY-MM-DD'),
+		'YYYY-MM-DD') 
+	</select>
+
+	<select id="countTodayAttendance" resultType="int">
+    SELECT COUNT(*)
+    FROM attendance_table
+    WHERE user_id = #{user_Id}
+      AND TRUNC(attend_date) = TRUNC(SYSDATE)
+  </select>
+	
+	<select id="getTotalAttendanceCount" resultType="int">
+    SELECT COUNT(*)
+    FROM (
+      SELECT TRUNC(attend_date) AS d
+      FROM attendance_table
+      WHERE user_id = #{user_Id}
+      GROUP BY TRUNC(attend_date)
+    )
+  </select>
+
+
+
+  <select id="findByUserSeq" resultType="com.fintecho.littleforest.vo.UserVO">
+		SELECT 
+		id AS id,
+		oauth_id AS oauth_id,
+		name AS name,
+		role AS role,
+		badge AS badge,
+		created_at AS created_at,
+		address AS address,
+		nickname AS nickname,
+		point AS point,
+		profile_photo AS profile_photo
+		FROM user_table
+		WHERE id = #{id}
+  </select>
+
+	<!-- 기존 MERGE 구문 삭제하고 이걸로 교체 -->
+	<update id="addAttendanceRewardToInventory">
+  	UPDATE growing_tree_table
+  	SET
+    water_stock = NVL(water_stock, 0) + #{water},
+    biyro_stock = NVL(biyro_stock, 0) + #{biyro},
+    last_updated = SYSDATE
+  	WHERE user_id = #{user_Id}
+	</update>
+
+	
+	<select id="selectCurrentStocks" resultType="map">
+    SELECT NVL(water_stock,0) AS WATER_STOCK,
+           NVL(biyro_stock,0) AS BIYRO_STOCK
+    FROM growing_tree_table
+    WHERE user_id = #{user_Id}
+  </select>
+
+
+
+</mapper>

@@ -1,0 +1,177 @@
+:root {
+	--bg: #f5f7fb;
+	--card: #fff;
+	--ink: #0f172a;
+	--muted: #64748b;
+	--line: #e6e8eb;
+	--shadow: 0 10px 24px rgba(15, 23, 42, .06);
+	--radius: 16px;
+}
+
+html,
+body {
+	height: 100%
+}
+
+body {
+	margin: 0;
+	color: var(--ink);
+	font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+	background: var(--bg);
+}
+
+.container {
+	max-width: 1280px;
+	margin: 22px auto;
+	padding: 0 20px
+}
+
+.title {
+	margin: 0 0 16px;
+	font-size: 22px;
+	font-weight: 800
+}
+
+/* KPI */
+.kpi-row {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 12px;
+	margin-bottom: 16px
+}
+
+.kpi {
+	background: var(--card);
+	border: 1px solid rgba(15, 23, 42, .06);
+	border-radius: 14px;
+	padding: 14px 16px;
+	box-shadow: var(--shadow)
+}
+
+.kpi-title {
+	color: var(--muted);
+	font-size: 12.5px;
+	font-weight: 700;
+	margin-bottom: 6px
+}
+
+.kpi-value {
+	font-size: 22px;
+	font-weight: 800
+}
+
+/* 그룹 카드 컨테이너(바깥) */
+.group-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	/* 큰 카드 2열 */
+	gap: 16px;
+}
+
+/* 그룹 카드 */
+.card.group-card {
+	background: var(--card);
+	border: 1px solid rgba(15, 23, 42, .06);
+	border-radius: var(--radius);
+	padding: 14px;
+	box-shadow: var(--shadow)
+}
+
+.group-head {
+	margin-bottom: 10px
+}
+
+.group-head h3 {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 800;
+	color: #1f2937
+}
+
+/* 그룹 내부 2열 */
+.group.two {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px
+}
+
+/* 서브 유닛(소카드) */
+.unit {
+	background: #fafbff;
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	padding: 12px;
+}
+
+.unit h4 {
+	margin: 0 0 6px;
+	font-size: 13px;
+	color: #374151;
+	font-weight: 800
+}
+
+/* 차트 고정 높이 */
+.chart {
+	position: relative
+}
+
+.h160 {
+	height: 160px
+}
+
+.h180 {
+	height: 180px
+}
+
+.h200 {
+	height: 200px
+}
+
+.chart canvas {
+	position: absolute;
+	inset: 0;
+	width: 100% !important;
+	height: 100% !important
+}
+
+/* 표 */
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px
+}
+
+.table th,
+.table td {
+	padding: 8px 10px;
+	border-bottom: 1px solid var(--line);
+	text-align: left
+}
+
+.table th {
+	color: var(--muted);
+	font-weight: 700
+}
+
+.table-scroll {
+	max-height: 220px;
+	overflow: auto
+}
+
+/* 반응형 */
+@media (max-width:1100px) {
+	.group-grid {
+		grid-template-columns: 1fr
+	}
+}
+
+@media (max-width:720px) {
+	.kpi-row {
+		grid-template-columns: 1fr 1fr
+	}
+
+	.group.two {
+		grid-template-columns: 1fr
+	}
+
+}

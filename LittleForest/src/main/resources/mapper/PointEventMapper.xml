@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.PointEventMapper">
+
+  <insert id="insert">
+    INSERT INTO point_event_table
+      (id, user_id, event_code, claim_date, claimed_at, amount, memo)
+    VALUES
+      (point_event_seq.NEXTVAL,
+       #{user_Id},
+       #{event_Code},
+       TRUNC(SYSDATE),
+       SYSDATE,
+       #{amount},
+       #{memo})
+  </insert>
+  
+  <select id="countToday" resultType="int">
+    SELECT COUNT(1)
+      FROM point_event_table
+     WHERE user_id = #{user_Id}
+       AND event_code = #{event_Code}
+       AND claim_date = TRUNC(SYSDATE)
+  </select>
+
+</mapper>

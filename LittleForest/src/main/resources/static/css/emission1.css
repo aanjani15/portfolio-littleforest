@@ -1,0 +1,439 @@
+#calendar {
+	max-width: 1000px;
+	margin: 15px auto;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#calendar-container {
+	max-width: 1050px;
+	margin: 30px auto;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#calendar-title {
+	text-align: center;
+	font-weight: 700;
+	font-size: 1.8rem;
+	color: #2e7d32;
+	margin-bottom: 15px;
+}
+
+#calendar-controls select {
+	padding: 12px 24px;
+	/* 위아래 12px, 좌우 24px로 넉넉하게 */
+	font-size: 1.4rem;
+	/* 글자 크기 키우기 */
+	width: 150px;
+	/* 너비 고정 (필요에 따라 조절) */
+	padding: 6px 12px;
+	font-size: 1rem;
+	border: 1px solid #4CAF50;
+	border-radius: 4px;
+	background-color: white;
+	color: #2e7d32;
+	cursor: pointer;
+}
+
+#calendar-controls select:focus {
+	outline: none;
+	border-color: #2e7d32;
+	box-shadow: 0 0 5px #2e7d32aa;
+}
+
+/* 월 소비량 드롭다운 */
+.toolbar .select select {
+	padding: 8px 16px;
+	/* 넉넉한 패딩 */
+	font-size: 1rem;
+	border: 1px solid #4caf50;
+	/* 진한 초록 테두리 */
+	border-radius: 6px;
+	color: #2e7d32;
+	/* 글씨 진한 초록 */
+	cursor: pointer;
+	position: relative;
+	transition: all 0.2s ease;
+}
+
+/* 드롭다운 포커스 시 강조 */
+.toolbar .select select:focus {
+	outline: none;
+	border-color: #2e7d32;
+	box-shadow: 0 0 5px #2e7d32aa;
+}
+
+/* 커스텀 화살표 */
+.toolbar .select::after {
+	content: '▾';
+	position: absolute;
+	right: 12px;
+	pointer-events: none;
+	color: #2e7d32;
+	font-size: 0.8rem;
+}
+
+
+#calendar table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+#calendar th {
+	background-color: #2e7d32;
+	color: white;
+	padding: 12px 0;
+	font-weight: 600;
+	font-size: 1rem;
+}
+
+#calendar td {
+	border: 1px solid #ddd;
+	text-align: center;
+	vertical-align: top;
+	padding: 12px 6px;
+	height: 100px;
+	color: #333;
+}
+
+#calendar .date {
+	font-weight: 700;
+	font-size: 1.1rem;
+	margin-bottom: 8px;
+	color: #2e7d32;
+}
+
+#calendar .carbon {
+	font-size: 0.95rem;
+	color: rgb(76, 175, 80);
+	font-weight: 700;
+}
+
+/* 빈 셀은 테두리만 연하게 */
+#calendar td:empty {
+	border-color: #f0f0f0;
+	background-color: #fafafa;
+}
+
+.payment {
+	font-size: 0.9rem;
+	color: #d32f2f;
+	/* 빨간색 계열 */
+	margin-top: 5px;
+	font-weight: 700;
+}
+
+
+/* 사이드바 */
+.page-with-sidebar {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 16px;
+	padding: 16px;
+	align-items: start;
+	box-sizing: border-box;
+}
+
+.page-with-sidebar .page-content {
+	min-width: 0;
+}
+
+@media (max-width:992px) {
+	.page-with-sidebar {
+		padding-left: 88px;
+	}
+}
+
+/* ////////다크모드/////////////////////// */
+
+/* ========== 다크모드 토글 버튼 스타일 ========== */
+.lf-theme-toggle {
+	position: fixed;
+	top: calc(var(--lf-header-h));
+	/* 헤더 + 여백 */
+	/* 헤더 바로 아래 느낌 */
+	right: 20px;
+	z-index: 900;
+	border: 0;
+	padding: 6px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .85);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+	cursor: pointer;
+	line-height: 0;
+}
+
+.theme-dark .lf-theme-toggle {
+	background: rgba(0, 0, 0, .6);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, .4);
+}
+
+.lf-theme-toggle img {
+	display: block;
+	width: 32px;
+	height: 32px;
+}
+
+/* ========== 다크모드 컬러 레이어 ========== */
+/* 기본(라이트) 변수 */
+:root {
+	--lf-bg: #ffffff;
+	--lf-bg-soft: #f6f7f8;
+	--lf-panel: #ffffff;
+	--lf-border: #e7e7e7;
+	--lf-text: #111;
+	--lf-text-muted: #666;
+	--lf-green: #2e7d32;
+	--lf-green-weak: #e8f5e9;
+}
+
+/* 다크 변수(루트 클래스 .theme-dark 활성화 시) */
+.theme-dark {
+	--lf-bg: #0f1113;
+	--lf-bg-soft: #141618;
+	--lf-panel: #141618;
+	--lf-border: #2a2e33;
+	--lf-text: #e8e9ea;
+	--lf-text-muted: #a8b0b6;
+	--lf-green: #69d088;
+	/* 살짝 밝은 그린 */
+	--lf-green-weak: #12271a;
+	/* 연한 녹 배경 */
+}
+
+/* 페이지 배경/문자 기본 치환 */
+body {
+	background: var(--lf-bg);
+	color: var(--lf-text);
+}
+
+/* 탭/섹션/카드류 공통 */
+.pay-tabs {
+	border-bottom-color: var(--lf-border);
+}
+
+.pay-tabs a {
+	color: var(--lf-text-muted);
+}
+
+.pay-tabs a.active {
+	color: var(--lf-green);
+}
+
+.pay-tabs a.active::after {
+	background: var(--lf-green);
+}
+
+.section-sub {
+	color: var(--lf-text-muted);
+}
+
+.empty {
+	color: var(--lf-text-muted);
+	border-color: var(--lf-border);
+}
+
+/* 카드: 결제내역/이벤트/사용자 패널 */
+.history-card,
+.event-row,
+.easy-card,
+.user-card,
+.modal-dialog,
+.donate-dialog {
+	background: var(--lf-panel) !important;
+	border-color: var(--lf-border) !important;
+	color: var(--lf-text) !important;
+}
+
+/* 자잘한 텍스트 */
+.hc-meta {
+	color: var(--lf-text-muted);
+}
+
+.ev-meta {
+	color: var(--lf-green);
+}
+
+/* 포인트 카드(우측) */
+.balance-card {
+	background: var(--lf-green-weak);
+	border-color: color-mix(in hsl, var(--lf-green) 30%, #0000);
+}
+
+.bc-title {
+	color: var(--lf-green);
+}
+
+/* 버튼류 */
+.btn-light {
+	background: var(--lf-panel);
+	border-color: var(--lf-border);
+	color: var(--lf-text);
+}
+
+.btn-outline {
+	background: var(--lf-panel);
+	border-color: var(--lf-border);
+	color: var(--lf-text);
+}
+
+.btn-green,
+.donate-btn {
+	background: #22c55e;
+	color: #fff;
+}
+
+/* 모달 오버레이 */
+.modal,
+.donate-modal {
+	background: rgba(0, 0, 0, .55);
+}
+
+/* 사이드 레이아웃 그리드 보강(경계색) */
+.pay-grid {
+	gap: 24px;
+}
+
+/* 테이블/경계선 가능성 있는 요소들 한번 더 안전망 */
+* {
+	border-color: var(--lf-border);
+}
+
+
+/* 숫자/강조 텍스트를 다크모드에서 흰색으로 */
+.theme-dark .ec-amount,
+.theme-dark .bc-amount,
+.theme-dark .hc-amount,
+.theme-dark .ev-meta {
+	color: #fff !important;
+}
+
+/* 카드 타이틀/뱃지는 가독성 유지 (선택 사항) */
+.theme-dark .ec-title,
+.theme-dark .hc-title,
+.theme-dark .ev-title {
+	color: var(--lf-text);
+	/* 이미 밝게 설정됨 */
+}
+
+.theme-dark .ec-badge,
+.theme-dark .bc-title {
+	color: #69d088;
+	/* 미묘하게 밝은 그린 */
+}
+
+
+
+/* ===== Glass preset: 다크모드에서만 적용 ===== */
+/* ===== Softer Glass (다크모드에서만) ===== */
+.theme-dark .easy-card,
+.theme-dark .user-card,
+.theme-dark .balance-card,
+.theme-dark .event-row,
+.theme-dark .history-card,
+.theme-dark .modal-dialog,
+.theme-dark .donate-dialog {
+	/* 더 투명하고, 살짝 그린 틴트가 있는 유리 */
+	background:
+		linear-gradient(to bottom right,
+			rgba(20, 24, 26, .55),
+			rgba(20, 24, 26, .45)) !important;
+	border: 1px solid rgba(255, 255, 255, .16) !important;
+	/* 바깥 그림자는 살짝만 */
+	box-shadow:
+		0 6px 18px rgba(0, 0, 0, .22),
+		inset 0 0 0 1px rgba(255, 255, 255, .04);
+	/* 유리 핵심: blur + 채도↑ */
+	-webkit-backdrop-filter: blur(16px) saturate(140%);
+	backdrop-filter: blur(16px) saturate(140%);
+	/* 둥글게 & 테두리 강조 조금 */
+	border-radius: 14px;
+}
+
+/* 상단 가장자리 하이라이트(유리엣지) */
+.theme-dark .easy-card::before,
+.theme-dark .user-card::before,
+.theme-dark .balance-card::before,
+.theme-dark .event-row::before,
+.theme-dark .history-card::before,
+.theme-dark .modal-dialog::before,
+.theme-dark .donate-dialog::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	background:
+		linear-gradient(to bottom,
+			rgba(255, 255, 255, .18), rgba(255, 255, 255, 0) 40%);
+	mix-blend-mode: screen;
+}
+
+/* 카드 내부의 텍스트 대비 보강(숫자/강조는 더 하얗게) */
+.theme-dark .ec-amount,
+.theme-dark .bc-amount,
+.theme-dark .hc-amount,
+.theme-dark .ev-meta {
+	color: #ffffff !important;
+}
+
+.theme-dark .ec-title,
+.theme-dark .hc-title,
+.theme-dark .ev-title,
+.theme-dark .uc-name {
+	color: rgba(255, 255, 255, .96);
+}
+
+.theme-dark .ec-badge,
+.theme-dark .bc-title {
+	color: #8be1a8;
+}
+
+/* 버튼은 유리 위에 놓인 반투명 버튼 느낌 */
+.theme-dark .btn-light,
+.theme-dark .btn-outline {
+	background: rgba(255, 255, 255, .06);
+	border-color: rgba(255, 255, 255, .18);
+	color: #fff;
+}
+
+.theme-dark .btn-light:hover,
+.theme-dark .btn-outline:hover {
+	background: rgba(255, 255, 255, .10);
+	border-color: rgba(255, 255, 255, .28);
+}
+
+/* 탭 경계도 유리 톤으로 */
+.theme-dark .pay-tabs {
+	border-bottom-color: rgba(255, 255, 255, .14);
+}
+
+/* 성능/가독성: 작은 화면에서는 blur 강도 살짝 낮춤 */
+@media (max-width: 768px) {
+
+	.theme-dark .easy-card,
+	.theme-dark .user-card,
+	.theme-dark .balance-card,
+	.theme-dark .event-row,
+	.theme-dark .history-card,
+	.theme-dark .modal-dialog,
+	.theme-dark .donate-dialog {
+		-webkit-backdrop-filter: blur(12px) saturate(140%);
+		backdrop-filter: blur(12px) saturate(140%);
+	}
+}
+
+/* 백드롭필터 미지원 브라우저 폴백 */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+
+	.theme-dark .easy-card,
+	.theme-dark .user-card,
+	.theme-dark .balance-card,
+	.theme-dark .event-row,
+	.theme-dark .history-card,
+	.theme-dark .modal-dialog,
+	.theme-dark .donate-dialog {
+		background: rgba(20, 24, 26, .78) !important;
+		/* 블러 못 쓰면 불투명도만 조금 높임 */
+	}
+}

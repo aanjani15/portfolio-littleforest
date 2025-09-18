@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>mypage</title>
+   <link rel="stylesheet" href="/css/mypage.css"> <!-- 마이페이지 전용 -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+   <link rel="stylesheet" href="/css/style.css"> <!-- 공통 header/footer용 -->
+   <link rel="stylesheet" href="/css/mainpagestyle.css">
+</head>
+
+<body>
+
+   <canvas id="canvas"></canvas>
+
+   <div class="mypage-container">
+
+      <!-- 상단 오른쪽 버튼 -->
+      <div class="header-right">
+         <a href="/" class="btn-home"><i class="fa-solid fa-house"></i> 홈</a>
+         <a href="/logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</a>
+      </div>
+
+      <!-- 프로필 카드 -->
+   <div class="mypage-container">
+      <!-- 프로필 영역 수정하였음-->
+      <div class="profile-box">
+         <input type="hidden" id="hidden_Id" name="id" th:value="${userInfo.id}">
+         <input type="hidden" id="hidden_Phone" name="phone" th:value="${userInfo.phone}">
+         <input type="hidden" id="hidden_Address" name="address" th:value="${userInfo.address}">
+         <input type="hidden" id="hidden_Nickname" name="nickname" th:value="${userInfo.nickname}">
+         <input type="hidden" id="hidden_Email" name="email" th:value="${userInfo.email}">
+         <div id="UpaloneB">
+            <div th:if="${userInfo.profile_Photo!=null}">
+               <img class="profile-img" th:src="@{${userInfo.profile_Photo}}">
+            </div>
+            <div th:unless="${userInfo.profile_Photo!=null}">
+               <img class="profile-img" th:src="@{/image/profile.png}">
+            </div>
+         </div>
+         <div class="profile-info">
+            <div id="selectInfo"><strong th:text="${userInfo.nickname}" id="nicknamez"></strong> 님 ></div>
+            <div id="UwithB">회원정보 수정</div>
+            <div id="searchPass">비밀번호 변경</div>
+            <!--<img class="profile-img" th:src="@{'/image/' + ${profilePhotoPath}}" alt="프로필">
+         <div class="profile-info">
+            <strong th:text="${userInfo.nickname}"></strong> 님 >-->
+            <p class="sub"> 나의 보유 포인트
+               (<span th:text="${userInfo.point}"></span>P) >
+            </p>
+         </div>
+      </div>
+
+
+      <!-- 상태 카드 -->
+      <div class="card status-box">
+         <div><i class="fa-solid fa-dollar-sign"></i><span>그린포인트</span><strong th:text="${userInfo.point} + 'p'"></strong></div>
+         <div><i class="fa-solid fa-ticket"></i><span>쿠폰</span><strong>1개</strong></div>
+         <div><i class="fa-solid fa-emission"></i><span>나의 탄소 배출량</span><strong>탄소배출량.emission</strong></div>
+      </div>
+
+      <!-- 배너 카드 -->
+      <div class="card banner">
+         <img src="/image/event_banner_centered.png" alt="이벤트 배너" />
+      </div>
+
+      <!-- 메뉴 카드 -->
+      <div class="card">
+         <ul class="menu">
+            <li><a href="/contact">1:1 문의 <i class="fa-solid fa-angle-right"></i></a></li>
+            <li><a href="#">고객센터 <i class="fa-solid fa-angle-right"></i></a></li>
+         </ul>
+         <div class="mypage-links">
+            <a href="/wallet"><i class="fa-solid fa-wallet"></i> 지갑으로 가기</a>
+            <a href="/emission1"><i class="fa-solid fa-chart-line"></i> 탄소배출량 차트 보기</a>
+            <a href="/carbon/point"><i class="fa-solid fa-leaf"></i> 포인트 보기</a>
+            <a href="/pay"><i class="fa-solid fa-coins"></i> 포인트 충전</a>
+         </div>
+      </div>
+   </div>
+
+   <!-- ===== 모달 영역 시작 ===== -->
+
+   <!-- 프로필 사진 변경 -->
+   <div id="userUpopup" class="modal">
+      <div class="modal-content">
+         <span class="close">&times;</span>
+         <h2>프로필 사진 변경</h2>
+         <div class="photo-area">
+            <div class="photo-box">
+               <p>기존 사진</p>
+               <div th:if="${userInfo.profile_Photo!=null}">
+                  <img id="nowPhoto" th:src="@{${userInfo.profile_Photo}}">
+               </div>
+               <div th:unless="${userInfo.profile_Photo!=null}">
+                  <img id="nowPhoto" th:src="@{/image/profile.png}">
+               </div>
+            </div>
+            <div class="photo-box">
+               <p>새 사진</p>
+               <img id="newPhoto2" src="">
+               <input type="file" name="profile_photo" id="alonePhoto">
+            </div>
+         </div>
+         <button class="button" id="aloneRBtn">변경 사진 초기화</button>
+         <button class="button" id="wantNoBtn">이미지 없음 변경</button>
+         <button class="button" id="aloneBtn">사진 등록</button>
+      </div>
+   </div>
+
+   <!-- 회원정보 수정 -->
+   <div id="userUpopup2" class="modal">
+      <div class="login-container">
+         <span class="close">&times;</span>
+         <h1 align="center">회원정보 수정</h1>
+         <h3 align="center">회원정보 변경 유의사항 안내</h3>
+         <div class="image_area">
+            <div th:if="${userInfo.profile_Photo!=null}">
+               <img class="profile-img" id="profile-img" th:src="@{${userInfo.profile_Photo}}">
+            </div>
+            <div th:unless="${userInfo.profile_Photo!=null}">
+               <img class="profile-img" id="profile-img" th:src="@{/image/profile.png}">
+            </div>
+         </div>
+         <button class="button" id="NormailImage">변경</button>
+         <h3 align="center">다른 부분 변경이 필요하실경우에는 관리자에게 문의 부탁드립니다.</h3>
+         <div id="customerCenter">관리자에게 문의하기</div><br>
+         <div class="address-wrapper">
+            <input type="text" name="nickname" id="nickname2" placeholder="닉네임" th:value="${userInfo.nickname}">
+            <button class="button" id="nickBtn">중복확인</button>
+         </div>
+         <div id="nickComplete"></div>
+         <input type="text" name="phone" id="phone2" placeholder="전화번호" maxlength="13" th:value="${userInfo.phone}">
+         현재 주소 : <label id="juso" th:text="${userInfo.address}"></label>
+         <div class="address-wrapper">
+            <input type="text" id="address2" name="address" placeholder="주소" />
+            <button type="button" class="address-btn" onclick="openPostcode2()">주소 검색</button>
+         </div>
+         <input type="text" id="detail_address2" name="detail_address" placeholder="상세주소" />
+         <input type="email" id="email2" name="email" placeholder="이메일" required th:value="${userInfo.email}">
+         <div class="email-code-wrapper">
+            <input type="text" id="emailCode2" name="emailCode" placeholder="이메일 인증 코드 입력" required />
+            <button type="button" onclick="requestEmailCode2()">코드 받기</button>
+            <button type="button" id="checkCode">코드 인증</button>
+         </div>
+         <div id="emailComplete"></div>
+         <div id="whereNo"></div>
+         <button class="button" id="reset2">초기화</button>
+         <button class="button" id="back2">되돌리기</button>
+         <button class="button" id="userInfoBtn">수정하기</button>
+      </div>
+   </div>
+
+   <!-- 비밀번호 변경 -->
+   <div id="userPassPopup" class="modal">
+      <div class="modal-content">
+         <span class="close">&times;</span>
+         <h1>현재 비밀번호를 입력해주세요</h1>
+         <input type="password" id="nowPassword" placeholder="현재 비밀번호">
+         <button class="button" id="checkPassword">입력완료</button>
+         <div id="okPassword"></div>
+         <div id="newPassPopup" style="display:none;">
+            <h1>새로운 비밀번호를 입력해주세요</h1>
+            <input type="password" id="newPassword" placeholder="새로운 비밀번호"><br>
+            <div id="newInfo"></div>
+            <input type="password" id="newPassword2" placeholder="비밀번호 확인">
+            <button class="button" id="newPasswordCheck">비밀번호 확인</button><br>
+            <div id="newInfo2"></div>
+            <button class="button" id="newPasswordBtn">비밀번호 변경</button>
+         </div>
+      </div>
+   </div>
+
+   <!-- 유저 정보 보기 -->
+   <div id="userInfoPopup" class="modal">
+      <div class="modal-content">
+         <span class="close">&times;</span>
+         아이디 <input type="text" th:value="${userInfo.oauth_Id}" readonly><br>
+         비밀번호 <input type="password" th:value="${userInfo.password}" readonly><br>
+         이름 <input type="text" th:value="${userInfo.name}" readonly><br>
+         닉네임 <input type="text" th:value="${userInfo.nickname}" readonly><br>
+         핸드폰 번호 <input type="text" th:value="${userInfo.phone}" readonly><br>
+         생일 <input type="text" th:value="${#dates.format(userInfo.birth,'yyyy-MM-dd')}" readonly><br>
+         역할 <input type="text" th:value="${userInfo.role}" readonly><br>
+         뱃지 <input type="text" th:value="${userInfo.badge}" readonly><br>
+         주소 <input type="text" th:value="${userInfo.address}" readonly><br>
+         이메일 <input type="text" th:value="${userInfo.email}" readonly><br>
+         가입일 <input type="text" th:value="${#dates.format(userInfo.created_At,'yyyy-MM-dd hh:mm:ss')}" readonly><br>
+         <button class="button" id="userInfoClosing">확인</button>
+      </div>
+   </div>
+   <!-- ===== 모달 영역 끝 ===== -->
+
+
+   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+   <script src="/js/userUpdate.js"></script>
+
+   <!-- fireflies.js -->
+   <script>
+      let c = init("canvas"),
+         w = (canvas.width = window.innerWidth),
+         h = (canvas.height = window.innerHeight);
+
+      const SIZE_MIN = 1, SIZE_MAX = 3;
+
+      class firefly {
+         constructor() {
+            this.x = Math.random() * w;
+            this.y = Math.random() * h;
+            this.s = SIZE_MIN + Math.random() * (SIZE_MAX - SIZE_MIN);
+            this.ang = Math.random() * 2 * Math.PI;
+            this.v = (Math.random() * 2) ** 2 / 4;
+         }
+         move() {
+            this.x += this.v * Math.cos(this.ang);
+            this.y += this.v * Math.sin(this.ang);
+            this.ang += Math.random() * (20 * Math.PI / 180) - (10 * Math.PI / 180);
+         }
+         show() {
+            c.save();
+            c.shadowColor = "rgba(255, 255, 80, 0.9)";
+            c.shadowBlur = 12;
+            c.beginPath();
+            c.arc(this.x, this.y, this.s, 0, 2 * Math.PI);
+            c.fillStyle = "#fff44f";
+            c.fill();
+            c.restore();
+         }
+      }
+
+      let f = [];
+      function draw() {
+         if (f.length < 100) {
+            for (let j = 0; j < 10; j++) f.push(new firefly());
+         }
+         for (let i = 0; i < f.length; i++) {
+            f[i].move();
+            f[i].show();
+            if (f[i].x < 0 || f[i].x > w || f[i].y < 0 || f[i].y > h) f.splice(i, 1);
+         }
+      }
+
+      function init(elemid) {
+         let canvas = document.getElementById(elemid),
+            c = canvas.getContext("2d"),
+            w = (canvas.width = window.innerWidth),
+            h = (canvas.height = window.innerHeight);
+         c.fillStyle = "rgba(30,30,30,1)";
+         c.fillRect(0, 0, w, h);
+         return c;
+      }
+
+      function loop() {
+         requestAnimationFrame(loop);
+         c.clearRect(0, 0, w, h);
+         draw();
+      }
+      window.addEventListener("resize", () => {
+         w = canvas.width = window.innerWidth;
+         h = canvas.height = window.innerHeight;
+         loop();
+      });
+      loop();
+   </script>
+</body>
+
+</html>
+

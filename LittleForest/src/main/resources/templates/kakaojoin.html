@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+   <meta charset="UTF-8">
+   <title>Little Forest</title>
+   <link rel="stylesheet" href="/css/joinpagestyle.css">
+   <script src="../js/email.js"></script>
+
+</head>
+
+<body>
+   <div class="login-container">
+      <h2>KAKAO JOIN</h2>
+      <p class="subtitle">필수 정보를 입력해주세요.</p>
+
+      <form id="joinForm" th:action="@{/kakaojoin}" method="post">
+      
+      	 <input type="text" name="oauth_id" th:value="${session.kakao_Id}" readonly>
+         <input type="text" name="name" placeholder="이름" required />
+         <input type="date" name="birth" placeholder="생년월일" required />
+         <input type="text" name="phone" placeholder="전화번호" required />
+         <div class="address-wrapper">
+            <input type="text" id="address" name="address" placeholder="주소" required readonly />
+            <button type="button" class="address-btn" onclick="openPostcode()">주소 검색</button>
+         </div>
+         <input type="text" name="detail_address" placeholder="상세주소" required />
+
+         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+         <script src="../js/address.js"></script>
+
+
+         <input type="email" name="email" th:value="${session.kakao_Email}" readonly>
+       
+
+
+         <button type="submit">회원가입</button>
+      </form>
+
+      <!-- 홈으로 가기 -->
+      <a href="/" class="btn home" style="color: white;">
+         <img src="/image/home.png" alt="홈" style="width: 20px; height: 20px;">
+         홈으로 가기
+      </a>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+/* 전체 컨테이너 (화면 중앙 하단) */
+#mcSeedAnim {
+  position: fixed;
+  left: 50%;
+  bottom: 12vh;
+  transform: translateX(-50%);
+  z-index: 9999;
+  pointer-events: none;
+  width: 220px;
+  height: 160px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  image-rendering: pixelated;
+}
+
+/* wrapper */
+.mc-anim-wrap { position: relative; width: 220px; height: 160px; }
+
+/* 땅 블록 */
+.mc-soil {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 140px;
+  height: 48px;
+  background: linear-gradient(#7b4f2b,#5a3b23);
+  border-top: 6px solid #a67c52;
+  box-shadow: inset 0 6px 0 rgba(0,0,0,0.06);
+  border-radius: 2px;
+}
+.mc-soil-top { display:none; }
+
+/* 씨앗 블록 */
+.mc-seed {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 62px;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(#d6b26f,#b8863c);
+  border: 2px solid #6a3f1a;
+  border-radius: 3px;
+  box-sizing: border-box;
+  animation: mcDrop 900ms cubic-bezier(.2,.9,.3,1) forwards;
+}
+
+/* 픽셀 데코 */
+.mc-seed .pixel {
+  position:absolute;
+  width:4px; height:4px;
+  background:#6a3f1a;
+  border-radius:1px;
+}
+.pixel.p1 { left:5px; top:5px; }
+.pixel.p2 { left:12px; top:8px; }
+.pixel.p3 { left:8px; top:12px; }
+
+/* 파티클 그룹 */
+.mc-particles {
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:42px;
+  width:140px;
+  height:80px;
+  pointer-events:none;
+}
+
+/* 개별 파티클 */
+.mc-particles .particle {
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:#ffd36b;
+  border-radius:1px;
+  opacity:0.95;
+  animation: mcParticle 800ms ease-out forwards;
+  image-rendering: pixelated;
+}
+
+/* 새싹 */
+.mc-sprout {
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:14px;
+  width:34px;
+  height:44px;
+  opacity:0;
+  animation: mcGrow 700ms ease-out forwards;
+  animation-delay: 950ms;
+}
+.sprout-pixel {
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:1px;
+}
+.s1 { left:12px; bottom:6px; background:#2d7b2d; }
+.s2 { left:18px; bottom:16px; background:#4caf50; transform: rotate(-25deg); }
+.s3 { left:6px; bottom:16px; background:#4caf50; transform: rotate(25deg); }
+
+/* 키프레임 애니메이션 */
+@keyframes mcDrop {
+  0%   { transform: translateX(-50%) translateY(-90px) scale(1.0); opacity:0; }
+  60%  { opacity:1; }
+  100% { transform: translateX(-50%) translateY(0) scale(0.95); }
+}
+@keyframes mcParticle {
+  0% { transform: translateY(0) scale(1); opacity:1; }
+  100% { transform: translateY(-36px) translateX(var(--tx)) scale(0.7); opacity:0; }
+}
+@keyframes mcGrow {
+  0% { transform: translateX(-50%) scale(0.4); opacity:0; }
+  60% { opacity:1; }
+  100% { transform: translateX(-50%) scale(1); opacity:1; }
+}

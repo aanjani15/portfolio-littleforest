@@ -1,0 +1,348 @@
+<!-- 공통 기부하기 모달 -->
+<!-- 공통 기부 모달 -->
+<th:block th:fragment="donateModal(pointBalance)">
+	<div id="donateModal" class="donate-modal" aria-hidden="true" style="display:none"
+		th:with="pb=${pointBalance != null ? pointBalance : (userInfo?.point ?: 0)}"> <!-- 탭 헤더 -->
+		<div class="donate-dialog" role="dialog" aria-modal="true" aria-labelledby="donateTitle">
+			<div class="donate-header">
+				<div class="donate-tabs">
+					<button class="donate-tab" data-pane="recurring">정기기부하기</button>
+					<button class="donate-tab active" data-pane="oneoff">보유금액 기부하기</button>
+				</div>
+				<button type="button" class="donate-close" id="closeDonateModal" aria-label="닫기">×</button>
+			</div>
+
+			<div class="donate-body">
+				<h2 id="donateTitle" class="donate-quote">
+					“기부자님의 소중한 마음으로 만드는 작은 숲, <br>놀라운 변화가 시작됩니다.”
+				</h2>
+				<p class="donate-sub">투명한 기부 후기로 그 변화를 소개하고 보답하겠습니다!</p>
+
+				<!-- 보유금액 기부 -->
+				<div class="donate-pane active" data-pane="oneoff">
+					<div class="donate-grid">
+						<div class="donate-left">
+							<div class="amount-row">
+								<label for="donationAmount">기부할 포인트</label>
+								<div class="amount-input-wrap">
+									<input id="donationAmount" type="number" inputmode="numeric" min="1000" step="100"
+										placeholder="금액을 입력하세요(원)">
+									<span class="unit">원</span>
+								</div>
+								<div id="amountHelp" class="help">＊기부를 원하는 금액을 입력한 후 <b>기부하기</b>를 눌러주세요.</div>
+								<div class="quick-buttons">
+									<button type="button" data-amt="1000">1천원</button>
+									<button type="button" data-amt="5000">5천원</button>
+									<button type="button" data-amt="10000">1만원</button>
+									<button type="button" data-amt="20000">2만원</button>
+									<button type="button" data-amt="30000">3만원</button>
+								</div>
+							</div>
+
+							<div class="method-row">
+								<div class="method-pill">보유 포인트</div>
+								<span class="point-balance" th:attr="data-balance=${pb}"
+									th:text="'보유 ' + ${#numbers.formatInteger(pb,3,'COMMA')} + ' P'">보유 0 P</span>
+							</div>
+						</div>
+
+						<aside class="donate-right">
+							<div class="notice-box">
+								<p class="title">수수료 없이 100% 기부</p>
+								<p class="desc">결제하신 금액은 수수료 없이 <b>단체로 100% 전달</b>됩니다.</p>
+							</div>
+
+							<div class="org-box">
+								<label class="checkbox">
+									<input type="checkbox" id="agreeOrg" checked>
+									<span>포인트 기부 동의하기</span>
+								</label>
+								<label class="checkbox">
+									<input type="checkbox" id="agreeInfo">
+									<span>(선택) 리틀포레스트 마케팅 알림 수신에 동의합니다.</span>
+								</label>
+							</div>
+							<button type="button" id="btnDonate" class="donate-btn donate-btn--wave">
+								<span class="wave" aria-hidden="true"></span>
+								<span class="label">기부하기</span>
+							</button>
+						</aside>
+					</div>
+				</div>
+
+				<!-- 정기기부 -->
+				<div class="donate-pane" data-pane="recurring">
+					<div class="donate-grid">
+						<div class="donate-left">
+							<div class="amount-row">
+								<label for="recurringAmount">매월 기부할 포인트</label>
+								<div class="amount-input-wrap">
+									<input id="recurringAmount" type="number" inputmode="numeric" min="20000"
+										step="1000" placeholder="금액을 입력하세요(원)">
+									<span class="unit">원</span>
+								</div>
+								<div class="quick-buttons">
+									<button type="button" data-amt="20000">2만원</button>
+									<button type="button" data-amt="30000">3만원</button>
+									<button type="button" data-amt="50000">5만원</button>
+									<button type="button" data-amt="100000">10만원</button>
+								</div>
+							</div>
+
+							<div class="schedule-row">
+								<label class="radio">
+									<input type="radio" name="rc_daytype" value="day" checked>
+									매월
+									<select id="rcDaySelect" aria-label="매월 며칠">
+										<option value="1">1일</option>
+										<option value="5">5일</option>
+										<option value="10">10일</option>
+										<option value="15" selected>15일</option>
+										<option value="20">20일</option>
+										<option value="25">25일</option>
+										<option value="28">28일</option>
+									</select>
+									에 자동 기부
+								</label>
+								<label class="radio">
+									<input type="radio" name="rc_daytype" value="last"> 매월 <b>말일</b>에 자동 기부
+								</label>
+							</div>
+						</div>
+
+						<aside class="donate-right">
+							<label class="checkbox">
+								<input type="checkbox" id="agreeOrgRc" checked>
+								<span>정기기부에 동의합니다</span>
+							</label>
+							<button type="button" id="btnRecurring" class="donate-btn">정기기부 신청</button>
+						</aside>
+					</div>
+				</div>
+			</div> <!-- /donate-body -->
+		</div> <!-- /donate-dialog -->
+	</div> <!-- /donateModal -->
+
+	<!-- ⬇️ confetti 타깃 + 초기화-->
+	<script>
+		// 1) 화면 전체를 덮는, 눈에 안 보이는 타깃(클릭 이벤트만 받음)
+		const _confettiTarget = document.createElement('button');
+		_confettiTarget.id = 'confettiTarget';
+		_confettiTarget.type = 'button';
+		_confettiTarget.style.cssText = 'position:fixed;inset:0;opacity:0;pointer-events:none;z-index:1;';
+		document.body.appendChild(_confettiTarget);
+
+		// 2) confetti 인스턴스 생성
+		const confetti = new Confetti('confettiTarget');
+		confetti.destroyTarget(false);  // 타깃을 숨기지 않도록
+		//confetti.setCount(120);         // 파티클 수
+		//confetti.setPower(40);          // 터지는 세기
+		//confetti.setSize(1.2);          // 파티클 크기
+		//(수정)
+		confetti.setCount(50);   // ← 종이가루 개수 줄임(120 → 50)
+		confetti.setPower(25);   // ← 파워도 낮춤(튀는 범위↓)
+		confetti.setSize(1.0);
+		confetti.setFade(true);         // 서서히 사라짐
+
+		// 모달 뒤로 강제 내리는 유틸
+		function forceConfettiBehind() {
+			// 라이브러리가 만드는 풀스크린 캔버스(또는 타깃 내부 캔버스) z-index 낮추기
+			document.querySelectorAll(
+				'#confettiTarget canvas, canvas[class*="confetti"], canvas[id*="confetti"]'
+			).forEach(c => {
+				c.style.zIndex = '1';
+				c.style.pointerEvents = 'none';
+				if (!c.style.position) c.style.position = 'fixed';
+			});
+		}
+
+		// 3) 호출 함수: 중앙에서 발사 중앙 한 지점 발사
+		function shootConfetti() {
+			const x = window.innerWidth / 2;
+			const y = window.innerHeight / 2;
+			_confettiTarget.dispatchEvent(new MouseEvent('click', {clientX: x, clientY: y}));
+			requestAnimationFrame(forceConfettiBehind); //추가된 부분
+		}
+
+		// 모달 주변 여러 지점에서 랜덤 발사
+		function scatterConfettiAroundModal(modalSelector = '.lf-success__dialog', burst = 8) {
+			const dlg = document.querySelector(modalSelector);
+			const vw = window.innerWidth;
+			const vh = window.innerHeight;
+
+			const rand = (a, b) => Math.random() * (b - a) + a;
+			const shootAt = (x, y) => {
+				_confettiTarget.dispatchEvent(new MouseEvent('click', {clientX: x, clientY: y}));
+				requestAnimationFrame(forceConfettiBehind);
+			};
+
+			// 모달을 못 찾으면 화면 랜덤
+			if (!dlg) {
+				for (let i = 0; i < burst; i++) shootAt(rand(0, vw), rand(0, vh));
+				return;
+			}
+
+			// 모달 사방 "띠 영역"을 만들어 그 안에서 쏘기 (모달로 안 들어오게 파워도 낮춰둠)
+			const r = dlg.getBoundingClientRect();
+			const m = 24; // 모달에서 떨어질 간격(px)
+			const zones = [
+				{x: [0, r.left - m], y: [0, vh]},                 // left strip
+				{x: [r.right + m, vw], y: [0, vh]},                 // right strip
+				{x: [r.left - m, r.right + m], y: [0, r.top - m]},          // top strip
+				{x: [r.left - m, r.right + m], y: [r.bottom + m, vh]}       // bottom strip
+			].filter(z => z.x[1] > z.x[0] && z.y[1] > z.y[0]);
+
+			for (let i = 0; i < burst; i++) {
+				const z = zones[Math.floor(Math.random() * zones.length)];
+				const x = rand(z.x[0], z.x[1]);
+				const y = rand(z.y[0], z.y[1]);
+				shootAt(x, y);
+			}
+		}
+
+
+	</script>
+
+	<!-- 모달 전용 JS (필수만) -->
+	<script>
+		(function () {
+			const modal = document.getElementById('donateModal');
+			if (!modal) return;
+
+			// 열기 버튼: 어떤 페이지든 data-open="donate"만 달아두면 작동
+			const openers = document.querySelectorAll('[data-open="donate"], #openDonateModal, #openDonateModalPay');
+			const closeBtn = modal.querySelector('#closeDonateModal');
+
+			const tabs = modal.querySelectorAll('.donate-tabs .donate-tab');
+			const panes = modal.querySelectorAll('.donate-pane');
+
+			const oneoffInput = modal.querySelector('#donationAmount');
+			const oneoffBtn = modal.querySelector('#btnDonate');
+			const rcInput = modal.querySelector('#recurringAmount');
+			const rcBtn = modal.querySelector('#btnRecurring');
+			const rcDaySelect = modal.querySelector('#rcDaySelect');
+
+			const balEl = modal.querySelector('.point-balance');
+			const currentBalance = Number(balEl?.dataset.balance || 0);
+
+			function showModal() {
+				modal.style.display = 'block';
+				modal.setAttribute('aria-hidden', 'false');
+				setTab('oneoff');
+				oneoffInput?.focus();
+			}
+			function hideModal() {
+				modal.style.display = 'none';
+				modal.setAttribute('aria-hidden', 'true');
+			}
+			function setTab(target) {
+				tabs.forEach(b => b.classList.toggle('active', b.dataset.pane === target));
+				panes.forEach(p => p.classList.toggle('active', p.dataset.pane === target));
+			}
+
+			openers.forEach(b => b.addEventListener('click', showModal));
+			closeBtn?.addEventListener('click', hideModal);
+			modal.addEventListener('click', e => {if (e.target === modal) hideModal();});
+			document.addEventListener('keydown', e => {
+				if (e.key === 'Escape' && modal.style.display === 'block') hideModal();
+			});
+
+			// 탭: /pay 이동 or 패널 전환
+			tabs.forEach(btn => {
+				if (btn.dataset.link) {
+					btn.addEventListener('click', () => {window.location.href = btn.dataset.link;});
+				} else if (btn.dataset.pane) {
+					btn.addEventListener('click', () => setTab(btn.dataset.pane));
+				}
+			});
+
+			// 빠른 금액 버튼(모달 내부만)
+			modal.querySelectorAll('.quick-buttons button').forEach(b => {
+				b.addEventListener('click', () => {
+					const pane = b.closest('.donate-pane');
+					const input = pane?.querySelector('input[type="number"]');
+					if (input) input.value = b.dataset.amt;
+				});
+			});
+
+			// 보유 초과 캡(일시 기부)
+			oneoffInput?.addEventListener('input', () => {
+				const v = Number(oneoffInput.value || 0);
+				if (currentBalance && v > currentBalance) oneoffInput.value = currentBalance;
+			});
+
+			// 정기기부: 말일 선택 시 날짜 셀렉트 비활성화
+			modal.querySelectorAll('input[name="rc_daytype"]').forEach(r => {
+				r.addEventListener('change', () => {
+					rcDaySelect.disabled = (r.value !== 'day') && r.checked;
+				});
+			});
+
+			// 일시 기부 요청
+			oneoffBtn?.addEventListener('click', async () => {
+				const amt = Number(oneoffInput.value || 0);
+				if (Number.isNaN(amt) || amt < 1000) {alert('1,000원 이상부터 기부할 수 있습니다.'); oneoffInput.focus(); return;}
+				if (!modal.querySelector('#agreeOrg')?.checked) {alert('단체 확인에 동의해 주세요.'); return;}
+
+				try {
+					const res = await fetch('/donations/point', {
+						method: 'POST',
+						headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+						body: new URLSearchParams({amount: amt})
+					});
+					if (!res.ok) throw new Error(await res.text() || '기부 처리 중 오류가 발생했습니다.');
+
+					const data = await res.json();
+
+					// shootConfetti();                 // confetti효과
+
+					showDonateSuccess();
+					// 모달 내 보유 포인트 갱신
+					balEl.dataset.balance = data.newBalance;
+					balEl.textContent = '보유 ' + Number(data.newBalance).toLocaleString() + ' P';
+					// 우측 사이드(있다면) 표시 갱신
+					const sideBal = document.querySelector('#pointBalance');
+					if (sideBal) sideBal.textContent = Number(data.newBalance).toLocaleString() + '원';
+
+					oneoffInput.value = '';
+					hideModal();
+				} catch (e) {alert(e.message);}
+			});
+
+			// 정기기부 요청
+			rcBtn?.addEventListener('click', async () => {
+				const amt = Number(rcInput.value || 0);
+				if (Number.isNaN(amt) || amt < 20000) {alert('정기기부는 20,000원 이상부터 가능합니다.'); rcInput.focus(); return;}
+				if (!modal.querySelector('#agreeOrgRc')?.checked) {alert('정기기부 동의가 필요합니다.'); return;}
+
+				const dayType = modal.querySelector('input[name="rc_daytype"]:checked')?.value; // 'day' | 'last'
+				const dueDay = (dayType === 'day') ? Number(rcDaySelect.value) : null;
+
+				try {
+					const res = await fetch('/donations/recurring', {
+						method: 'POST',
+						headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+						body: new URLSearchParams({
+							amount: amt,
+							schedule: dayType === 'last' ? 'LASTDAY' : `DAY:${dueDay}`
+						})
+					});
+					if (!res.ok) throw new Error(await res.text() || '정기기부 신청 중 오류가 발생했습니다.');
+
+					alert('정기기부가 설정되었습니다. 감사합니다!');
+					rcInput.value = '';
+					setTab('oneoff'); // 원탭으로 복귀(선택)
+				} catch (e) {alert(e.message);}
+			});
+		})();
+
+		/*
+	   IMP.request_pay 로 카카오페이 결제창을 띄움 → 성공 시 서버(/points/charge/complete)로 imp_uid 등 전달 → 
+	   서버가 포트원 REST API로 결제검증 후 user_table.point 증가.
+	   “포인트 선물”은 간단 모달로 받는 사람 user_id와 금액만 받고 
+	   서버(/points/gift)에서 보내는 사람 차감 + 받는 사람 증가를 트랜잭션으로 처리.
+	   “포인트 받기(이벤트)”는 API /points/event로 POST → 포인트 추가.
+		*/
+
+	</script>
+</th:block>

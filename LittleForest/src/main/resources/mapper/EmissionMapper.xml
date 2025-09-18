@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.EmissionMapper">
+
+  <!-- 연도별 월 합계 -->
+
+	<!-- merge 추가 09.02 -->
+	<!-- 연도별 월 합계 (1~12) -->
+	<!-- [최근 12개월]은 원본 일 데이터에서 해당 연도의 월로 집계 -->
+	<!--     [그 이전]은 월 요약 테이블에서 해당 연도의 월로 집계 -->
+  <select id="getMonthlyEmissions" resultType="com.fintecho.littleforest.vo.EmissionMonthlyVO">
+    <![CDATA[
+      SELECT mth AS month, NVL(SUM(kg), 0) AS kg
+      FROM (
+        SELECT EXTRACT(MONTH FROM emission_date) AS mth,
+               SUM(emission) AS kg
+          FROM emission_table
+         WHERE user_id = #{user_Id}
+           AND EXTRACT(YEAR  FROM emission_date) = #{year}
+           AND emission_date >= ADD_MONTHS(TRUNC(SYSDATE,'MM'), -11)
+         GROUP BY EXTRACT(MONTH FROM emission_date)
+
+        UNION ALL
+        SELECT mm AS mth,
+               SUM(kg) AS kg
+          FROM emission_monthly_sum
+         WHERE user_id = #{user_Id}
+           AND yyyy    = #{year}
+           AND TO_DATE(TO_CHAR(yyyy)||LPAD(mm,2,'0')||'01','YYYYMMDD')
+               < ADD_MONTHS(TRUNC(SYSDATE,'MM'), -11)
+         GROUP BY mm
+      )
+      GROUP BY mth
+      ORDER BY mth
+    ]]>
+  </select>
+
+	<!-- 특정 연/월 총합 (최근 12개월은 원본 / 그 이전은 월요약) -->
+  <select id="getMonthlyTotal" resultType="int">
+    <![CDATA[
+      SELECT NVL(SUM(kg), 0)
+      FROM (
+        -- [최근 12개월]이면 원본 일 데이터에서 해당 연/월 합
+        SELECT SUM(emission) AS kg
+          FROM emission_table
+         WHERE user_id = #{user_Id}
+           AND EXTRACT(YEAR  FROM emission_date)  = #{year}
+           AND EXTRACT(MONTH FROM emission_date) = #{month}
+           AND emission_date >= ADD_MONTHS(TRUNC(SYSDATE,'MM'), -11)
+
+        UNION ALL
+
+        -- [그 이전]이면 월 요약 테이블에서 해당 연/월 합
+        SELECT SUM(kg) AS kg
+          FROM emission_monthly_sum
+         WHERE user_id = #{user_Id}
+           AND yyyy    = #{year}
+           AND mm      = #{month}
+           AND TO_DATE(TO_CHAR(yyyy)||LPAD(mm,2,'0')||'01','YYYYMMDD')
+               < ADD_MONTHS(TRUNC(SYSDATE,'MM'), -11)
+      )
+    ]]>
+  </select>
+</mapper>

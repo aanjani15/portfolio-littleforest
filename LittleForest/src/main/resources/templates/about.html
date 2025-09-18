@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>회사소개 | Little Forest</title>
+	<link rel="stylesheet" href="/css/about.css" />
+	<!-- 웹폰트: 고딕/세리프 조합 -->
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Pretendard:wght@400;600;700&display=swap"
+		rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="lf-about i18n-scope" id="lfAbout">
+
+		<!-- 전체 네임스페이스: 전역 CSS 충돌 방지 -->
+		<div class="lf-about">
+
+			<!-- 고정 헤더(비로그인 공개 네비게이션) -->
+			<header class="lf-about__header" aria-label="상단 내비게이션">
+				<a href="/" class="lf-about__brand" aria-label="홈으로">LittleForest</a>
+				<nav class="lf-about__nav">
+					<a href="/">Home</a>
+					<a href="/slider" aria-current="page">Manual</a>
+					<a href="/community">Community</a>
+				</nav>
+				<a class="lf-about__account" href="/login">Account</a>
+			</header>
+
+			<!-- 사이드 인디케이터 -->
+			<aside class="lf-about__steps" aria-label="섹션 인디케이터">
+				<button data-target="#sec01" class="is-active"><span>01</span></button>
+				<button data-target="#sec02"><span>02</span></button>
+				<button data-target="#sec03"><span>03</span></button>
+			</aside>
+
+			<!-- 00: 히어로(동영상) -->
+			<section class="lf-about__hero section" id="hero" aria-label="히어로">
+				<video class="lf-about__hero-video" src="/video/hero.mp4" autoplay muted playsinline loop></video>
+				<div class="lf-about__hero-grad"></div>
+				<div class="lf-about__hero-content">
+					<p class="eyebrow">A GREEN GUIDE</p>
+					<h1 class="display">
+						From Seeds To Forests,<br />
+						Be Part Of The Change!
+					</h1>
+					<p class="scrolldown">what little forest do ↓</p>
+				</div>
+			</section>
+
+			<!-- 01: 나무 심기(게임 닉네임 → 실제 식재) -->
+			<section class="lf-about__panel section" id="sec01" aria-labelledby="sec01-title">
+				<!-- 투명 유리질감 카드 -->
+				<div class="lf-about__panel-inner lf-glass">
+					<!--    <div class="lf-about__panel-inner"> -->
+					<div class="lf-about__panel-col">
+						<p class="eyebrow">GET STARTED</p>
+						<h2 class="title" id="sec01-title">우리는 씨앗에서 숲을 만듭니다</h2>
+						<p class="copy">
+							Little Forest의 <strong>나무 키우기</strong> 게임에서 싹을 틔운 수많은 나무들은
+							단순한 기록이 아니라 <strong>현실의 숲</strong>으로 이어집니다. 유저 여러분의 닉네임을
+							따서 이름 붙인 ‘게임 속 나무’는 파트너 기관과 함께 실제 묘목으로 식재됩니다.
+						</p>
+						<ul class="bullet">
+							<li><strong>닉네임 명명</strong> → 식재 위치에 표찰 부착</li>
+							<li><strong>지역 커뮤니티</strong>와 협력한 사후관리</li>
+							<li>연 2회 <strong>생장 리포트</strong> 이메일 발송</li>
+						</ul>
+
+						<div class="metrics">
+							<div class="metric">
+								<div class="metric__num" data-no-i18n data-countto="18342">0</div>
+								<div class="metric__label">지금까지 심은 나무</div>
+							</div>
+							<div class="metric">
+								<div class="metric__num" data-no-i18n data-countto="12980">0</div>
+								<div class="metric__label">닉네임이 붙은 나무</div>
+							</div>
+						</div>
+
+						<a class="link-more" href="/forest/trees">더 알아보기 →</a>
+					</div>
+
+					<figure class="lf-about__panel-media">
+						<img src="/images/about/tree-hero.jpg" alt="능선을 걷는 하이커와 산 뷰" />
+					</figure>
+
+					<div class="lf-about__panel-no">01</div>
+				</div> <!-- /.lf-about__panel-inner -->
+			</section>
+
+			<!-- 02: 기부금 사용 -->
+			<section class="lf-about__panel section is-alt" id="sec02" aria-labelledby="sec02-title">
+				<div class="lf-about__panel-inner">
+					<figure class="lf-about__panel-media">
+						<img src="/images/about/donate.jpg" alt="암석 위 백팩 하이커" />
+					</figure>
+
+					<div class="lf-about__panel-col">
+						<p class="eyebrow">DONATION</p>
+						<h2 class="title" id="sec02-title">모인 기부, 정확히 쓰입니다</h2>
+						<p class="copy">
+							유저 여러분의 기부는 <strong>투명한 흐름</strong>으로 전달됩니다.
+							우리는 식재·보전 활동과
+						<p>탄소상쇄 프로젝트를 지원하며, 모든 금액은
+							분기별 <strong>투명 보고</strong>로 공개됩니다.
+						</p>
+						<div class="pill-grid">
+							<span class="pill">토양·수분 관리</span>
+							<span class="pill">묘목 구입/운송</span>
+							<span class="pill">투명한 기부금 내역</span>
+							<span class="pill">탄소상쇄 인증</span>
+						</div>
+
+						<div class="metrics">
+							<div class="metric">
+								<div class="metric__num" data-no-i18n data-countto="348_520_000">0</div>
+								<div class="metric__label">누적 모금액(원)</div>
+							</div>
+							<div class="metric">
+								<div class="metric__num" data-no-i18n data-countto="63">0</div>
+								<div class="metric__label">지원 프로젝트 수</div>
+							</div>
+						</div>
+
+						<p class="note">
+							최근 사용 : 강원군 산불피해지 <strong>복원 식재</strong>, 서해안 <strong>갯벌 보전</strong>,
+							도심 <strong>미세먼지 저감 숲</strong> 조성 등.
+						</p>
+
+						<a class="link-more" href="/community">임팩트 리포트 →</a>
+					</div>
+
+					<div class="lf-about__panel-no">02</div>
+				</div>
+			</section>
+
+			<!-- 03: 탄소배출량 감소 지수 -->
+			<section class="lf-about__panel section" id="sec03" aria-labelledby="sec03-title">
+				<div class="lf-about__panel-inner">
+					<div class="lf-about__panel-col">
+						<p class="eyebrow">WHERE YOU GO IS THE KEY</p>
+						<h2 class="title" id="sec03-title">우리가 함께 줄인 탄소</h2>
+						<p class="copy">
+							전자영수증, 텀블러 사용, 대중교통, 리사이클링 등
+							<strong>일상 속 작은 변화</strong>가 모여 큰 감축을 이뤄냈습니다.
+							Little Forest는 활동별 가이드라인과 <strong>감축 계산식</strong>을 적용해
+							지수를 집계합니다.
+						</p>
+
+						<ul class="bullet">
+							<li>전자영수증 전환 <strong>20g/회</strong> 감축</li>
+							<li>텀블러 사용 <strong>300g/회</strong> 감축</li>
+							<li>대중교통/모빌리티 전환 <strong>1.2kg/일</strong> 감축</li>
+						</ul>
+
+						<div class="metrics">
+							<div class="metric">
+								<div class="metric__num" data-countto="1_842_000">0</div>
+								<div class="metric__label">누적 감축량(kgCO₂e)</div>
+							</div>
+							<div class="metric">
+								<div class="metric__num" data-countto="7_540_000">0</div>
+								<div class="metric__label">친환경 행동 누적(회)</div>
+							</div>
+						</div>
+
+						<a class="link-more" href="/slider">탄소중립 가이드 →</a>
+					</div>
+
+					<figure class="lf-about__panel-media">
+						<img src="/images/about/carbon.jpg" alt="탄소감축이미지" />
+					</figure>
+
+					<div class="lf-about__panel-no">03</div>
+				</div>
+			</section>
+
+			<!-- 푸터 -->
+			<footer class="lf-about__footer">
+				<div class="lf-about__footer-col">
+					<div class="brand">MNTN</div>
+					<p class="muted">자연을 향한 작은 발걸음이, 내일의 숲을 만듭니다.</p>
+					<p class="legal">© Little Forest.</p>
+				</div>
+				<div class="lf-about__footer-col">
+					<h3>More on The Blog</h3>
+					<a href="#">About MNTN</a>
+					<a href="#">Contributors &amp; Writers</a>
+					<a href="#">Write For Us</a>
+					<a href="#">Contact Us</a>
+				</div>
+				<div class="lf-about__footer-col">
+					<h3>More on MNTN</h3>
+					<a href="#">The Team</a>
+					<a href="#">Jobs</a>
+					<a href="#">Press</a>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+
+	<!-- ===== JS: 스크롤 스냅 + 카운트업 + 인디케이터 ===== -->
+	<script>
+		(function () {
+			// 전역 네임스페이스
+			window.LF = window.LF || {};
+			LF.about = LF.about || {};
+
+			// 이전 리스너/옵저버 해제용 핸들
+			let _wheelHandler = null;
+			let _io = null;
+			let _ioNum = null;
+
+			// 초기화 함수: 언제든 호출해서 스냅/카운터를 다시 연결
+			LF.about.init = function initAboutPage() {
+				// 0) 기존 바인딩 해제
+				if (_io) {_io.disconnect(); _io = null;}
+				if (_ioNum) {_ioNum.disconnect(); _ioNum = null;}
+				if (_wheelHandler) {
+					window.removeEventListener('wheel', _wheelHandler);
+					_wheelHandler = null;
+				}
+
+				// 1) 대상 요소 재조회
+				const root = document.querySelector('#lfAbout');
+				const secs = Array.from(document.querySelectorAll('.section'));
+				const dots = Array.from(document.querySelectorAll('.lf-about__steps button'));
+				let isAnimating = false;
+
+				// 2) 스냅 스크롤
+				let current = 0;
+				const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+				function snapTo(idx) {
+					isAnimating = true;
+					current = clamp(idx, 0, secs.length - 1);
+					secs[current]?.scrollIntoView({behavior: 'smooth', block: 'start'});
+					setTimeout(() => {isAnimating = false;}, 900);
+				}
+				_wheelHandler = function (e) {
+					if (isAnimating) return;
+					const delta = e.deltaY;
+					if (Math.abs(delta) < 10) return;
+					if (delta > 0) snapTo(current + 1);
+					else snapTo(current - 1);
+				};
+				window.addEventListener('wheel', _wheelHandler, {passive: true});
+
+				// 3) 현재 섹션 표시
+				_io = new IntersectionObserver((entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+							const idx = secs.indexOf(entry.target);
+							current = idx;
+							dots.forEach(d => d.classList.remove('is-active'));
+							if (dots[idx - 1]) dots[idx - 1].classList.add('is-active'); // hero 제외
+						}
+					});
+				}, {threshold: [0.6]});
+				secs.forEach(s => _io.observe(s));
+
+				// 4) dot 클릭 이동
+				dots.forEach((btn) => {
+					btn.onclick = () => {
+						const target = document.querySelector(btn.dataset.target);
+						const idx = secs.indexOf(target);
+						snapTo(idx);
+					};
+				});
+
+				// 5) 숫자 카운트업 (data-no-i18n이 붙은 기존 노드가 유지되므로 정상 동작)
+				const counters = document.querySelectorAll('.metric__num');
+				const seen = new WeakSet();
+				_ioNum = new IntersectionObserver((ents) => {
+					ents.forEach(ent => {
+						if (ent.isIntersecting && !seen.has(ent.target)) {
+							seen.add(ent.target);
+							const el = ent.target;
+							const to = Number(String(el.dataset.countto).replaceAll('_', ''));
+							const dur = 1200;
+							const t0 = performance.now();
+							function tick(now) {
+								const p = Math.min(1, (now - t0) / dur);
+								const val = Math.floor(to * (0.1 + 0.9 * p));
+								el.textContent = val.toLocaleString('ko-KR');
+								if (p < 1) requestAnimationFrame(tick);
+							}
+							requestAnimationFrame(tick);
+						}
+					});
+				}, {threshold: 0.6});
+				counters.forEach(c => _ioNum.observe(c));
+			};
+
+			// 최초 1회
+			document.addEventListener('DOMContentLoaded', LF.about.init);
+		})();
+	</script>
+
+
+	<div th:replace="fragments/lang-switcher :: langSwitcher"></div>
+
+
+</body>
+
+</html>

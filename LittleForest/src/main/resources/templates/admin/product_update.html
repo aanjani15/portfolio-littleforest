@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<meta name="_csrf" th:content="${_csrf.token}">
+<meta name="_csrf_header" th:content="${_csrf.headerName}">
+<style>
+.product_one {
+	display: flex; /* 가로 배치 */
+	gap: 12px; /* 요소 사이 간격 */
+}
+.small-size{
+	width:40px;
+}
+.pid{
+	width:20px;
+}
+</style>
+<body
+	th:replace="~{admin/layout :: layout(~{::section}, ~{::#page-scripts})}">
+
+	<section>
+
+		<div class="product_container" th:each="p : ${product}">
+			<div class="product_one" th:attr="data-id=${p.id}">
+		      <div class="pid" th:text="${p.id}"></div>
+		      <img class="small-size" th:src="${p.image_Path}" alt="없음"/>
+		      <input type="text" class="name"       th:value="${p.name}" />
+		      <input type="text" class="category"   th:value="${p.category}" />
+		      <input type="text" class="price"      th:value="${p.price}" />
+		      <input type="text" class="description" th:value="${p.description}" />
+		      <button onclick="update_(this)">수정</button>
+		      <button onclick="delete_(this)">삭제</button>
+		    </div>
+		</div>
+
+		<th:block id="page-scripts">
+			<script>
+			
+			// 1) CSRF 토큰/헤더 준비
+		      const CSRF_TOKEN  = document.querySelector('meta[name="_csrf"]').content;
+		      const CSRF_HEADER = document.querySelector('meta[name="_csrf_header"]').content;
+		      
+			  async function update_(btn) {
+				  console.log(btn); 
+				  // <button onclick="update_(this)">수정</button>
+				  
+				  const row = btn.closest('.product_one'); 
+				  
+				  const id = row.dataset.id
+				  const name        = row.querySelector('.name').value.trim();
+			      const category    = row.querySelector('.category').value.trim();
+			      const price       = row.querySelector('.price').value.trim();
+			      const description = row.querySelector('.description').value.trim();
+			      
+			      try {
+
+			    	  await fetch('/admin/product/updater', {
+			    		  method: 'POST',
+			    		  headers: {
+			    		    'Content-Type': 'application/json',
+			    		    [CSRF_HEADER]: CSRF_TOKEN
+			    		  },
+			    		  body: JSON.stringify({
+			    		    id,
+			    		    name,
+			    		    category,
+			    		    price: Number(price),
+			    		    description
+			    		  })
+			    		});
+			          
+			        } catch (e) {
+			          console.error(e);
+			          alert('수정 중 오류: ' + e.message);
+			        }
+			      //row.style.outline = '2px solid #6aa84f';
+				  console.log(row.dataset.id); // "123"
+				  window.location.reload();
+				}
+				async function delete_(btn) {
+					const row = btn.closest('.product_one'); 
+					  
+					const id = row.dataset.id
+					  
+					try {
+
+				    	await fetch('/admin/product/deleter', {
+				    		  method: 'POST',
+				    		  headers: {
+				    		    'Content-Type': 'application/json',
+				    		    [CSRF_HEADER]: CSRF_TOKEN
+				    		  },
+				    		  body: JSON.stringify({id})
+				    		});
+				          
+				        } catch (e) {
+				          console.error(e);
+				          alert('수정 중 오류: ' + e.message);
+				        }
+				    window.location.reload();
+				}
+			</script>
+		</th:block>
+	</section>
+
+
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.admin.AdminMemberMapper">
+
+<resultMap id="UserMap" type="com.fintecho.littleforest.vo.UserVO">
+    <id column="id" property="id"/>
+    <result column="oauth_id" property="oauth_Id"/>
+    <result column="password" property="password"/>
+    <result column="name" property="name"/>
+    <result column="role" property="role"/>
+    <result column="badge" property="badge"/>
+    <result column="created_at" property="created_At"/>
+    <result column="address" property="address"/>
+    <result column="nickname" property="nickname"/>
+    <result column="point" property="point"/>
+    <result column="profile_photo" property="profile_Photo"/>
+</resultMap>
+
+  <select id="countMembers" parameterType="com.fintecho.littleforest.vo.admin.AdminVO" resultType="int">
+    SELECT COUNT(*)
+    FROM user_table u
+    WHERE 1=1
+      <if test="keyword != null and keyword != ''">
+        AND (LOWER(u.name)     LIKE '%'||LOWER(#{keyword})||'%' OR
+             LOWER(u.email)    LIKE '%'||LOWER(#{keyword})||'%' OR
+             LOWER(u.nickname) LIKE '%'||LOWER(#{keyword})||'%' OR
+             u.phone           LIKE '%'||#{keyword}||'%')
+      </if>
+      <if test="role != null and role != ''">
+        AND u.role = #{role}
+      </if>
+  </select>
+
+  <select id="findMembers"
+        parameterType="com.fintecho.littleforest.vo.admin.AdminVO"
+        resultType="map">
+    SELECT
+        u.id            AS "id",
+        u.oauth_id      AS "oauth_id",
+        u.name          AS "name",
+        u.nickname      AS "nickname",
+        u.email         AS "email",
+        u.address       AS "address",
+        u.phone         AS "phone",
+        u.role          AS "role",
+        u.created_at    AS "created_at",
+        u.point         AS "point",
+        u.badge         AS "badge",
+        u.profile_photo AS "profile_photo"
+    FROM user_table u
+    WHERE 1=1
+      <if test="keyword != null and keyword != ''">
+        AND (LOWER(u.name)     LIKE '%'||LOWER(#{keyword})||'%' OR
+             LOWER(u.email)    LIKE '%'||LOWER(#{keyword})||'%' OR
+             LOWER(u.nickname) LIKE '%'||LOWER(#{keyword})||'%' OR
+             u.phone           LIKE '%'||#{keyword}||'%')
+      </if>
+      <if test="role != null and role != ''">
+        AND u.role = #{role}
+      </if>
+    ORDER BY u.created_at DESC
+    OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+  </select>
+
+  <update id="updateRole">
+    UPDATE user_table SET role = #{role}
+    WHERE id = #{id}
+  </update>
+
+  <select id="findById" resultMap="UserMap">
+		SELECT
+		id,
+		oauth_id AS oauth_Id,
+		password,
+		name,
+		role,
+		badge,
+		created_at AS created_At,
+		address,
+		nickname,
+		point,
+		profile_photo AS profile_Photo
+		FROM user_table
+		WHERE id = #{id}
+  </select>
+
+
+  <update id="updateBasic" parameterType="com.fintecho.littleforest.vo.UserVO">
+    UPDATE user_table
+       SET name          = #{name},
+           role          = #{role},
+           badge         = #{badge},
+           address       = #{address},
+           nickname      = #{nickname},
+           profile_photo = #{profile_Photo}
+     WHERE id = #{id}
+  </update>
+
+</mapper>

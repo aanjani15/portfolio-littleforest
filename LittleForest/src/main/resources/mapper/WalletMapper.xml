@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fintecho.littleforest.mapper.WalletMapper">
+
+
+<!-- 1:N 조인 -->
+<select id="findByUserId" parameterType="int" resultType="com.fintecho.littleforest.vo.WalletVO">
+    SELECT 
+        w.*, 
+        u.name AS user_name,
+        u.nickname AS user_nickname
+    FROM wallet_table w
+    JOIN user_table u ON w.user_id = u.id
+    WHERE w.user_id = #{userId}
+</select>
+
+<insert id="insertWallet">
+	INSERT INTO wallet_table VALUES (
+	wallet_seq.NEXTVAL, #{user_Id}, #{bankName}, 0, SYSDATE , #{account_Number})
+	
+	
+</insert>
+
+<update id="addBalance">
+	UPDATE wallet_table SET account_balance = account_balance + #{amount} WHERE bank_name = #{bankName}
+</update>
+
+<update id="desBalance">
+	UPDATE wallet_table SET account_balance = account_balance - #{amount} WHERE id = #{wallet_Id}
+</update>
+
+</mapper>
+
+
+

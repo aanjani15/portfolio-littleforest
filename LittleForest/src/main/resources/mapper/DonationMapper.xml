@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- DonationMapper.xml -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.DonationMapper">
+
+  <insert id="insertDonation" parameterType="com.fintecho.littleforest.vo.DonationVO">
+    INSERT INTO donation_table (id, user_id, amount, donation_date, description)
+    VALUES (
+      donation_seq.NEXTVAL,
+      #{user_Id},
+      #{amount},
+      SYSDATE,
+      #{description}
+    )
+  </insert>  
+
+</mapper>

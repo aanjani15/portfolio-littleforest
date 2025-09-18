@@ -1,0 +1,303 @@
+/* =========================================================
+   Little Forest - 3D Coverflow (Arc ver.)
+   - 네임스페이스: .lf-slider
+   ========================================================= */
+
+.lf-slider{
+  /* 컴포넌트 변수 */
+  --lf-card-w: 420px;
+  --lf-card-h: 560px;
+  --lf-radius: 18px;
+
+  /* 곡률/깊이 파라미터 */
+  --lf-gap-x: 240px;
+  --lf-depth: 200px;
+  --lf-curve-x: 2px;
+  --lf-curve-z: 10px;
+  --lf-rotY: 25deg;
+  --lf-tilt-x: -1deg;
+
+  color:#fff;
+/*   background:
+    radial-gradient(1200px 800px at 20% 0%, #1b2242 0%, #0f1731 40%, #0b1121 100%),
+    linear-gradient(180deg, #101324, #0e1b30); */
+  display:block;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+/* 기존 .lf-slider의 background는 fallback로만 남기거나 제거 가능합니다. */
+.lf-slider{
+  /* 변수(원하시면 파일 경로/밝기만 바꾸면 됨) */
+  --lf-bg-url: url('/images/forest_back2.jpg'); /* 배경 이미지 경로 */
+  --lf-bg-dim: 0.45;                           /* 어둡게(0~0.8 권장) */
+
+  /* 기존 카드 사이즈/각도 변수는 그대로 유지 */
+  --lf-card-w: 420px;
+  --lf-card-h: 560px;
+  --lf-radius: 18px;
+  --lf-gap-x: 240px;
+  --lf-depth: 200px;
+  --lf-curve-x: 2px;
+  --lf-curve-z: 10px;
+  --lf-rotY: 25deg;
+  --lf-tilt-x: -1deg;
+
+  color:#fff;
+  /* 기존 남색 배경은 지우고(또는 fallback로 둬도 무방), 아래 ::before/::after로 대체 */
+  background: none;
+
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+/* ⬇️ 배경 이미지 레이어 (섹션 전체를 cover로 채움) */
+.lf-slider::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: var(--lf-bg-url);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: -2;            /* 콘텐츠 뒤, 섹션 안에서 가장 아래 */
+  pointer-events:none;
+  /* 필요 시 ‘패럴랙스 느낌’ 원하면 주석 해제 */
+  /* background-attachment: fixed; */
+}
+
+/* ⬇️ 어둡게(디밍) 오버레이 레이어 */
+.lf-slider::after{
+  content:"";
+  position:absolute; inset:0;
+  background: rgba(0,0,0, var(--lf-bg-dim));
+  z-index: -1;
+  pointer-events:none;
+}
+
+/* 높이 및 정렬은 기존과 동일 */
+.lf-slider__wrap{
+  min-height: 70vh;
+  padding: 72px 24px 96px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.lf-slider__wrap{
+  min-height: 70vh;
+  padding: 72px 24px 96px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.lf-slider__viewport{
+  position:relative;
+  width:min(96vw, calc(var(--lf-card-w) * 3.0));
+  height:var(--lf-card-h);
+  perspective: 1400px;
+  overflow:visible;
+}
+
+/* 스테이지를 살짝 누워 보이게 */
+.lf-slider__stage{
+  position:relative;
+  width:100%; height:100%;
+  transform: rotateX(var(--lf-tilt-x));
+  transform-style: preserve-3d;
+}
+
+/* 카드 */
+.lf-slider__slide{
+  position:absolute;
+  top:50%; left:50%;
+  width:var(--lf-card-w);
+  height:var(--lf-card-h);
+  transform-style: preserve-3d;
+  border-radius:var(--lf-radius);
+  overflow:hidden;
+  background:#090d1a;
+  box-shadow:
+    0 28px 70px rgba(0,0,0,.45),
+    0 2px 10px rgba(0,0,0,.25) inset;
+  will-change: transform, opacity, z-index;
+}
+
+/* 이미지/비디오 공통 - 원본 색감 유지 */
+.lf-slider__img,
+.lf-slider__video{
+  width:100%; height:100%;
+  object-fit:cover; display:block; border-radius:inherit;
+  filter:none; /* ✅ 색감 보정 제거 */
+}
+
+/* 캡션(좌측 하단 라벨) */
+.lf-slider__caption{
+  position:absolute; left:14px; bottom:14px;
+  padding:8px 12px;
+  background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55));
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:10px; backdrop-filter: blur(6px);
+  font-weight:700; letter-spacing:.2px;
+}
+
+/* 정보 박스(중앙 카드에서만 보임) */
+.lf-slider__info{
+  position:absolute;
+  bottom:90px;
+  left:50%;
+  transform:translateX(-50%) translateY(8px);
+  width: 75%;                   /* 가로폭 확장 */
+  max-width: calc(var(--lf-card-w) * 0.55);
+  padding: 28px 20px;	/* 세로 */
+  text-align: left;             /* 본문은 좌측 정렬 */
+  font-size:15px;
+  line-height: 1.5;		/*텍스트가 줄 간격이 넓어져 세로로 더 길어짐  */
+    /* ↓ 카드 배경의 어두움/투명도: 마지막 값(0.55)이 불투명도(= 55%) */
+  background: rgba(0,0,0,0.10);
+    /* ↓ 테두리 투명도 */
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 14px;
+   /* ↓ 카드 뒤 배경 흐림 강도 */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    /* ↓ 카드 자체의 나타남/사라짐 투명도(hover 시 1로 바뀜) */
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .6s ease, transform .6s ease;
+  z-index: 2;
+}
+
+/* 변경: 중앙 + hover/focus/탭(show-info 클래스)일 때만 보임 */
+.lf-slider__slide.is-active:hover .lf-slider__info,
+.lf-slider__slide.is-active:focus-within .lf-slider__info,
+.lf-slider__slide.is-active.show-info .lf-slider__info {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 중앙 카드는 상호작용 힌트 */
+.lf-slider__slide.is-active { cursor: pointer; }
+
+.lf-slider__info h3{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:12px;
+  text-align: center;           /* 제목만 가운데 */
+}
+.lf-slider__info p {
+  margin: 8px 0;
+}
+
+.lf-slider__info strong {
+  font-weight: 700;
+  display: block;        /* 줄바꿈 */
+  margin-bottom: 2px;
+  color: #ffd966;               /* 강조 포인트 색상 (연한 노랑) */
+}
+
+.lf-slider__info .detail {
+  display: block;
+  padding-left: 14px;    /* ✅ 디테일 들여쓰기 */
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: #f0f0f0;
+}
+
+
+/* 네비게이션 */
+.lf-slider__nav{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:space-between;
+  pointer-events:none;
+}
+
+.lf-slider__btn {
+	pointer-events: auto;
+	appearance: none;
+	border: none;
+	outline: none;
+	width: 54px;
+	height: 54px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .08);
+	color: #fff;
+	display: grid;
+	place-items: center;
+	margin: 0 8px;
+	backdrop-filter: blur(4px);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+	transition: transform .2s ease, background .2s ease;}
+
+.lf-slider__btn:hover{ transform: translateY(-1px) scale(1.03); background: rgba(255,255,255,.12); }
+.lf-slider__btn:active{ transform: scale(.96); }
+
+/* 인디케이터 */
+.lf-slider__dots {
+	display: flex;
+	gap: 10px;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: -28px;}
+
+.lf-slider__dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #6a7ab6;
+	opacity: .4;
+	transition: opacity .25s ease, transform .25s ease, background .25s ease;}
+
+.lf-slider__dot.is-active{ opacity:1; transform:scale(1.4); background:#cfe1ff; }
+
+/* 접근성 숨김 텍스트 */
+.lf-slider__sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;}
+
+/* 반응형 */
+@media (max-width: 900px){
+  .lf-slider{
+    --lf-card-w: 360px; --lf-card-h: 500px;
+    --lf-gap-x: 200px;  --lf-depth: 150px;
+    --lf-rotY: 22deg;
+  }
+  .lf-slider__info{
+    bottom:48px;
+    font-size:14px;
+  }
+}
+@media (max-width: 680px){
+  .lf-slider{
+    --lf-card-w: 300px; --lf-card-h: 440px;
+    --lf-gap-x: 150px;  --lf-depth: 120px;
+    --lf-rotY: 20deg;
+  }
+  .lf-slider__btn{ width:46px; height:46px; }
+  .lf-slider__info{
+    width:90%;
+    padding:14px 16px;
+  }
+}
+
+/* 섹션 하단 여백 키우기 (기존 96px → 160px) */
+.lf-slider__wrap{
+  min-height: 70vh;
+  padding: 72px 24px 160px; /* ← 여기만 늘림 */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+ 
+ 

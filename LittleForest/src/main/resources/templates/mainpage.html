@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Little Forest</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<!-- 폰트어썸 아이콘 불러오는 코드 -->
+
+	<link rel="stylesheet" href="https://jhammann.github.io/sakura/dist/sakura.css">
+	<link rel="stylesheet" href="/css/mainpagestyle.css">
+	<style>
+	header { margin-bottom: 5px !important; }
+	</style>
+</head>
+
+<body>
+	<!-- 헤더 삽입 -->
+	<div th:replace="fragments/header :: header"></div>
+
+	<div class="sakura-container" id="sakura-petals">
+
+	
+
+	<!-- 메인 배너 -->
+	<section class="hero">
+	
+
+		<div th:replace="~{fragments/chatting}"></div>
+
+		<div class="hero-content">
+			<h1>내 손안의 작은 숲, LittleForest<!-- <span th:text="${session.user_Id}">게스트</span> --></h1>
+			<p>
+				탄소배출량 측정,<br>지속가능한 소비 분석,<br>당신을 위한 환경 데이터 플랫폼
+			</p>
+		</div>
+	</section>
+
+	<!-- 컨텐트 모음 -->
+
+	<section class="scroll-section">
+		<p class="scroll-text">SCROLL DOWN</p>
+		<div class="scroll-line"></div>
+		<h1>
+			<span class="highlight">Litte Forest</span>를 경험해 보세요 !
+		</h1>
+	</section>
+
+	<!-- 하단 버튼 -->
+	<div class="service-title-wrapper">
+		<h2 class="service-title">
+			< Little Forest가 제공하는 서비스>
+		</h2>
+	</div>
+
+	<div class="green-box">
+		<div class="content">
+			<div class="content-box">
+				<img src="/image/maintree.png" alt="tree" /> <a th:href="@{/growtree}"><button>나무키우러가기</button></a>
+			</div>
+			<div class="content-box">
+				<img src="/image/paypal.png" alt="wallet" /> <a th:href="@{/wallet}"><button>지갑으로가기</button></a>
+			</div>
+			<div class="content-box">
+				<img src="/image/qrcode.png" alt="pay" /> <a th:href="@{/shop}"><button>결제하러가기</button></a>
+			</div>
+			<div class="content-box">
+				<img src="/image/co2-car.png" alt="emission1" /> <a th:href="@{/emission1}"><button>탄소소비확인</button></a>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const sections = document.querySelectorAll(".scroll-section2");
+
+				// 홀수/짝수에 클래스 부여
+				sections.forEach((section, index) => {
+					if (index % 2 === 0) {
+						section.classList.add("left");  // 0,2,4... 왼쪽
+					} else {
+						section.classList.add("right"); // 1,3,5... 오른쪽
+					}
+				});
+
+				// Intersection Observer
+				const observer = new IntersectionObserver((entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							entry.target.classList.add("visible");
+						}
+					});
+				}, {threshold: 0.2});
+
+				sections.forEach(section => {
+					observer.observe(section);
+				});
+			});
+		</script>
+
+
+	<!-- 구분선 -->
+	<div style="margin: 25px 0; border-top: 1px solid #ccc;"></div>
+
+	<section class="scroll-section2">
+		<p class="scroll-text">SCROLL DOWN</p>
+		<div class="scroll-line"></div>
+		<h1>
+			하루하루 자라나는 <span class="highlight">나만의 나무</span>를 길러보세요 !
+		</h1>
+		<div class="qrpay-wrapper">
+			<img src="/image/growtree2.png" alt="growtree" />
+			<p class="qrpay-desc">
+				작은 씨앗에서 시작해 물과 비료를 주며 <br>하루하루 나무가 자라는 모습을 지켜보세요!!! <br>물을
+				모으고 비료로 성장 속도를 높일 수 있습니다 !!<br> 나무를 모두 키우면, 게임 속 나무가 실제 지구에 심어져
+				환경 보호에 기여 할 수 있습니다 !
+			</p>
+			<a href="/growtree" class="qrpay-btn">바로가기</a>
+		</div>
+	</section>
+
+	<section class="scroll-section2">
+		<div class="scroll-line"></div>
+		<h1>
+			쓰고 적립하고 <span class="highlight"> 환경을 지켜보세요 !</span>
+		</h1>
+		<div class="qrpay-wrapper">
+			<img src="/image/greenwallet.png" alt="greenwallet" />
+			<p class="qrpay-desc">
+				내 지갑이 지구를 웃게 합니다.<br> 소비 습관을 확인하고, 절약한 만큼 환경에 기부하세요 ! <br>
+				LittleForest 지갑과 함께라면, <br>나만의 작은 숲을 가꿀 수 있습니다 작은 행동이 큰 변화를 !
+				만듭니다.
+			</p>
+			<a href="/wallet" class="qrpay-btn">바로가기</a>
+		</div>
+	</section>
+
+	<section class="scroll-section2">
+		<div class="scroll-line"></div>
+		<h1>
+			LittleForest 만의 <span class="highlight"> GreenPay</span>를 사용해보세요 !
+		</h1>
+		<div class="qrpay-wrapper">
+			<img src="/image/qrpay.jpg" alt="qrpay" />
+			<p class="qrpay-desc">
+				Little Forest 매장을 QR로 연결합니다!<br> 결제 시 탄소 발자국 계산에 따른 포인트를 획들 할 수
+				있어요 !<br> 행운의 네잎클로버 QR로 탄소 절약 소비를 이행해 보아요! +ㅁ+
+			</p>
+			<a href="/shop" class="qrpay-btn">바로가기</a>
+		</div>
+	</section>
+
+	<section class="scroll-section2">
+		<div class="scroll-line"></div>
+		<h1>
+			LittleForest 만의 <span class="highlight"> GreenPay</span>를 사용해보세요 !
+		</h1>
+		<div class="qrpay-wrapper">
+			<img src="/image/grape.png" alt="emission1" />
+			<p class="qrpay-desc">
+				스스로 사용한 탄소량을 한눈에 간단하게 확인해 보세요 !<br> 사용한 탄소량을 통계로 확인하여 지구를 지켜
+				보세요 !<br> 한 달 동안 사용한 탄소량, 일 년 동안 확인한 탄소량을 쉽게 확인해 보세요 !
+			</p>
+			<a href="/emission1" class="qrpay-btn">바로가기</a>
+		</div>
+	</section>
+	</div>
+
+	<!-- 푸터 삽입 -->
+	<div th:replace="fragments/footer :: footer"></div>
+
+
+	<script src="https://jhammann.github.io/sakura/dist/sakura.js"></script>
+	<script>
+		var sakura = new Sakura('#sakura-petals', {
+			fallSpeed: 5,
+			maxSize: 23,
+			minSize: 16,
+			gradientColorStart: 'rgba(140, 190, 140, 1)',
+			gradientColorEnd: 'rgba(140, 190, 140, 0.9)',
+			lifeTime: 300
+			//rgba(173, 223, 173, 0.8) 민트
+			//rgba(140, 190, 140, 0.8) 올리브
+			// Gradient color end (rgba).
+		});
+	</script>
+
+</body>
+
+</html>

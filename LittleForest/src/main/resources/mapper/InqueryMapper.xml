@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.InqueryMapper">
+<select id="getAllInquery" parameterType="InqueryVO">
+select i.id, i.user_id, i.category, i.title, i.content, i.created_at,i.status, u.id as user_table_id, u.nickname from
+inquery_table i left outer join user_table u on i.user_id=u.id
+</select>
+<select id="getUserInquery" parameterType="InqueryVO">
+select i.id, i.user_id, i.category, i.title, i.content, i.created_at,i.status, u.id as user_table_id, u.nickname from
+inquery_table i left outer join user_table u on i.user_id=u.id 
+where i.user_id=#{user_Id}
+order by i.id desc
+</select>
+<select id="getOneInquery" parameterType="InqueryVO">
+select i.id, i.user_id, i.category, i.title, i.content, i.created_at,i.status, u.id as user_table_id,i.status, u.nickname from
+inquery_table i left outer join user_table u on i.user_id=u.id
+where i.id=#{id} and i.user_id=#{user_Id}
+</select>
+<insert id="insertInquery" parameterType="InqueryVO">
+insert into inquery_table values(inquery_Seq.nextval,#{user_Id},#{category}, #{title}, #{content}, sysdate,'안읽음')
+</insert>
+<update id="updateInquery" parameterType="InqueryVO">
+update inquery_table set title=#{title}, content=#{content} where id=#{id} and user_id=#{user_Id}
+</update>
+<delete id="deleteInquery" parameterType="InqueryVO">
+delete from inquery_table where id=#{id} and user_id=#{user_Id}
+</delete>
+<update id="updateStatus" parameterType="InqueryVO">
+update inquery_table set status=#{status} where id=#{id}
+</update>
+<select id="inqueryAnswer" parameterType="InqueryVO">
+select * from inquery_table where id=#{user_Id} </select>
+</mapper>

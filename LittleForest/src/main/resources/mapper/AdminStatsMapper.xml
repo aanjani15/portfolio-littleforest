@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fintecho.littleforest.mapper.admin.AdminStatsMapper">
+
+  <!-- 전체 카운트: VO 매핑이라 alias 대소문자 영향 없음 -->
+  <select id="selectCounts" resultType="com.fintecho.littleforest.vo.admin.AdminCountsVO">
+    SELECT
+      (SELECT COUNT(*) FROM user_table) AS users,
+      (SELECT COUNT(*) FROM growing_tree_table) AS growingTrees,
+      (SELECT COUNT(*) FROM grown_tree_table) AS grownTrees
+    FROM dual
+  </select>
+
+  <!-- DAU / WAU / MAU : Map이지만 서비스단에서 dau/wau/mau 대/소문자 둘 다 처리 -->
+  <select id="selectActive" resultType="map">
+    SELECT
+      (SELECT COUNT(DISTINCT user_id) FROM attendance_table
+        WHERE attend_date = TRUNC(SYSDATE)) AS "dau",
+      (SELECT COUNT(DISTINCT user_id) FROM attendance_table
+        WHERE attend_date >= TRUNC(SYSDATE,'IW')) AS "wau",
+      (SELECT COUNT(DISTINCT user_id) FROM attendance_table
+        WHERE attend_date >= ADD_MONTHS(TRUNC(SYSDATE,'MM'),0)) AS "mau"
+    FROM dual
+  </select>
+
+  <!-- 월별 신규 가입자 -->
+  <select id="selectMonthlyNewUsers" resultType="map">
+    SELECT TO_CHAR(created_at,'YYYY-MM') AS "ym",
+           COUNT(*)                       AS "cnt"
+    FROM user_table
+    GROUP BY TO_CHAR(created_at,'YYYY-MM')
+    ORDER BY 1
+  </select>
+
+  <!-- 요일별 출석 -->
+  <select id="selectWeekdayAttendance" resultType="map">
+    SELECT TO_CHAR(attend_date,'DY','NLS_DATE_LANGUAGE=KOREAN') AS "dow",
+           COUNT(*)                                             AS "cnt"
+    FROM attendance_table
+    GROUP BY TO_CHAR(attend_date,'DY','NLS_DATE_LANGUAGE=KOREAN')
+    ORDER BY MIN(attend_date)
+  </select>
+
+  <!-- 연속 출석 TOP10 -->
+  <select id="selectTopStreaks" resultType="map">
+    SELECT user_id              AS "userId",
+           MIN(attend_date)     AS "startDate",
+           MAX(attend_date)     AS "endDate",
+           COUNT(*)             AS "days"
+    FROM attendance_table
+    GROUP BY user_id
+    ORDER BY "days" DESC
+    FETCH FIRST 10 ROWS ONLY
+  </select>
+
+  <!-- 트리 레벨 분포 -->
+  <select id="selectTreeLevelDistribution" resultType="map">
+    SELECT tree_level AS "treeLevel",
+           COUNT(*)   AS "cnt"
+    FROM growing_tree_table
+    GROUP BY tree_level
+    ORDER BY "treeLevel"
+  </select>
+
+  <!-- 월별 다 키운 나무 -->
+  <select id="selectGrownMonthly" resultType="map">
+    SELECT TO_CHAR(complete_tree,'YYYY-MM') AS "ym",
+           COUNT(*)                          AS "cnt"
+    FROM grown_tree_table
+    GROUP BY TO_CHAR(complete_tree,'YYYY-MM')
+    ORDER BY 1
+  </select>
+
+  <!-- 포인트 (월/유형별) -->
+  <select id="selectPointMonthlyByType" resultType="map">
+    SELECT TO_CHAR(created_at,'YYYY-MM') AS "ym",
+           type                           AS "type",
+           SUM(amount)                    AS "amount"
+    FROM point_table
+    GROUP BY TO_CHAR(created_at,'YYYY-MM'), type
+    ORDER BY 1, 2
+  </select>
+
+  <!-- 선물 TOP (보낸사람): 부호 규칙이 뒤섞여도 정확히 집계되도록 보완 -->
+  <select id="selectGiftTopSent" resultType="map">
+  <![CDATA[
+    SELECT
+      /* 보낸 사람: amount<0 이면 user_id, amount>0 이면 counterparty_user_id */
+      CASE WHEN amount < 0 THEN user_id ELSE counterparty_user_id END AS "sender",
+      SUM(ABS(amount))                                               AS "amount"
+    FROM point_table
+    WHERE type = 'GIFT'
+      AND counterparty_user_id IS NOT NULL   -- 짝이 있는 gift만
+    GROUP BY CASE WHEN amount < 0 THEN user_id ELSE counterparty_user_id END
+    ORDER BY "amount" DESC
+    FETCH FIRST 5 ROWS ONLY
+  ]]>
+  </select>
+
+  <!-- 선물 TOP (받은사람) -->
+  <select id="selectGiftTopReceived" resultType="map">
+  <![CDATA[
+    SELECT
+      /* 받은 사람: amount>0 이면 user_id, amount<0 이면 counterparty_user_id */
+      CASE WHEN amount > 0 THEN user_id ELSE counterparty_user_id END AS "receiver",
+      SUM(ABS(amount))                                               AS "amount"
+    FROM point_table
+    WHERE type = 'GIFT'
+      AND counterparty_user_id IS NOT NULL
+    GROUP BY CASE WHEN amount > 0 THEN user_id ELSE counterparty_user_id END
+    ORDER BY "amount" DESC
+    FETCH FIRST 5 ROWS ONLY
+  ]]>
+  </select>
+
+  <!-- 카테고리별 매출 + 탄소효과 -->
+  <select id="selectSalesByCategory" resultType="map">
+    SELECT p.category                       AS "category",
+           NVL(SUM(pay.amount),0)           AS "sales",
+           NVL(SUM(p.carbon_effect),0)      AS "carbonEffect"
+    FROM product_table p
+    LEFT JOIN payment_table pay ON p.id = pay.product_id
+    GROUP BY p.category
+    ORDER BY "sales" DESC
+  </select>
+
+  <!-- 월별 탄소 절감 -->
+  <select id="selectEmissionMonthly" resultType="map">
+    SELECT TO_CHAR(emission_date,'YYYY-MM') AS "ym",
+           SUM(emission)                    AS "total"
+    FROM emission_table
+    GROUP BY TO_CHAR(emission_date,'YYYY-MM')
+    ORDER BY 1
+  </select>
+
+  <!-- 커뮤니티 (게시글/댓글/좋아요) -->
+  <select id="selectCommunityPostsMonthly" resultType="map">
+    SELECT TO_CHAR(created_at,'YYYY-MM') AS "ym",
+           COUNT(*)                      AS "cnt"
+    FROM community_table
+    GROUP BY TO_CHAR(created_at,'YYYY-MM')
+    ORDER BY 1
+  </select>
+
+  <select id="selectCommunityCommentsMonthly" resultType="map">
+    SELECT TO_CHAR(created_at,'YYYY-MM') AS "ym",
+           COUNT(*)                      AS "cnt"
+    FROM comment_table
+    GROUP BY TO_CHAR(created_at,'YYYY-MM')
+    ORDER BY 1
+  </select>
+
+  <select id="selectCommunityLikesMonthly" resultType="map">
+    SELECT TO_CHAR(press_at,'YYYY-MM') AS "ym",
+           COUNT(*)                    AS "cnt"
+    FROM likes_table
+    GROUP BY TO_CHAR(press_at,'YYYY-MM')
+    ORDER BY 1
+  </select>
+
+  <!-- 월별 기부 -->
+  <select id="selectDonationMonthly" resultType="map">
+    SELECT TO_CHAR(donation_date,'YYYY-MM') AS "ym",
+           SUM(amount)                      AS "total",
+           COUNT(DISTINCT user_id)          AS "donors"
+    FROM donation_table
+    GROUP BY TO_CHAR(donation_date,'YYYY-MM')
+    ORDER BY 1
+  </select>
+
+</mapper>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Little Forest</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="/css/mainpagestyle.css">
+	<link rel="stylesheet" href="/css/wallet.css"> <!-- wallet.css -->
+	<link rel="stylesheet" href="/css/payment.css">
+
+</head>
+
+<body class="page-payment">
+
+	<!-- 상단 오른쪽 버튼 -->
+	<div class="header-right">
+		<a href="/" class="btn-home"><i class="fa-solid fa-house"></i> 홈</a>
+		<a href="/logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</a>
+	</div>
+
+	<!-- 영상 배경 -->
+	<video autoplay muted loop playsinline class="bg-video">
+		<source src="/video/forest_video.mp4" type="video/mp4">
+	</video>
+
+	<div class="receipt">
+		<div class="receipt-header">
+			<div class="receipt-logo-box">
+				<img src="/image/logo.png" alt="로고" class="receipt-logo">
+				<span class="receipt-brand">LITTLE FOREST</span>
+			</div>
+			<div class="user-nickname" th:text="'[' + ${userInfo.nickname} + ']'">[NICKNAME]</div>
+			<div class="date-time">
+				<span th:with="
+	      now=${T(java.time.ZonedDateTime).now(T(java.time.ZoneId).of('Asia/Seoul'))},
+	      fmt=${T(java.time.format.DateTimeFormatter)
+	              .ofPattern('EEE yyyy-MM-dd hh:mma')
+	              .withLocale(T(java.util.Locale).ENGLISH)}
+	    " th:text="${#strings.toUpperCase(now.format(fmt))}">
+				</span>
+			</div>
+		</div>
+		<div class="receipt-body">
+			<table>
+				<thead>
+					<tr>
+						<th>날짜</th>
+						<th>구분</th>
+						<th>금액</th>
+						<th>내역</th>
+						<th>포인트</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="p : ${paymentList}">
+						<td th:text="${#dates.format(p.tran_At, 'yyyy-MM-dd')}"></td>
+						<td th:text="${p.type == 'withdrawal' ? '지출' : '수입'}"></td>
+						<td th:text="${#numbers.formatInteger(p.amount, 1, 'COMMA')}"></td>
+						<td th:text="${p.description}"></td>
+						<!-- 교체 (포인트 표시) -->
+						<!-- <td th:text="${p.earnedPoint > 0 ? #numbers.formatInteger(p.earnedPoint,1,'COMMA') : '-'}"></td> -->
+						<!-- ==================================09.02 변경===================================== -->
+						<td>
+							<div>
+								<span
+									th:text="${p.earnedPoint > 0 ? #numbers.formatInteger(p.earnedPoint,1,'COMMA') : '-'}"></span>
+							</div>
+							<div class="emission-kg" th:if="${p.savedEmission != null and p.savedEmission > 0}"
+								th:text="${'(' + #numbers.formatDecimal(p.savedEmission, 1, 3) + ' kg)'}">
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- ==================================09.02 변경===================================== -->
+
+			<div class="summary">
+				<p class="total">TOTAL (총 지출) :
+					<span th:text="${#numbers.formatInteger(totalSpending, 1, 'COMMA')}">0</span>
+				</p>
+				<p class="green-point">GREEN POINT (포인트 합계)
+					<span th:text="${#numbers.formatInteger(totalGreenPoint, 1, 'COMMA')}">0</span>
+				</p>
+			</div>
+		</div>
+	</div>
+	<!-- =========================08.25 업뎃  -->
+
+
+</body>
+
+</html>

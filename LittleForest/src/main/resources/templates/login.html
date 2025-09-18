@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+   <meta charset="UTF-8">
+   <title>Little Forest</title>
+   <meta name="google-signin-client_id"
+      content="500391187336-3qurkv759q281l37us952apo9tu7vhim.apps.googleusercontent.com">
+   <link rel="stylesheet" href="/css/loginpagestyle.css">
+</head>
+
+<body>
+   <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+   <script src="../js/login.js">
+
+   </script>
+<canvas id="canvas"></canvas>
+   <!-- //c2a49ae7428eee2fc07b7fb509ae845a -->
+   <div class="login-container">
+      <h2>LOGIN</h2>
+      <p class="subtitle">기존 계정으로 간단하게 로그인하세요 !</p>
+      <form action="/login" method="post">
+         <input type="text" name="oauth_id" placeholder="아이디을 입력하세요" required />
+         <input type="password" name="password" placeholder="비밀번호" required />
+         <div th:if="${errorMsg}" th:text="${errorMsg}" class="error-message"></div>
+         <button type="submit">로그인</button>
+      </form>
+
+      <!-- 구분선 -->
+      <div style="margin: 25px 0; border-top: 1px solid #ccc;"></div>
+
+
+      <a href="javascript:kakaoLogin();" class="btn kakao" style="margin-top: 12px;"> <img src="/image/kakaotalk.png"
+            alt="카카오 로그인" style="width: 20px; height: 20px;"> 카카오로 로그인
+      </a>
+      <!--       <a class="btn kakao" href="/oauth2/authorization/kakao" style="margin-top: 12px;">
+               <img src="/image/kakaotalk.png" alt="카카오 로그인" style="width:20px;height:20px;">
+               카카오로 로그인
+            </a> -->
+
+
+      <!-- 홈으로 가기 -->
+      <a href="/" class="btn home" style="color: white;">
+         <img src="/image/home.png" alt="홈" style="width: 20px; height: 20px;">
+         홈으로 가기
+      </a>
+
+      <!-- 회원가입 -->
+      <div class="signup-section">
+         <div class="signup-divider">
+            <span>아직 회원이 아니신가요?</span>
+         </div>
+         <a href="/join" class="signup-button">회원가입 하러 가기</a>
+      </div>
+   </div>
+   
+      <!--  fireflies.js -->
+   <script>
+      let c = init("canvas"),
+         w = (canvas.width = window.innerWidth),
+         h = (canvas.height = window.innerHeight);
+      //initiation
+
+      //반딧불 사이즈 조절
+      const SIZE_MIN = 1;
+      const SIZE_MAX = 3;
+
+      class firefly {
+         constructor() {
+            this.x = Math.random() * w;
+            this.y = Math.random() * h;
+            this.s = Math.random() * 2;  /* 스피드  */
+            this.ang = Math.random() * 2 * Math.PI;
+            this.v = this.s * this.s / 4;
+
+            // 속도는 크기와 무관하게 예전 분포 유지
+            // 기존: this.v = this.s*this.s/4;
+            this.s = SIZE_MIN + Math.random() * (SIZE_MAX - SIZE_MIN);
+            this.v = (Math.random() * 2) ** 2 / 4;   // 0 ~ 1 근처, 예전과 동일한 범위
+
+         }
+
+
+         move() {
+            this.x += this.v * Math.cos(this.ang);
+            this.y += this.v * Math.sin(this.ang);
+            this.ang += Math.random() * 20 * Math.PI / 180 - 10 * Math.PI / 180;
+         }
+         show() {
+            /*      c.beginPath();
+                c.arc(this.x,this.y,this.s,0,2*Math.PI);
+                c.fillStyle="#fddba3";
+                c.fill(); */
+
+            /* 형광버전 */
+            c.save();
+            c.shadowColor = "rgba(255, 255, 80, 0.9)";
+            c.shadowBlur = 12;                 // 글로우 강도 (10~20 사이로 조절)
+            c.beginPath();
+            c.arc(this.x, this.y, this.s, 0, 2 * Math.PI);
+            c.fillStyle = "#fff44f";
+            c.fill();
+            c.restore();
+
+            /* (선명) 라디얼 그라디언트 */
+            /*       const g = c.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.s * 3);
+                  g.addColorStop(0.00, "#ffffcc");           // 밝은 코어
+                  g.addColorStop(0.40, "#fff44f");           // 형광 노랑
+                  g.addColorStop(1.00, "rgba(255,255,0,0)"); // 가장자리는 투명
+                  c.beginPath();
+                  c.arc(this.x, this.y, this.s * 3, 0, 2*Math.PI);
+                  c.fillStyle = g;
+                  c.fill(); */
+         }
+      }
+
+      let f = [];
+
+      function draw() {
+         if (f.length < 100) {
+            for (let j = 0; j < 10; j++) {
+               f.push(new firefly());
+            }
+         }
+         //animation
+         for (let i = 0; i < f.length; i++) {
+            f[i].move();
+            f[i].show();
+            if (f[i].x < 0 || f[i].x > w || f[i].y < 0 || f[i].y > h) {
+               f.splice(i, 1);
+            }
+         }
+      }
+
+      let mouse = {};
+      let last_mouse = {};
+
+      canvas.addEventListener(
+         "mousemove",
+         function (e) {
+            last_mouse.x = mouse.x;
+            last_mouse.y = mouse.y;
+
+            mouse.x = e.pageX - this.offsetLeft;
+            mouse.y = e.pageY - this.offsetTop;
+         },
+         false
+      );
+      function init(elemid) {
+         let canvas = document.getElementById(elemid),
+            c = canvas.getContext("2d"),
+            w = (canvas.width = window.innerWidth),
+            h = (canvas.height = window.innerHeight);
+         c.fillStyle = "rgba(30,30,30,1)";
+         c.fillRect(0, 0, w, h);
+         return c;
+      }
+
+      window.requestAnimFrame = (function () {
+         return (
+            window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function (callback) {
+               window.setTimeout(callback);
+            }
+         );
+      });
+
+      function loop() {
+         window.requestAnimFrame(loop);
+         c.clearRect(0, 0, w, h);
+         draw();
+      }
+
+      window.addEventListener("resize", function () {
+         (w = canvas.width = window.innerWidth),
+            (h = canvas.height = window.innerHeight);
+         loop();
+      });
+
+      loop();
+      setInterval(loop, 1000 / 60);
+   </script>
+
+</body>
+
+</html>

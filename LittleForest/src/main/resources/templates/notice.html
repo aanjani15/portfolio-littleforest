@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+   <meta charset="UTF-8">
+   <title>공지사항</title>
+   <link rel="stylesheet" th:href="@{/css/notice.css}">
+   	<link rel="stylesheet" href="/css/mainpagestyle.css">
+</head>
+
+<body>
+
+	<div th:replace="fragments/header :: header"></div>
+	
+   <div class="notice-header">
+      <h2>📢 공지사항</h2>
+   </div>
+
+   <div class="notice-container">
+      <h1 class="notice-main">LittleForest 서비스 점검 안내</h1>
+      <p class="notice-desc">
+         안녕하세요, LittleForest 입니다.<br>
+         안정적인 서비스 제공을 위해 아래와 같이 점검이 진행될 예정입니다.
+      </p>
+
+      <div class="notice-card">
+         <h3>📅 점검 일정</h3>
+         <p>2025년 8월 31일(일) 오전 2시 ~ 오전 4시</p>
+      </div>
+
+      <div class="notice-card">
+         <h3>⚡ 영향 범위</h3>
+         <p>서비스 접속 불가 (로그인, 나무 키우기, 결제 등 전체 서비스)</p>
+      </div>
+
+      <div class="notice-card">
+         <h3>ℹ️ 참고 사항</h3>
+         <ul>
+            <li>점검 시간은 작업 상황에 따라 단축되거나 연장될 수 있습니다.</li>
+            <li>불편을 드려 죄송합니다. 더욱 안정적인 서비스로 보답하겠습니다.</li>
+         </ul>
+      </div>
+
+      <div class="notice-footer">
+         <p>LittleForest 고객센터 ☎ 1588-0000</p>
+      </div>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>커뮤니티 자세히보기</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<link rel="stylesheet" th:href="@{/css/community.css}">
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+
+	<div class="community-container">
+		<div class="community-post">
+			<div class="post-image">
+				<img th:if="${voo.photo != null and voo.photo != ''}" th:src="@{${voo.photo}}">
+				<div th:if="${voo.photo == null or voo.photo == ''}" class="placeholder"></div>
+			</div>
+			<h2 th:text="${voo.title}" id="title3">제목</h2>
+			<p class="meta">
+				<span th:text="${voo.user_Id}">작성자</span> |
+				<span th:text="${#dates.format(voo.created_At,'yyyy-MM-dd HH:mm')}">작성일</span>
+			</p>
+			<div id="type3" th:text="${voo.type}">타입</div>
+			<div class="content" id=content3 th:text="${voo.content}">내용</div>
+			<input type="hidden" name="id" class="community_Id3" th:value="${voo.id}">
+			<input type="hidden" name="id" class="user_Id3" th:value="${o.id}">
+			<input type="hidden" name="photo" id="photo3" th:value="${voo.photo}">
+			<div class="community-like">
+				<span class="like-btn" th:classappend="${k.contains(voo.id)} ? ' liked'"> <svg class="heart"
+						xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+						<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+						             2 5.42 4.42 3 7.5 3
+						             9.24 3 10.91 3.81 12 5.09
+						             13.09 3.81 14.76 3 16.5 3
+						             19.58 3 22 5.42 22 8.5
+						             c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+					</svg></span>
+				<span class="likes-count" th:text="${voo.likes}">0</span>
+			</div>
+			<div class="post-buttons">
+				<button th:if="${voo.user_Id==o.id}" id="upbtn2">수정하기</button>
+				<button th:if="${voo.user_Id==o.id} or ${o.role=='admin'}" id="debtn2">삭제하기</button>
+			</div>
+		</div>
+
+		<hr>
+
+		<div class="comment-section">
+			<h3>댓글 <span th:text="${#lists.size(vo)}">0</span>개</h3>
+			<button id="ccbtn" class="comment-btn">댓글등록</button>
+			<input type="hidden" name="community_Id" id="ccid" th:value="${voo.id}">
+
+			<div class="comment-list">
+				<div class="comment-item" th:each="c : ${vo}">
+					<div class="comment-header">
+						<span class="nickname" th:text="${o.nickname}">닉네임</span>
+						<input type="hidden" name="user_Id" class="c2user_Id" th:value="${c.user_Id}">
+						<input type="hidden" name="user_Id" class="c2user_Id2" th:value="${o.id}">
+						<input type="hidden" name="comment_Id" class="mid" th:value="${c.id}">
+						<span class="date" th:text="${#dates.format(c.created_At,'yyyy-MM-dd HH:mm')}">날짜</span>
+					</div>
+					<div class="comment-content" th:text="${c.comment_Id}">댓글 내용</div>
+					<div class="comment-like">
+						<span class="like-btn" th:classappend="${k.contains(c.id)} ? ' liked'">
+							<svg class="heart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+								height="24">
+								<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+										             2 5.42 4.42 3 7.5 3
+										             9.24 3 10.91 3.81 12 5.09
+										             13.09 3.81 14.76 3 16.5 3
+										             19.58 3 22 5.42 22 8.5
+										             c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+							</svg>
+						</span>
+						<span class="likes-count" th:text="${c.likes}">0</span>
+					</div>
+
+					<div class="comment-buttons">
+						<button th:if="${c.user_Id==o.id}" class="upbtn">수정하기</button>
+						<button th:if="${c.user_Id==o.id} or ${o.role=='admin'}" class="debtn">삭제하기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--글 수정 팝업-->
+	<div id="updatepopupy" class="popup">
+		<div class="post-popup">
+			<span class="close">&times;</span>
+			사용자 아이디 : <label name="user_Id" id="uuser_Idy" th:text="${o.id}">0</label><br>
+			타입 :
+			<select id="utypey" name="type">
+				<option value="">--선택--</option>
+				<option value="공지">공지</option>
+				<option value="자유">자유</option>
+				<option value="정보공유">정보공유</option>
+			</select><br>
+			제목 : <input type="text" id="utitley" name="title" maxlength="20" minlength="1"><br>
+			<textarea name="content" id="ucontenty" rows="10" cols="50" required maxlength="1000"
+				minlength="10"></textarea><br>
+			사진(선택) <input type="file" name="photo" id="uphotoy"><br>
+			<img id="uphotopathy" width="100" height="100" style="display:none;">
+			<button class="button" id="cupdbtny">글 수정</button>
+			<button type="reset" id="cupdbtnrey">초기화</button>
+		</div>
+	</div>
+	<!--글 등록 팝업-->
+	<div id="cinsertpopup" class="popup">
+		<div class="post-popup">
+			<span class="close">&times;</span>
+			<p>사용자 : <span name="userId" id="cc1user_Id" th:text="${o.id}">사용자</span></p>
+			<textarea name="comment" id="cccomment" rows="5" cols="50" required maxlength="1000" minlength="3"
+				placeholder="최소 3자 이상 입력해주세요"></textarea><br>
+			<button class="button" id="ccsubmit">댓글 등록</button>
+		</div>
+	</div>
+
+	<!--글 수정 팝업-->
+	<div id="cupdatepopup" class="popup">
+		<div class="post-popup">
+			<span class="close">&times;</span>
+			<p>사용자 : <span name="user_Id" class="cc2user_Id" th:text="${o.id}">사용자</span></p>
+			<textarea name="comment" class="cc2comment" rows="5" cols="50" required maxlength="1000" minlength="3"
+				th:value="#{vo.comment_Id}"></textarea><br>
+			<button class="button" id="cc2submit">댓글 수정</button>
+		</div>
+	</div>
+
+	<script src="/js/insert2.js"></script>
+	<script src="/js/update2.js"></script>
+	<script src="/js/likey2.js"></script>
+	<script src="/js/likey3.js"></script>
+	<script src="js/updatey.js"></script>
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>

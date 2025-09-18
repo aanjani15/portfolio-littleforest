@@ -1,0 +1,67 @@
+body {
+   font-family: "Noto Sans KR", sans-serif;
+   background: #f8fafc;
+   margin: 0;
+}
+
+.notice-header {
+   background: #2e7d32;
+   /* LittleForest 초록 */
+   color: #fff;
+   padding: 20px;
+   text-align: center;
+   font-size: 22px;
+   font-weight: bold;
+}
+
+.notice-container {
+   max-width: 700px;
+   margin: 40px auto;
+   padding: 30px;
+   background: #fff;
+   border-radius: 16px;
+   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.notice-main {
+   text-align: center;
+   margin-bottom: 10px;
+   font-size: 26px;
+}
+
+.notice-desc {
+   text-align: center;
+   margin-bottom: 30px;
+   color: #555;
+}
+
+.notice-card {
+   background: #f9fafb;
+   border-left: 5px solid #4caf50;
+   padding: 15px 20px;
+   margin-bottom: 20px;
+   border-radius: 8px;
+}
+
+.notice-card h3 {
+   margin: 0 0 8px;
+   color: #2e7d32;
+}
+
+.notice-card p,
+.notice-card ul {
+   margin: 0;
+   color: #444;
+}
+
+.notice-card ul {
+   padding-left: 20px;
+}
+
+.notice-footer {
+   margin-top: 30px;
+   text-align: center;
+   font-size: 14px;
+   color: #666;
+
+}

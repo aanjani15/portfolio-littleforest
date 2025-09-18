@@ -1,0 +1,1217 @@
+	@charset "UTF-8";
+
+	/* 추가된 효과용 CSS */
+	/* 패널: 탭/상단을 가리지 않도록 아래에서 시작 + 탭보다 낮은 z-index */
+	.passbook-content {
+		padding-top: 50px !important;
+		position: absolute;
+		left: 0;
+		/* 상단(배경 제목/이미지 + 정보 + 탭 높이)을 피해서 시작 */
+		top: 160px;
+		/* 필요에 따라 160~220px 사이로 조절하세요 */
+		height: auto;
+		width: 100%;
+		box-sizing: border-box;
+		bottom: 72px;
+		padding: 90px 40px 40px;
+		/* 윗쪽 여백을 70→90 정도로 늘려 탭과 시각 충돌 방지 */
+		z-index: 1;
+
+		display: none;
+		opacity: 0;
+		transform: translateY(16px);
+		transition: transform 0.45s ease, opacity 0.45s ease;
+	}
+
+
+	/* ----- 위쪽(표) 전용 ----- */
+	.panel-top {
+		/* 표 위 간격/아래 간격 개별 관리 */
+		margin-top: 0;
+		/* 배경 상단과 더 붙이고 싶으면 음수도 가능 */
+		margin-bottom: 10px;
+
+		/* divider와의 거리 */
+	}
+
+	/* 모든 은행 패널의 표 폭만 좁히기 */
+	.passbook-content.bank-panel .panel-top>.wallet-table {
+		width: 560px;
+		/* 또는 85% 등 비율로 */
+		margin: 0 auto;
+		/* 가운데 정렬 */
+	}
+
+	/* ----- 구분선(형광펜 선 위치 맞춤) ----- */
+	/* .panel-divider {
+  height: 0;
+  border-top: 2px dashed rgba(120, 100, 80, .35); 
+  margin: 8px 0 14px;      
+} */
+
+	/* ----- 아래쪽(상세/안내) 전용 ----- */
+
+	.panel-bottom .bank-notice {
+		margin-top: 18px;
+		background: #fef8e7;
+		padding: 8px 12px;
+		border-radius: 8px;
+		line-height: 1.6;
+	}
+
+	.passbook-content.is-visible {
+		display: block;
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.passbook-content.slide-up {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	.bank-initial {
+		/* 고정된 크기 제거 → 이미지 비율에 맞게 */
+		width: auto;
+		height: auto;
+		margin: 0 auto;
+		text-align: center;
+		/* 이미지 가운데 정렬 */
+		padding: 20px;
+		z-index: 1;
+		transform-origin: left center;
+		transition-duration: 1s;
+		transition-timing-function: ease-in;
+	}
+
+	.bank-initial img {
+		max-width: 700px;
+		/* 최대 너비 제한 (통장 느낌 유지) */
+		width: 100%;
+		/* 부모 요소 기준으로 꽉 채우기 */
+		height: auto;
+		/* 세로 비율 자동 유지 */
+		border-radius: 10px;
+		box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+	}
+
+	.bank-initial:hover {
+		transform: rotateX(-180deg);
+		/* ✅ 위로 넘기기 */
+		opacity: 0.4;
+	}
+
+	/* 공통 폭/가운데 정렬: 배경, 상단, 패널 모두 같은 폭을 쓰게 */
+	.passbook-bg,
+	.section-narrow {
+		width: 700px;
+		margin: 0 auto;
+	}
+
+	/* ① 배경(이미지 전용) */
+	.passbook-bg {
+		position: relative;
+		perspective: 1400px;
+		transform-style: preserve-3d;
+	}
+
+
+	.passbook-background {
+		width: 100%;
+		display: block;
+		border-radius: 14px;
+		box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+	}
+
+	/* 통장 내용 영역 */
+	.passbook {
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 50px 40px;
+		width: 50px;
+		height: 100%;
+		box-sizing: border-box;
+		font-family: 'Pretendard', sans-serif;
+		font-size: 16px;
+		color: #333;
+		opacity: 0;
+		transform: translateY(100%);
+		transition: transform 0.6s ease, opacity 0.4s ease;
+	}
+
+	.passbook.slide-up {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+
+	/* /css/wallet.css */
+
+	.wallet-container {
+		display: flex;
+		justify-content: center;
+		margin-top: 100px;
+		margin-bottom: 100px;
+	}
+
+	.wallet-card {
+		background-color: #e0f0e6;
+		border-radius: 20px;
+		padding: 30px;
+		width: 600px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		font-family: 'Pretendard', sans-serif;
+	}
+
+	.wallet-header {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		margin-bottom: 30px;
+	}
+
+	.wallet-title {
+		font-size: 20px;
+		font-weight: bold;
+		background-color: #d0e5d2;
+		padding: 10px 20px;
+		border-radius: 15px;
+		margin-bottom: 10px;
+	}
+
+	.wallet-total {
+		font-size: 32px;
+		font-weight: bold;
+		color: #205c32;
+	}
+
+	.wallet-table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 5px;
+		font-size: 16px;
+	}
+
+	.wallet-table th,
+	.wallet-table td {
+		padding: 8px 12px;
+		/* 상하 8px, 좌우 12px */
+		line-height: 1.4;
+		/* 줄 간격 통일 */
+		vertical-align: middle;
+		/* 세로 중앙 정렬 */
+		font-size: 15px;
+		/* 글자 크기 통일 */
+	}
+
+	/* 은행명, 계좌번호, 잔액 모두 왼쪽/오른쪽 정렬 */
+	.wallet-table th:nth-child(1),
+	.wallet-table td:nth-child(1),
+	.wallet-table th:nth-child(2),
+	.wallet-table td:nth-child(2) {
+		text-align: left;
+	}
+
+	.wallet-table th:nth-child(3),
+	.wallet-table td:nth-child(3) {
+		text-align: right;
+	}
+
+	/* 계좌번호에 점선 적용 시 높이 맞추기 */
+	.wallet-table td.account-number {
+		border-bottom: 1px dashed #999;
+	}
+
+	/* 은행 상세정보 줄간격 통일 */
+	.bank-details p {
+		margin: 4px 0;
+		/* 위아래 간격 줄임 */
+		line-height: 1.5;
+		font-size: 14px;
+	}
+
+	.wallet-empty {
+		margin-top: 20px;
+		font-weight: bold;
+		color: #ff3333;
+	}
+
+	/* 종이 통장 스타일 */
+	.passbook-wrapper {
+		display: flex;
+		justify-content: center;
+		/*  margin: 50px 20px 140px; */
+		margin: 40px 20px 24px;
+	}
+
+	/* 접힌 선 표현 */
+	.passbook::before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 1px;
+		background-color: #aaa;
+		position: absolute;
+		top: 50%;
+		left: 0;
+	}
+
+	/* info 블록을 이미지 내부(상단 박스)로 고정 */
+	.passbook-top {
+		position: absolute;
+		/* 통장 안쪽 종이 여백(좌우 36px)에 맞춰 정렬 */
+		left: 36px;
+		right: 36px;
+		/* 상단 박스 위치(필요하면 60~120px 사이로 미세 조정) */
+		top: 72px;
+		margin: 0;
+		/* 바깥 여백 제거 */
+		padding: 0;
+		/* 안쪽 여백 제거(원하면 넣어도 됨) */
+		z-index: 4;
+		/* 탭(z=5)보다 한 단계 아래, 패널보다 위 */
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+
+	/* 내용 정돈(선택) — 글만 깔끔히 보이게 */
+	.passbook-top .info-section {
+		display: none;
+		background: rgba(255, 255, 255, .55);
+		/* 살짝 비침 */
+		backdrop-filter: blur(2px);
+		/* 브라우저 지원 시 부드럽게 */
+		border-radius: 8px;
+		padding: 10px 12px;
+		line-height: 1.4;
+	}
+
+	.info-section .label {
+		font-weight: bold;
+		margin-right: 5px;
+	}
+
+	.info-section p {
+		margin: 8px 0;
+	}
+
+	.username {
+		rgb: (254, 234, 199);
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	/* 하단 발급 정보 */
+	.passbook-bottom {
+		margin-top: 10px;
+		font-size: 14px;
+	}
+
+	.bank-details p {
+		margin: 6px 0;
+		border-bottom: 1px dashed #aaa;
+		padding-bottom: 3px;
+	}
+
+	.bank-notice {
+		margin-top: 30px;
+		background-color: #fef8e7;
+		padding: 5px 10px;
+		border-radius: 8px;
+		line-height: 1.6;
+	}
+
+
+	/* btn-jittery버튼 (흔들리는 버튼)*/
+
+	.btn-jittery {
+		animation: jittery 4s infinite;
+	}
+
+	@keyframes jittery {
+
+		5%,
+		50% {
+			transform: scale(1);
+		}
+
+		10% {
+			transform: scale(0.9);
+		}
+
+		15% {
+			transform: scale(1.15);
+		}
+
+		20% {
+			transform: scale(1.15) rotate(-5deg);
+		}
+
+		25% {
+			transform: scale(1.15) rotate(5deg);
+		}
+
+		30% {
+			transform: scale(1.15) rotate(-3deg);
+		}
+
+		35% {
+			transform: scale(1.15) rotate(2deg);
+		}
+
+		40% {
+			transform: scale(1.15) rotate(0);
+		}
+	}
+
+	/* 기부하기 버튼: 더 크고 선명한 초록색 */
+	#openDonateModal {
+		/* 색상(테마) */
+		--btn-bg: #00AE68;
+		/* 기본 초록 */
+		--btn-bg-dark: #007144;
+		/* 그림자/눌림용 진한 초록 */
+		background: var(--btn-bg);
+		color: #fff;
+		/* 크기/타이포 */
+		font-size: 18px;
+		/* 기존보다 크게 */
+		font-weight: 700;
+		padding: 14px 22px;
+		/* 높이/가로 여백 확대 */
+		line-height: 1;
+		/* 버튼 높이 균형 */
+
+		/* 형태/효과 */
+		border: none;
+		border-radius: 10px;
+		box-shadow: 0 6px 0 var(--btn-bg-dark);
+		cursor: pointer;
+
+		/* 애니메이션/전환 */
+		transition: box-shadow .12s ease, opacity .12s ease;
+
+		position: relative;
+		z-index: 11;
+
+	}
+
+	/* hover/active 시 3D 눌림 느낌: jittery 애니메이션과 transform 충돌 방지를 위해 transform은 쓰지 않음 */
+	#openDonateModal:hover {
+		box-shadow: 0 3px 0 var(--btn-bg-dark);
+		opacity: 0.95;
+	}
+
+	#openDonateModal:active {
+		box-shadow: 0 0 0 var(--btn-bg-dark);
+		opacity: 0.9;
+	}
+
+
+	/* 탭 */
+	.wallet-tabs {
+		position: relative;
+		z-index: 5;
+		display: flex;
+		gap: 8px;
+		padding: 0 30px 12px;
+	}
+
+	/* ===== 탭: 이미지 윗변에 겹치게 ===== */
+	.wallet-tabs--over {
+		position: absolute;
+		left: 24px;
+		right: 24px;
+		top: -18px;
+		/* 윗변 살짝 밖으로 튀어나오게 (-값이면 바깥으로) */
+		display: flex;
+		align-items: center;
+		/* 탭과 문구 수직정렬 */
+		gap: 10px;
+		z-index: 6;
+		/* 패널보다 위로 */
+		pointer-events: auto;
+	}
+
+	.wallet-tabs--over .tab {
+		padding: 8px 14px;
+		border: 1px solid #ccc;
+		border-bottom: none;
+		/* 윗쪽에 붙어있는 느낌 */
+		border-radius: 10px 10px 0 0;
+		background: #fff;
+		cursor: pointer;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+		font-weight: 600;
+	}
+
+	.wallet-tabs--over .tabs-buttons {
+		display: flex;
+		gap: 8px;
+	}
+
+	.wallet-tabs .tab {
+		padding: 8px 14px;
+		border-radius: 20px;
+		border: 1px solid #ccc;
+		background: #fff;
+		cursor: pointer;
+	}
+
+	.wallet-tabs .tab.selected {
+		background: #205c32;
+		color: #fff;
+		border-color: #205c32;
+	}
+
+	.wallet-tabs--over .tabs-help {
+		font-size: 14px;
+		line-height: 1;
+		color: rgba(0, 0, 0, .6);
+		background: rgba(255, 255, 255, .85);
+		padding: 8px 12px;
+		border-radius: 999px;
+		/* 말풍선/알약 느낌 */
+		white-space: nowrap;
+		/* 줄바꿈 방지 */
+		box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
+	}
+
+	/* 좁은 화면에서 탭 아래로 문구 떨어지게 */
+	@media (max-width: 560px) {
+		.wallet-tabs--over {
+			flex-wrap: wrap;
+			gap: 6px 8px;
+		}
+
+		.wallet-tabs--over .tabs-help {
+			order: 2;
+		}
+	}
+
+
+	/* 안쪽 종이 영역과 동일한 캔버스 (패널들이 올라오는 영역과 같은 여백) */
+	.paper-frame {
+		position: absolute;
+		left: var(--paper-pad-x);
+		right: var(--paper-pad-x);
+		top: var(--paper-top);
+		bottom: var(--paper-btm);
+		height: auto !important;
+		/* 이전 height:40% 같은 값 무력화 */
+		overflow: hidden;
+		border-radius: 12px;
+		z-index: 7;
+		/* 탭/패널 위로 확실히 */
+		pointer-events: none;
+	}
+
+	/* 종이 넘김 프레임/이미지는 절대 클릭 안 받게 */
+	.paper-frame,
+	.paper-frame * {
+		pointer-events: none;
+		/* 클릭 전파 */
+		z-index: 4;
+		/* 탭(5)보다 낮게 */
+	}
+
+
+	/* ③ 은행 패널 영역(탭+내용) - 이것도 배경/상단과 독립 */
+	.bank-panels {
+		position: relative;
+		/* 이 블록 전체를 통째로 위/아래로 움직이고 싶으면 이 값을 바꿔 */
+		margin-top: 0;
+	}
+
+	/* 탭은 이 영역 안에서만 포지셔닝 */
+	.bank-panels .wallet-tabs--over {
+		position: relative;
+		top: 0;
+		left: 0;
+		right: 0;
+		margin-bottom: 8px;
+		/* 탭과 표 사이 간격 */
+	}
+
+	/* 패널 공통 */
+	.passbook-content.bank-panel {
+		padding: 0;
+	}
+
+	/* 위쪽(표) 전용 */
+	.panel-top {
+		margin: 0 0 10px;
+	}
+
+	/* 형광펜(배경 점선) 맞추는 구분선 — 여기 margin만 만지면 됨 */
+	:root {
+		/* 한 번에 미세조정하기 쉬운 값들 */
+		--paper-pad-x: 36px;
+		--paper-top: 184px;
+		/* 시작이 높으면 ↑ 이 값을 키워 더 아래에서 시작 */
+		--paper-btm: 86px;
+
+		/* 모션/톤 */
+		--flip-dur: .58s;
+		/* ← 살짝 더 빠르게 (.55~.65 사이 권장) */
+		--flip-ease: cubic-bezier(.23, .68, .14, 1);
+		/* 부드러운 가감속 */
+		--hinge-x: 48%;
+		/* 제본쪽(왼쪽으로 48~45% 정도) */
+
+		/* 종이 색상(영상과 비슷한 크림톤) */
+		--paper-cream-1: #fff7e3;
+		--paper-cream-2: #ffecc8;
+		--paper-line: rgba(120, 90, 50, .07);
+		--paper-edge: rgba(0, 0, 0, .08);
+
+	}
+
+
+	/* 아래쪽(상세/안내) 전용 */
+	.panel-bottom {
+		width: 560px;
+		margin: 0 auto;
+		/* 가운데 정렬 */
+		margin-top: 40px;
+		/*하단 내용 내리기 */
+	}
+
+	.panel-bottom .bank-details p {
+		margin: 6px 0;
+		border-bottom: 1px dashed #aaa;
+		padding-bottom: 3px;
+	}
+
+	.panel-bottom .bank-notice {
+		margin-top: 18px;
+		background: #fef8e7;
+		padding: 8px 12px;
+		border-radius: 8px;
+		line-height: 1.6;
+	}
+
+	/* 중앙 정렬 강제(스크립트가 style="display:block"로 여는 경우 대비) */
+	#donateModal[style*="display: block"] {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+	}
+
+	#donateModal {
+		/* 원하는 값으로 조절하세요: 640px, 680px, 720px 등 */
+		--dialog-w: 700px;
+		/* (비율 그대로 유지) 여기 숫자만 바꾸면 전체 크기가 같이 변함 예) 0.95, 0.9, 0.85 ... */
+		--dialog-scale: 0.85;
+
+		/* 오버레이는 화면 전체를 차지 */
+		inset: 0;
+		position: fixed;
+		display: block;
+		/* 아래에서 dialog를 직접 위치시킬 거라 flex 불필요 */
+	}
+
+	/* 모달 박스: 화면 정중앙 + 비율 축소 */
+	#donateModal .donate-dialog {
+		position: fixed;
+		/* 부모 스크롤과 무관하게 중앙 고정 */
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%) scale(var(--dialog-scale));
+		transform-origin: center center;
+		/* 스케일 기준을 중앙으로 */
+		width: var(--dialog-w);
+		max-width: calc(100dvw - 32px);
+		max-height: calc(100dvh - 32px);
+		overflow-y: auto;
+		overflow-x: hidden;
+		margin: 0;
+		/* 혹시 남아있는 마진 제거 */
+	}
+
+	#donateModal .donate-body,
+	#donateModal .donate-grid {
+		min-width: 680px;
+		/* ← 내부 전체 최소폭(원하는 값으로 고정) */
+	}
+
+	#donateModal .donate-left,
+	#donateModal .donate-right {
+		display: grid;
+		justify-items: center;
+		/* 자식들을 가운데로 */
+	}
+
+	/* 입력/퀵버튼/동의박스/버튼 폭 고정 */
+	#donateModal .amount-input-wrap,
+	#donateModal .quick-buttons,
+	#donateModal .method-row,
+	#donateModal .donate-right .notice-box,
+	#donateModal .donate-btn {
+		width: 380px;
+		/* ← 폼 너비 고정 */
+		max-width: none;
+		/* 부모 줄어들어도 같이 줄어들지 않게 */
+	}
+
+	/* 좌/우 영역 비율(왼쪽 입력, 오른쪽 안내) */
+	/* #donateModal .donate-grid {
+  grid-template-columns: 1fr 300px;  오른쪽 폭을 280~340px 등으로 조절
+  gap: 24px;
+} */
+
+	/* 입력창의 가로 길이 제한(너무 길면 좁혀줌) */
+	#donateModal .amount-input-wrap {
+		max-width: 360px;
+	}
+
+	/* 반응형: 화면이 좁아지면 한 열로 쌓기 */
+	@media (max-width : 900px) {
+		#donateModal .donate-dialog {
+			width: 92vw;
+			min-height: auto;
+		}
+
+		#donateModal .donate-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+
+	/* === '기부할 포인트' 레이블/도움말/빠른버튼만 오른쪽으로 밀기 === */
+	/* 숫자만 바꾸면 이동 폭 조절됩니다. 예: 24px, 32px, 40px ... */
+	#donateModal {
+		--amount-offset-x: 80px;
+	}
+
+	#donateModal .amount-row>label,
+	#donateModal .amount-row>.help,
+	#donateModal .amount-row>.quick-buttons {
+		transform: translateX(var(--amount-offset-x));
+	}
+
+	/* =========정기기부=========== */
+	/* pane 전환 */
+	.donate-pane {
+		display: none;
+	}
+
+	.donate-pane.active {
+		display: block;
+	}
+
+	/* 정기기부 스케줄 행 */
+	.schedule-row {
+		display: flex;
+		gap: 16px;
+		align-items: center;
+		margin: 12px 0 4px;
+	}
+
+	.schedule-row .radio {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.schedule-help {
+		margin-top: 2px;
+	}
+
+	/* 통장 이미지 아래 CTA 영역 */
+	.passbook-cta {
+		width: 700px;
+		/* 통장과 같은 폭 */
+		margin: 10px auto 24px;
+		/* 이미지와 간격/아래 여백 */
+		display: flex;
+		justify-content: center;
+		/* 가운데 정렬 */
+		position: relative;
+		z-index: 3;
+		/* 패널(z=1)보다 위 */
+	}
+
+
+
+	/* ////////다크모드/////////////////////// */
+
+	/* ========== 다크모드 토글 버튼 스타일 ========== */
+	.lf-theme-toggle {
+		position: fixed;
+		top: calc(var(--lf-header-h));
+		/* 헤더 + 여백 */
+		/* 헤더 바로 아래 느낌 */
+		right: 20px;
+		z-index: 900;
+		border: 0;
+		padding: 6px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, .85);
+		box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+		cursor: pointer;
+		line-height: 0;
+	}
+
+	.theme-dark .lf-theme-toggle {
+		background: rgba(0, 0, 0, .6);
+		box-shadow: 0 6px 18px rgba(0, 0, 0, .4);
+	}
+
+	.lf-theme-toggle img {
+		display: block;
+		width: 32px;
+		height: 32px;
+	}
+
+	/* ========== 다크모드 컬러 레이어 ========== */
+	/* 기본(라이트) 변수 */
+	:root {
+		--lf-bg: #ffffff;
+		--lf-bg-soft: #f6f7f8;
+		--lf-panel: #ffffff;
+		--lf-border: #e7e7e7;
+		--lf-text: #111;
+		--lf-text-muted: #666;
+		--lf-green: #2e7d32;
+		--lf-green-weak: #e8f5e9;
+	}
+
+	/* 다크 변수(루트 클래스 .theme-dark 활성화 시) */
+	.theme-dark {
+		--lf-bg: #0f1113;
+		--lf-bg-soft: #141618;
+		--lf-panel: #141618;
+		--lf-border: #2a2e33;
+		--lf-text: #e8e9ea;
+		--lf-text-muted: #a8b0b6;
+		--lf-green: #69d088;
+		/* 살짝 밝은 그린 */
+		--lf-green-weak: #12271a;
+		/* 연한 녹 배경 */
+	}
+
+	/* 페이지 배경/문자 기본 치환 */
+	body {
+		background: var(--lf-bg);
+		color: var(--lf-text);
+	}
+
+	/* 탭/섹션/카드류 공통 */
+	.pay-tabs {
+		border-bottom-color: var(--lf-border);
+	}
+
+	.pay-tabs a {
+		color: var(--lf-text-muted);
+	}
+
+	.pay-tabs a.active {
+		color: var(--lf-green);
+	}
+
+	.pay-tabs a.active::after {
+		background: var(--lf-green);
+	}
+
+	.section-sub {
+		color: var(--lf-text-muted);
+	}
+
+	.empty {
+		color: var(--lf-text-muted);
+		border-color: var(--lf-border);
+	}
+
+	/* 카드: 결제내역/이벤트/사용자 패널 */
+	.history-card,
+	.event-row,
+	.easy-card,
+	.user-card,
+	.modal-dialog,
+	.donate-dialog {
+		background: var(--lf-panel) !important;
+		border-color: var(--lf-border) !important;
+		color: var(--lf-text) !important;
+	}
+
+	/* 자잘한 텍스트 */
+	.hc-meta {
+		color: var(--lf-text-muted);
+	}
+
+	.ev-meta {
+		color: var(--lf-green);
+	}
+
+	/* 포인트 카드(우측) */
+	.balance-card {
+		background: var(--lf-green-weak);
+		border-color: color-mix(in hsl, var(--lf-green) 30%, #0000);
+	}
+
+	.bc-title {
+		color: var(--lf-green);
+	}
+
+	/* 버튼류 */
+	.btn-light {
+		background: var(--lf-panel);
+		border-color: var(--lf-border);
+		color: var(--lf-text);
+	}
+
+	.btn-outline {
+		background: var(--lf-panel);
+		border-color: var(--lf-border);
+		color: var(--lf-text);
+	}
+
+	.btn-green,
+	.donate-btn {
+		background: #22c55e;
+		color: #fff;
+	}
+
+	/* 모달 오버레이 */
+	.modal,
+	.donate-modal {
+		background: rgba(0, 0, 0, .55);
+	}
+
+	/* 사이드 레이아웃 그리드 보강(경계색) */
+	.pay-grid {
+		gap: 24px;
+	}
+
+	/* 테이블/경계선 가능성 있는 요소들 한번 더 안전망 */
+	* {
+		border-color: var(--lf-border);
+	}
+
+
+	/* 숫자/강조 텍스트를 다크모드에서 흰색으로 */
+	.theme-dark .ec-amount,
+	.theme-dark .bc-amount,
+	.theme-dark .hc-amount,
+	.theme-dark .ev-meta {
+		color: #fff !important;
+	}
+
+	/* 카드 타이틀/뱃지는 가독성 유지 (선택 사항) */
+	.theme-dark .ec-title,
+	.theme-dark .hc-title,
+	.theme-dark .ev-title {
+		color: var(--lf-text);
+		/* 이미 밝게 설정됨 */
+	}
+
+	.theme-dark .ec-badge,
+	.theme-dark .bc-title {
+		color: #69d088;
+		/* 미묘하게 밝은 그린 */
+	}
+
+
+
+	/* ===== Glass preset: 다크모드에서만 적용 ===== */
+	/* ===== Softer Glass (다크모드에서만) ===== */
+	.theme-dark .easy-card,
+	.theme-dark .user-card,
+	.theme-dark .balance-card,
+	.theme-dark .event-row,
+	.theme-dark .history-card,
+	.theme-dark .modal-dialog,
+	.theme-dark .donate-dialog {
+		/* 더 투명하고, 살짝 그린 틴트가 있는 유리 */
+		background:
+			linear-gradient(to bottom right,
+				rgba(20, 24, 26, .55),
+				rgba(20, 24, 26, .45)) !important;
+		border: 1px solid rgba(255, 255, 255, .16) !important;
+		/* 바깥 그림자는 살짝만 */
+		box-shadow:
+			0 6px 18px rgba(0, 0, 0, .22),
+			inset 0 0 0 1px rgba(255, 255, 255, .04);
+		/* 유리 핵심: blur + 채도↑ */
+		-webkit-backdrop-filter: blur(16px) saturate(140%);
+		backdrop-filter: blur(16px) saturate(140%);
+		/* 둥글게 & 테두리 강조 조금 */
+		border-radius: 14px;
+	}
+
+	/* 상단 가장자리 하이라이트(유리엣지) */
+	.theme-dark .easy-card::before,
+	.theme-dark .user-card::before,
+	.theme-dark .balance-card::before,
+	.theme-dark .event-row::before,
+	.theme-dark .history-card::before,
+	.theme-dark .modal-dialog::before,
+	.theme-dark .donate-dialog::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		pointer-events: none;
+		background:
+			linear-gradient(to bottom,
+				rgba(255, 255, 255, .18), rgba(255, 255, 255, 0) 40%);
+		mix-blend-mode: screen;
+	}
+
+	/* 카드 내부의 텍스트 대비 보강(숫자/강조는 더 하얗게) */
+	.theme-dark .ec-amount,
+	.theme-dark .bc-amount,
+	.theme-dark .hc-amount,
+	.theme-dark .ev-meta {
+		color: #ffffff !important;
+	}
+
+	.theme-dark .ec-title,
+	.theme-dark .hc-title,
+	.theme-dark .ev-title,
+	.theme-dark .uc-name {
+		color: rgba(255, 255, 255, .96);
+	}
+
+	.theme-dark .ec-badge,
+	.theme-dark .bc-title {
+		color: #8be1a8;
+	}
+
+	/* 버튼은 유리 위에 놓인 반투명 버튼 느낌 */
+	.theme-dark .btn-light,
+	.theme-dark .btn-outline {
+		background: rgba(255, 255, 255, .06);
+		border-color: rgba(255, 255, 255, .18);
+		color: #fff;
+	}
+
+	.theme-dark .btn-light:hover,
+	.theme-dark .btn-outline:hover {
+		background: rgba(255, 255, 255, .10);
+		border-color: rgba(255, 255, 255, .28);
+	}
+
+	/* 탭 경계도 유리 톤으로 */
+	.theme-dark .pay-tabs {
+		border-bottom-color: rgba(255, 255, 255, .14);
+	}
+
+	/* 성능/가독성: 작은 화면에서는 blur 강도 살짝 낮춤 */
+	@media (max-width: 768px) {
+
+		.theme-dark .easy-card,
+		.theme-dark .user-card,
+		.theme-dark .balance-card,
+		.theme-dark .event-row,
+		.theme-dark .history-card,
+		.theme-dark .modal-dialog,
+		.theme-dark .donate-dialog {
+			-webkit-backdrop-filter: blur(12px) saturate(140%);
+			backdrop-filter: blur(12px) saturate(140%);
+		}
+	}
+
+	/* 백드롭필터 미지원 브라우저 폴백 */
+	@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+
+		.theme-dark .easy-card,
+		.theme-dark .user-card,
+		.theme-dark .balance-card,
+		.theme-dark .event-row,
+		.theme-dark .history-card,
+		.theme-dark .modal-dialog,
+		.theme-dark .donate-dialog {
+			background: rgba(20, 24, 26, .78) !important;
+			/* 블러 못 쓰면 불투명도만 조금 높임 */
+		}
+	}
+
+	/* pay와 동일한 보정: grid 내부에서 컨텐츠 너비 초과 방지 */
+	.page-with-sidebar .page-content {
+		min-width: 0;
+	}
+
+	/* pay와 같은 그리드 설정을 강제(혹시 다른 CSS가 덮어썼다면) */
+	.page-with-sidebar {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 16px;
+		align-items: start;
+	}
+
+	#lfSidebar {
+		width: var(--sb-w) !important;
+	}
+
+	/* 펼친 너비 유지 */
+	#lfSidebar[data-collapsed="true"] {
+		width: var(--sb-w-c) !important;
+	}
+
+	/* 접힘 너비 유지 */
+
+
+	/* wallet 전용: 사이드바→오른쪽, 본문→왼쪽으로 살짝 당기기 */
+	.page-with-sidebar {
+		--nudge: 25px;
+		/* 4~12px 사이에서 취향대로 조절 */
+	}
+
+	/* 사이드바를 오른쪽으로 */
+	#lfSidebar {
+		position: relative;
+		left: var(--nudge);
+	}
+
+	/* 접힘 상태에서도 동일하게 적용 */
+	#lfSidebar[data-collapsed="true"] {
+		left: var(--nudge);
+	}
+
+	/* 본문을 왼쪽으로 */
+	.page-with-sidebar .page-content {
+		position: relative;
+		left: calc(-1 * var(--nudge));
+	}
+	
+	
+	 /* ----- Modal base ----- */
+  .lf-modal[hidden] { display: none; }
+  .lf-modal {
+    position: fixed; inset: 0; z-index: 1000;
+    display: grid; place-items: center;
+  }
+  .lf-modal__overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(2px);
+  }
+  .lf-modal__dialog {
+    position: relative;
+    width: min(420px, 92vw);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    padding: 22px 22px 18px;
+    animation: lf-in .16s ease-out;
+  }
+  @keyframes lf-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .lf-modal__title {
+    margin: 0 0 12px;
+    font-size: 18px; font-weight: 700;
+  }
+  .lf-modal__close {
+    position: absolute; top: 8px; right: 10px;
+    border: 0; background: transparent; font-size: 22px; line-height: 1;
+    cursor: pointer; color: #888;
+  }
+
+  /* ----- Form ----- */
+  .lf-form { display: grid; gap: 14px; margin-top: 6px; }
+  .lf-field { display: grid; gap: 6px; }
+  .lf-label { font-size: 13px; color: #444; }
+  .lf-field input {
+    width: 100%;
+    border: 1px solid #dcdfe5;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .lf-field input:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 3px rgba(13,110,253,.15);
+  }
+
+  .lf-actions {
+    display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px;
+  }
+  .lf-btn {
+    border: 1px solid #dcdfe5; background: #f8f9fb;
+    padding: 9px 14px; border-radius: 10px; cursor: pointer; font-size: 14px;
+  }
+  .lf-btn--primary {
+    background: #2a7a2a; color: #fff; border-color: #2a7a2a;
+  }
+  .lf-btn--primary:hover { filter: brightness(0.98); }
+  
+  /* ===== Add Balance Modal (scoped) ===== */
+  #addBalanceModal.lf-modal[hidden] { display: none; }
+  #addBalanceModal.lf-modal { position: fixed; inset: 0; z-index: 1000; }
+  #addBalanceModal .lf-modal__overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,.45);
+  }
+  #addBalanceModal .lf-modal__dialog {
+    position: relative; margin: 8vh auto 0; width: min(520px, 92vw);
+    background: var(--panel, #fff); color: var(--text, #111);
+    border-radius: 14px; padding: 20px 20px 16px; box-shadow: 0 10px 40px rgba(0,0,0,.2);
+  }
+  html.theme-dark #addBalanceModal .lf-modal__dialog { --panel:#111; --text:#f5f5f5; }
+  #addBalanceModal .lf-modal__close {
+    position: absolute; right: 10px; top: 8px; font-size: 22px; line-height: 1;
+    background: transparent; border: 0; cursor: pointer; color: inherit;
+  }
+  #addBalanceModal .lf-modal__title { margin: 0 0 12px; font-size: 20px; font-weight: 700; }
+
+  #addBalanceModal .lf-form { display: grid; gap: 14px; }
+  #addBalanceModal .lf-help { margin: 0 0 4px; font-size: 13px; opacity: .8; }
+  #addBalanceModal .lf-field { display: grid; gap: 6px; }
+  #addBalanceModal .lf-label { font-weight: 600; }
+  #addBalanceModal input[type="number"] {
+    padding: 12px 12px; border: 1px solid rgba(0,0,0,.15);
+    border-radius: 10px; font-size: 16px; outline: none; background: inherit; color: inherit;
+  }
+  html.theme-dark #addBalanceModal input[type="number"] { border-color: rgba(255,255,255,.2); }
+  #addBalanceModal .lf-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+  #addBalanceModal .lf-btn {
+    appearance: none; border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer;
+    background: #e9ecef; color: #111; font-weight: 600;
+  }
+  #addBalanceModal .lf-btn--primary { background: #2f7cff; color: #fff; }
+  #addBalanceModal .lf-btn:disabled { opacity: .6; cursor: not-allowed; }
+  
+  
+  
+  
+  
+  
+  /* 잔액 추가 버튼: 처음엔 숨김 */
+#addBalance{
+  display:none;                 /* ← 최초 진입 숨김 */
+  padding:6px 12px;
+  font-size:13px;
+  font-weight:600;
+  line-height:1;
+  border:1px solid rgba(0,0,0,.22);
+  border-radius:10px;
+  background:rgba(255,255,255,.9);
+  color:#2e2e2e;
+  box-shadow:0 2px 6px rgba(0,0,0,.06);
+  backdrop-filter:saturate(120%) blur(2px);
+  /* 우측 상단 배치(상단 정보 박스 오른쪽) */
+  align-self:flex-start;        /* .passbook-top이 flex라 이걸로 위에 딱 붙음 */
+  margin-top:4px;
+  z-index:8;                    /* 카드 위로 */
+  margin-right: 90px;   /* ← 원하는 만큼 숫자만 조절 */
+}
+
+#addBalance:hover{
+  background:#205c32;
+  color:#fff;
+  border-color:#205c32;
+}
+
+html.theme-dark #addBalance{
+  background:rgba(20,20,20,.7);
+  color:#eee;
+  border-color:rgba(255,255,255,.18);
+}
+

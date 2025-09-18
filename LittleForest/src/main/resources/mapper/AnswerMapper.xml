@@ -1,0 +1,22 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.fintecho.littleforest.mapper.AnswerMapper">
+	<select id="getAnswer" parameterType="AnswerVO">
+	select a.id, a.user_id, a.inquery_id, a.answer_id, a.content,a.created_At, u.id as userTableId, u.nickname
+	from answer_table a left outer join user_table u on a.user_id=u.id where a.inquery_id=#{inquery_Id}
+	order by a.id asc
+	</select>
+	<select id="countAnswer" parameterType="int" resultType="int">
+	select count(*) from answer_table where inquery_id=#{inquery_Id}
+	</select>
+	<insert id="insertAnswer" parameterType="AnswerVO">
+	insert into answer_table values(
+		answer_seq.nextval,
+		#{user_Id},
+		#{inquery_Id},
+		#{answer_Id},
+		#{content},
+		sysdate
+	)
+	</insert>
+	</mapper>

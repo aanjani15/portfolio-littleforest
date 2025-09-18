@@ -1,0 +1,16 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.fintecho.littleforest.mapper.admin.AdminChatMessageMapper">
+	
+	<select id="getAllChatMessage" parameterType="int" resultType="com.fintecho.littleforest.vo.admin.ChatMessageVO">
+		SELECT * FROM chat_message_table WHERE chat_room_id = #{chat_Room_Id} order by timestamp
+	</select>
+	
+	<insert id="insertChatMessage" parameterType="com.fintecho.littleforest.vo.admin.ChatMessageVO">
+    INSERT INTO chat_message_table 
+        (chat_room_id, type, sender, content, timestamp)
+    VALUES (#{chat_Room_Id}, #{type}, #{sender}, #{content}, SYSTIMESTAMP)
+    </insert>
+
+</mapper>
+

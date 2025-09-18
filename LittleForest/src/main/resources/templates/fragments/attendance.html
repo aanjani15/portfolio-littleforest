@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<div th:fragment="modal(user)">
+
+		<!-- 출석 모달 -->
+		<div id="attendanceModal" class="modal">
+			<div class="modal-content">
+				<span class="close" onclick="closeAttendanceModal()">&times;</span>
+
+				<!--<p id="totalAttendance" style="margin-bottom:10px;font-weight:bold;"></p>-->
+				<p id="totalAttendance" style="margin:0px;font-weight:bold;"></p>
+				<div id="calendar"></div>
+				<!--<button type="button" id="attendanceBtn" class="button" style="margin-top:20px;">출석 체크</button>-->
+				<div class="actions">
+					<button type="button" id="attendanceBtn" class="button">출석 체크</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- 보상 모달 -->
+		<div id="rewardModal" class="modal">
+			<div class="modal-content">
+				<span class="close" onclick="closeRewardModal()">&times;</span>
+				<h3>출석 성공</h3>
+				<div id="rewardIcons" style="display:flex;gap:8px;align-items:center;margin:8px 0;"></div>
+				<p id="rewardText" style="margin-top:10px;"></p>
+				<button onclick="closeRewardModal()" class="button" style="margin-top:8px;">확인</button>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>

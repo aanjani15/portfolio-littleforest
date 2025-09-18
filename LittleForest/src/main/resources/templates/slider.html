@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>3D Coverflow Slider</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="/css/slider.css" />
+	<link rel="stylesheet" href="/css/mainpagestyle.css">
+	<script th:src="@{/js/gsap.min.js}"></script>
+</head>
+
+<body>
+	<!-- 헤더 -->
+	<div th:replace="fragments/header :: header"></div>
+
+	<section class="lf-slider" id="lfSlider1" tabindex="0" aria-label="환경 실천 슬라이더">
+		<div class="lf-slider__wrap">
+			<div class="lf-slider__viewport" aria-roledescription="carousel" aria-label="이미지 슬라이더">
+				<div class="lf-slider__stage" data-role="stage">
+
+					<!-- 1. 텀블러·다회용컵 이용 -->
+					<article class="lf-slider__slide" aria-roledescription="slide" aria-label="1 / 5">
+						<img class="lf-slider__img" src="/images/slide1.jpg" th:src="@{/images/slide1.jpg}"
+							alt="텀블러·다회용컵 이용" />
+						<p class="lf-slider__caption">텀블러·다회용컵 이용</p>
+						<div class="lf-slider__info">
+							<h3>일회용컵 대신, 지구를 살리는 한 잔의 선택!</h3>
+							<p><strong>보상:</strong>
+								<span class="detail">텀블러를 사용할 때마다 300원의 보상이 주어집니다. 작은 실천이 큰 변화를 만듭니다.</span>
+							</p>
+							<p><strong>탄소 절감:</strong>
+								<span class="detail">1회 사용 시 약 20g의 이산화탄소를 줄여 탄소중립에 기여합니다.</span>
+							</p>
+							<p><strong>환경적 의미:</strong>
+								<span class="detail">플라스틱 컵을 줄이면 해양 오염을 완화하고 재활용 부담도 낮출 수 있습니다.</span>
+							</p>
+						</div>
+					</article>
+
+					<!-- 2. 폐휴대폰 반납 -->
+					<article class="lf-slider__slide" aria-roledescription="slide" aria-label="2 / 5">
+						<img class="lf-slider__img" src="/images/slide2.jpg" th:src="@{/images/slide2.jpg}"
+							alt="폐휴대폰 반납" />
+						<p class="lf-slider__caption">폐휴대폰 반납</p>
+						<div class="lf-slider__info">
+							<h3>방치된 휴대폰, 지구를 위한 자원으로 되살리기!</h3>
+							<p><strong>보상:</strong>
+								<span class="detail">휴대폰 1대 반납 시 1,000원의 보상을 제공합니다. 집에 잠든 자원을 깨워 주세요.</span>
+							</p>
+							<p><strong>자원·배출 절감:</strong>
+								<span class="detail">금·은·구리·코발트 등 금속을 재활용해 채굴·제련에서 발생하는 에너지·온실가스를 줄입니다.</span>
+							</p>
+							<p><strong>환경적 의미:</strong>
+								<span class="detail">배터리 유해물질의 유출 위험을 낮추고 금속의 순환 사용을 확대합니다.</span>
+							</p>
+						</div>
+					</article>
+
+					<!-- 3. 리필스테이션 이용 -->
+					<article class="lf-slider__slide" aria-roledescription="slide" aria-label="3 / 5">
+						<img class="lf-slider__img" src="/images/slide3.jpg" th:src="@{/images/slide3.jpg}"
+							alt="리필스테이션 이용" />
+						<p class="lf-slider__caption">리필스테이션 이용</p>
+						<div class="lf-slider__info">
+							<h3>포장은 줄이고, 필요한 만큼만 현명하게 채우기!</h3>
+							<p><strong>보상:</strong>
+								<span class="detail">리필스테이션을 한 번 이용할 때마다 2,000원을 드립니다.</span>
+							</p>
+							<p><strong>탄소 절감:</strong>
+								<span class="detail">용기 생산·포장·운송 단계의 배출을 줄이고, 반복 이용할수록 절감 효과가 누적됩니다.</span>
+							</p>
+							<p><strong>환경적 의미:</strong>
+								<span class="detail">일회용 용기 수요를 낮춰 자원 효율을 높이고 생활 폐기물 발생을 감소시킵니다.</span>
+							</p>
+						</div>
+					</article>
+
+					<!-- 4. 공유자전거 이용 -->
+					<article class="lf-slider__slide" aria-roledescription="slide" aria-label="4 / 5">
+						<img class="lf-slider__img" src="/images/slide4.jpg" th:src="@{/images/slide4.jpg}"
+							alt="공유자전거 이용" />
+						<p class="lf-slider__caption">공유자전거 이용</p>
+						<div class="lf-slider__info">
+							<h3>차 대신 자전거! 건강과 환경을 함께 지켜요.</h3>
+							<p><strong>보상:</strong>
+								<span class="detail">1km 이동마다 50원의 보상을 드립니다. 출퇴근길이 곧 지구를 지키는 길입니다.</span>
+							</p>
+							<p><strong>탄소 절감:</strong>
+								<span class="detail">자동차 대신 자전거를 타면 1km당 약 200g의 이산화탄소를 줄일 수 있습니다.</span>
+							</p>
+							<p><strong>환경적 의미:</strong>
+								<span class="detail">도심 대기질 개선, 소음·혼잡 완화, 그리고 건강한 생활 습관 형성에 도움이 됩니다.</span>
+							</p>
+						</div>
+					</article>
+
+					<!-- 5. 전자영수증 발급 -->
+					<article class="lf-slider__slide" aria-roledescription="slide" aria-label="5 / 5">
+						<img class="lf-slider__img" src="/images/slide5.jpg" th:src="@{/images/slide5.jpg}"
+							alt="전자영수증 발급" />
+						<p class="lf-slider__caption">전자영수증 발급</p>
+						<div class="lf-slider__info">
+							<h3>종이 대신 전자영수증, 지갑도 지구도 가볍게!</h3>
+							<p><strong>보상:</strong>
+								<span class="detail">전자영수증 1건 발급 시 100원을 드립니다. 생활 속 탄소 저감에 쉽게 참여하세요.</span>
+							</p>
+							<p><strong>탄소 절감:</strong>
+								<span class="detail">영수증 1건당 약 2~3g의 이산화탄소 배출을 줄일 수 있습니다.</span>
+							</p>
+							<p><strong>환경적 의미:</strong>
+								<span class="detail">종이·잉크 사용을 줄여 산림을 보호하고, 인쇄·물류·보관 과정의 불필요한 자원 낭비를 낮춥니다.</span>
+							</p>
+						</div>
+					</article>
+
+				</div>
+
+				<!-- 내비게이션 -->
+				<div class="lf-slider__nav" aria-hidden="false">
+					<button class="lf-slider__btn" data-role="prev" aria-label="이전 슬라이드">
+						<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+							<path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+						</svg>
+					</button>
+					<!-- next: 오른쪽 화살표로 교체 -->
+					<button class="lf-slider__btn" data-role="next" aria-label="다음 슬라이드">
+						<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+							<!-- material chevron_right -->
+							<path fill="currentColor" d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+						</svg>
+					</button>
+				</div>
+
+				<div class="lf-slider__dots" data-role="dots" aria-hidden="false"></div>
+				<p class="lf-slider__sr-only" data-role="live" aria-live="polite"></p>
+			</div>
+		</div>
+
+		<!-- 푸터 -->
+		<div th:replace="fragments/footer :: footer"></div>
+
+		<!-- 커버플로우 스크립트 (중복 선언 제거 + 이미지 필터 조작 제거) -->
+		<script>
+			(() => {
+				const hasGSAP = () => typeof window.gsap !== 'undefined';
+
+				const numVar = (cs, name, fallback = 0) => {
+					const raw = cs.getPropertyValue(name); if (!raw) return fallback;
+					const v = parseFloat(raw); return Number.isFinite(v) ? v : fallback;
+				};
+				const degVar = (cs, name, fallback = 0) => {
+					const raw = cs.getPropertyValue(name); if (!raw) return fallback;
+					const v = parseFloat(raw); return Number.isFinite(v) ? v : fallback;
+				};
+				const clamp01 = n => Math.max(0, Math.min(1, n));
+
+				function initCoverflow(rootId, opts = {}) {
+					const root = document.getElementById(rootId);
+					if (!root || !hasGSAP()) return;
+
+					const gsap = window.gsap;
+
+					const stage = root.querySelector('[data-role="stage"]');
+					const slides = Array.from(stage.children);
+					const prevBtn = root.querySelector('[data-role="prev"]');
+					const nextBtn = root.querySelector('[data-role="next"]');
+					const dotsBox = root.querySelector('[data-role="dots"]');
+					const live = root.querySelector('[data-role="live"]');
+
+					// ===== 옵션/변수 =====
+					const cs = getComputedStyle(root);
+					const DUR = opts.duration ?? 0.8;
+					const AUTOPLAY_MS = opts.autoplayMs ?? 3200;
+					const SWIPE_THRES = opts.swipeThreshold ?? 40;  // ✅ 한 번만 선언
+
+					const GAP_X = opts.gapX ?? numVar(cs, '--lf-gap-x', 240);
+					const DEPTH_Z = opts.depthZ ?? numVar(cs, '--lf-depth', 200);
+					const CURVE_X = opts.curveX ?? numVar(cs, '--lf-curve-x', 2);
+					const CURVE_Z = opts.curveZ ?? numVar(cs, '--lf-curve-z', 10);
+					const ROT_Y = opts.rotY ?? degVar(cs, '--lf-rotY', 25);
+
+					const SCALE_STEP = opts.scaleStep ?? 0.12;
+					const VISIBLE_COUNT = opts.visible ?? 4;
+
+					let index = 0;
+					let lock = false;
+					let autoplay = null;
+
+					// 인디케이터
+					dotsBox.innerHTML = '';
+					slides.forEach((_, i) => {
+						const d = document.createElement('button');
+						d.type = 'button';
+						d.className = 'lf-slider__dot' + (i === 0 ? ' is-active' : '');
+						d.setAttribute('aria-label', (i + 1) + '번으로 이동');
+						d.addEventListener('click', () => goTo(i));
+						dotsBox.appendChild(d);
+					});
+					const dots = Array.from(dotsBox.children);
+
+					// 기준점
+					gsap.set(slides, {xPercent: -50, yPercent: -50, transformOrigin: '50% 50%'});
+
+					const wrap = gsap.utils.wrap(0, slides.length);
+					const announce = () => {if (live) live.textContent = `${index + 1} / ${slides.length} 슬라이드`;};
+
+					// 배치
+					function layout(animate = true) {
+						slides.forEach((el, i) => {
+							// 원형 거리
+							let rel = i - index;
+							if (rel > slides.length / 2) rel -= slides.length;
+							if (rel < -slides.length / 2) rel += slides.length;
+
+							const abs = Math.abs(rel);
+							const sign = rel === 0 ? 0 : (rel > 0 ? 1 : -1);
+							const hide = abs > VISIBLE_COUNT;
+
+							// 중앙 표시: 정보 박스 노출용
+							if (abs === 0) el.classList.add('is-active');
+							else el.classList.remove('is-active');
+
+							// 기본 위치/회전/스케일
+							let x = rel * GAP_X;
+							let z = -abs * DEPTH_Z;
+							let ry = rel * -ROT_Y;
+							let sc = Math.max(1 - abs * SCALE_STEP, 0.55);
+
+							// 곡률(arc) 보정
+							const tri = (abs * (abs + 1)) / 2;
+							const cX = -sign * tri * CURVE_X;
+							const cZ = -tri * CURVE_Z;
+							x += cX; z += cZ;
+
+							const opacity = clamp01(1 - abs * 0.18);
+
+							el.style.zIndex = String(100 - abs);
+
+							const toVars = hide
+								? {x, z, rotateY: ry, scale: sc, opacity: 0}
+								: {x, z, rotateY: ry, scale: sc, opacity};
+
+							animate
+								? gsap.to(el, {...toVars, ease: 'power3.out', duration: DUR, overwrite: true})
+								: gsap.set(el, toVars);
+						});
+
+						dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
+						announce();
+					}
+
+					// 이동
+					function goTo(nextIdx) {
+						if (lock) return;
+						lock = true;
+						index = wrap(nextIdx);
+						layout(true);
+						setTimeout(() => {lock = false;}, DUR * 1000);
+					}
+					const next = () => goTo(index + 1);
+					const prev = () => goTo(index - 1);
+
+					// 버튼
+					nextBtn?.addEventListener('click', next);
+					prevBtn?.addEventListener('click', prev);
+
+					// 카드 클릭 시 중앙으로
+					slides.forEach((el, i) => el.addEventListener('click', () => {if (i !== index) goTo(i);}));
+
+					// 키보드 (컴포넌트 내부 포커스 시)
+					root.addEventListener('keydown', (e) => {
+						const inside = document.activeElement && root.contains(document.activeElement);
+						if (!inside) return;
+						if (e.key === 'ArrowRight') next();
+						if (e.key === 'ArrowLeft') prev();
+					});
+
+					// 드래그/스와이프 (✅ 중복 선언 제거)
+					let isDown = false, startX = 0, moved = 0;
+					const onDown = x => {isDown = true; startX = x; moved = 0; stopAutoplay();};
+					const onMove = x => {if (!isDown || lock) return; moved = x - startX;};
+					const onUp = () => {
+						if (!isDown) return;
+						isDown = false;
+						if (Math.abs(moved) > SWIPE_THRES) {moved < 0 ? next() : prev();}
+						startAutoplay();
+					};
+					stage.addEventListener('pointerdown', e => onDown(e.clientX));
+					root.addEventListener('pointermove', e => onMove(e.clientX));
+					root.addEventListener('pointerup', onUp);
+					root.addEventListener('pointercancel', onUp);
+					root.addEventListener('mouseleave', onUp);
+
+					// 호버 시 자동재생 일시정지
+					function startAutoplay() {stopAutoplay(); autoplay = setInterval(next, AUTOPLAY_MS);}
+					function stopAutoplay() {if (autoplay) {clearInterval(autoplay); autoplay = null;} }
+					root.addEventListener('mouseenter', () => stopAutoplay());
+					root.addEventListener('mouseleave', () => startAutoplay());
+					document.addEventListener('visibilitychange', () => document.hidden ? stopAutoplay() : startAutoplay());
+
+					// 초기화
+					layout(false);
+					startAutoplay();
+				}
+
+				// DOMContentLoaded 후 초기화
+				window.addEventListener('DOMContentLoaded', () => initCoverflow('lfSlider1'));
+			})();
+		</script>
+	</section>
+</body>
+
+</html>

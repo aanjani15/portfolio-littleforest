@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>탄소중립포인트 조회</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="/css/carbonpoint.css"> <!-- 탄소중립포인트 전용 스타일 -->
+	<link rel="stylesheet" href="/css/mainpagestyle.css">
+
+</head>
+
+<body th:classappend="${success} ? 'nz-success'">
+	<div th:replace="fragments/header :: header"></div>
+
+	<div class="wrap nz-scope">
+		<h2>탄소중립포인트 조회</h2>
+		<p class="muted">
+			이 화면은 <strong>탄소중립 포인트 조회</strong>
+		</p>
+
+		<!-- 입력 폼 -->
+
+		<!-- 상단 헤더(스샷 같은 연한 그린 히어로) -->
+		<!-- 상단 헤더(연한 그린 히어로) : 성공이면 숨김 -->
+		<section class="nz-scope nz-hero" th:unless="${success}">
+			<h1>비밀번호 재확인</h1>
+		</section>
+
+		<!-- 비밀번호 입력 폼 : 성공이면 숨김 -->
+		<form class="nz-scope cp-auth" th:action="@{/carbon/netzero}" method="post" th:unless="${success}">
+			<input type="hidden" name="organization" value="0002" />
+			<input type="hidden" name="userId" value="anjani15" />
+
+			<div class="cp-card">
+				<p class="cp-help">개인정보 보호를 위해 비밀번호를 입력해주세요.</p>
+
+				<label for="cpPassword" class="sr-only">비밀번호</label>
+				<div class="cp-input-group">
+					<input id="cpPassword" name="password" type="password" placeholder="비밀번호" required />
+					<button class="cp-eye" type="button" aria-label="비밀번호 표시"
+						onclick="(function(btn){const i=btn.previousElementSibling;const on=i.type==='password';i.type=on?'text':'password';btn.setAttribute('aria-label',on?'비밀번호 숨기기':'비밀번호 표시');})(this)">
+						<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+							<path
+								d="M12 5c5.5 0 9.5 4.4 10.5 6-1 1.6-5 6-10.5 6S2.5 12.6 1.5 11C2.5 9.4 6.5 5 12 5zm0 3a4 4 0 100 8 4 4 0 000-8z"
+								fill="currentColor" />
+							<circle cx="12" cy="12" r="2.2" fill="#fff" />
+						</svg>
+					</button>
+				</div>
+
+				<button class="cp-btn" type="submit">확인</button>
+			</div>
+		</form>
+
+
+		<!-- 결과 -->
+		<!-- 조회 상태 배너 -->
+		<div class="card nz-result status-card" th:if="${success != null}">
+			<div th:if="${success}" class="ok">조회 성공</div>
+			<div th:if="${!success}" class="error" th:text="'조회 실패: ' + ${errorMessage}"></div>
+		</div>
+
+		<!-- 연간 현황 (요약 KPI) -->
+		<div class="card nz-result summary-card" th:if="${success}">
+			<h3>연간 탄소중립포인트 현황</h3>
+			<table>
+				<tbody>
+					<tr>
+						<th>이름</th>
+						<td th:text="${result.resName}">-</td>
+					</tr>
+					<tr>
+						<th>등급</th>
+						<td th:text="${result.resRating}">-</td>
+					</tr>
+					<tr>
+						<th>녹색생활 실천 건수</th>
+						<td th:text="${result.resCount}">0</td>
+					</tr>
+					<tr>
+						<th>적립포인트</th>
+						<td th:text="${result.resEarnPoint}">0</td>
+					</tr>
+					<tr>
+						<th>지급포인트</th>
+						<td th:text="${result.resGivePoint}">0</td>
+					</tr>
+					<tr>
+						<th>잔여포인트</th>
+						<td th:text="${result.resAvailablePoint}">0</td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="kpi-footnote">* 적립포인트의 연간 최대 한도는 70,000원</p>
+		</div>
+
+		<!-- 월별 현황 -->
+		<div class="card nz-result monthly-card" th:if="${success}">
+			<h3>월별 탄소중립포인트 현황</h3>
+
+			<!-- (선택) 안내 문구를 샘플처럼 보이게 -->
+			<ul class="notes">
+				<li>적립포인트: 전자영수증 발급 등 녹색생활 실천활동을 통해 적립된 포인트</li>
+				<li>연간적립한도: 연간 7만 원까지 가능</li>
+				<li>지급예정포인트: 제휴사의 지급이 되지 않은 포인트</li>
+				<li>지급완료일: 제휴사 지급 완료일</li>
+			</ul>
+
+			<table class="table-monthly">
+				<thead>
+					<tr>
+						<th>정산월</th>
+						<th>실적 건수</th>
+						<th>적립포인트</th>
+						<th>지급예정 포인트</th>
+						<th>지급포인트</th>
+						<th>잔여포인트</th>
+						<th>지급완료일자</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="m : ${result.resPointList}">
+						<td th:text="${m.resYearMonth}">202501</td>
+						<td th:text="${m.resCount}">0</td>
+						<td th:text="${m.resEarnPoint}">0</td>
+						<td th:text="${m.resGivePlanPoint}">0</td>
+						<td th:text="${m.resGivePoint}">0</td>
+						<td th:text="${m.resAvailablePoint}">0</td>
+						<td th:text="${m.resPaymentDate}">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h4 class="sub">상세 내역(예: 전자영수증 등)</h4>
+			<table class="table-detail">
+				<thead>
+					<tr>
+						<th>년월</th>
+						<th>일자</th>
+						<th>기업명</th>
+						<th>활동</th>
+						<th>상세</th>
+						<th>건수</th>
+						<th>실천포인트</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="m : ${result.resPointList}">
+						<td th:rowspan="${#lists.size(m.resDetailList)}" th:text="${m.resYearMonth}"
+							th:if="${m.resDetailList != null and !m.resDetailList.isEmpty()}">202501</td>
+						<td th:each="d, stat : ${m.resDetailList}">
+							<span th:text="${d.resDate}">20250101</span>
+							<span style="display:none" th:if="${false}"></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- 항목별 현황 -->
+		<div class="card nz-result type-card" th:if="${success}">
+			<h3>녹색생활 실천항목별 탄소중립포인트 현황</h3>
+			<table class="table-type">
+				<thead>
+					<tr>
+						<th>녹색생활 실천활동</th>
+						<th>건수</th>
+						<th>상세실적</th>
+						<th>적립포인트</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="t : ${result.resPointList1}">
+						<td th:text="${t.resType}">전자영수증</td>
+						<td th:text="${t.resCount}">0건</td>
+						<td th:text="${t.resPerformance}">-</td>
+						<td th:text="${t.resEarnPoint}">0원</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>

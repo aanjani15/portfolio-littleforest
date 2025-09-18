@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block layout:fragment="BaseStructure">
+	<title layout:fragment="title">상품 보기</title>
+</th:block>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/product_view.css">
+<script src="../js/product_view.js"></script>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+
+	<div class="container">
+
+		
+		<h2>결제가 완료되었습니다</h2>
+	</div>
+
+</body>
+</html>

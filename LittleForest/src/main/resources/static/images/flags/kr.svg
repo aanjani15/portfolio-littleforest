@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600">
+  <rect width="900" height="600" fill="#fff"></rect>
+  <g transform="translate(450,300)">
+    <circle r="120" fill="#cd2e3a"></circle>
+    <path d="M0-120a120 120 0 0 0 0 240 60 60 0 0 1 0-120 60 60 0 0 0 0-120z" fill="#0047a0"></path>
+  </g>
+  <g stroke="#000" stroke-width="12">
+    <g transform="translate(140,120) rotate(-30)">
+      <line x1="-40" x2="40" y1="-20" y2="-20"></line>
+      <line x1="-40" x2="40" y1="0" y2="0"></line>
+      <line x1="-40" x2="40" y1="20" y2="20"></line>
+    </g>
+    <g transform="translate(760,480) rotate(-30)">
+      <line x1="-40" x2="40" y1="-20" y2="-20"></line>
+      <line x1="-40" x2="-5" y1="0" y2="0"></line>
+      <line x1="5" x2="40" y1="0" y2="0"></line>
+      <line x1="-40" x2="40" y1="20" y2="20"></line>
+    </g>
+    <g transform="translate(760,120) rotate(30)">
+      <line x1="-40" x2="40" y1="-20" y2="-20"></line>
+      <line x1="-40" x2="-5" y1="0" y2="0"></line>
+      <line x1="5" x2="40" y1="0" y2="0"></line>
+      <line x1="-40" x2="-5" y1="20" y2="20"></line>
+      <line x1="5" x2="40" y1="20" y2="20"></line>
+    </g>
+    <g transform="translate(140,480) rotate(30)">
+      <line x1="-40" x2="40" y1="-20" y2="-20"></line>
+      <line x1="-40" x2="40" y1="0" y2="0"></line>
+      <line x1="-40" x2="40" y1="20" y2="20"></line>
+    </g>
+  </g>
+</svg>

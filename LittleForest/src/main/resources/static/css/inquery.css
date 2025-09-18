@@ -1,0 +1,272 @@
+/* ====== 전체 배경 ====== */
+body {
+	background: #f5f6fa;
+	/* 은은한 회색 배경 */
+	font-family: 'Noto Sans KR', sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+/* ====== 문의 테이블 ====== */
+.YourOneInquery {
+	border-bottom: 1px solid #eee;
+	padding: 15px 0;
+	display: flex;
+	justify-items: center;
+	align-items: center;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+
+.YourOneInquery-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 400px;
+	height: 0 auto;
+	margin-bottom: 8px;
+}
+
+.YourOneInquery-nickname {
+	font-weight: bold;
+	font-size: 15px;
+	color: #333;
+}
+
+.YourOneInquery-category {
+	font-size: 13px;
+	color: #777;
+	margin-left: 10px;
+	/* 닉네임과 카테고리 사이 띄우기 */
+}
+
+.YourOneInquery-date {
+	font-size: 10px;
+	color: darkred;
+	/* flex 부모에서 justify-content: space-between 덕분에 자동 오른쪽 배치 */
+}
+
+.YourOneInquery-title {
+	font-size: 18px;
+	/* 제목 글씨 크게 */
+	font-weight: bold;
+	margin: 5px 0;
+	color: #222;
+}
+
+.YourOneInquery-content {
+	font-size: 14px;
+	color: #555;
+	white-space: pre-wrap;
+	/* 줄바꿈 유지 */
+	margin: 8px 0;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #eee;
+	/* hr 느낌 */
+}
+
+.inqueryU,
+.inqueryD {
+	margin: 6px 3px 0 0;
+	padding: 8px 14px;
+	border: none;
+	border-radius: 6px;
+	font-size: 13px;
+	cursor: pointer;
+	color: #fff;
+}
+
+.inqueryU {
+	background-color: #4CAF50;
+}
+
+.inqueryD {
+	background-color: #f44336;
+}
+
+.inqueryU:hover {
+	background-color: #45a049;
+}
+
+.inqueryD:hover {
+	background-color: #e53935;
+}
+
+/* 문의 등록 버튼 */
+#inqueryI {
+	display: block;
+	margin: 20px auto;
+	padding: 12px 18px;
+	border: none;
+	border-radius: 8px;
+	background-color: #4CAF50;
+	color: #fff;
+	font-weight: bold;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+#inqueryI:hover {
+	background-color: #45a049;
+}
+
+/* ====== 모달(팝업) ====== */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 2000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.modal-content {
+	background: #fff;
+	padding: 30px 40px;
+	border-radius: 12px;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+	width: 600px;
+	/* 크게 */
+	height: 700px;
+	max-width: 90%;
+	position: relative;
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 닫기 버튼 */
+.modal-content .close {
+	position: absolute;
+	right: 15px;
+	top: 12px;
+	font-size: 24px;
+	font-weight: bold;
+	color: #aaa;
+	cursor: pointer;
+	transition: color 0.2s;
+}
+
+.modal-content .close:hover {
+	color: #333;
+}
+
+/* 입력 폼 */
+.modal-content select,
+.modal-content input[type="text"],
+.modal-content textarea {
+	width: 100%;
+	padding: 12px;
+	margin: 10px 0;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 14px;
+	box-sizing: border-box;
+}
+
+.modal-content input[type="text"]:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+	outline: none;
+	border-color: #4CAF50;
+	box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* 버튼 스타일 */
+.modal-content .button {
+	display: inline-block;
+	width: 20%;
+	padding: 14px;
+	margin-top: 12px;
+	border: none;
+	border-radius: 8px;
+	background-color: #4CAF50;
+	color: white;
+	font-size: 15px;
+	font-weight: bold;
+	margin: 0 auto;
+	cursor: pointer;
+	transition: background 0.3s, transform 0.1s;
+}
+
+.modal-content .button:hover {
+	background-color: #45a049;
+}
+
+.modal-content .button:active {
+	transform: scale(0.98);
+}
+
+.popup-text {
+	white-space: pre-wrap;
+	/* 줄바꿈 유지 */
+	font-size: 14px;
+	color: #333;
+}
+.modal-content2 {
+	background: #fff;
+	padding: 30px 40px;
+	border-radius: 12px;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+	width: 400px;
+	max-width: 90%;
+	position: relative;
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 닫기 버튼 */
+.modal-content2 .close {
+	position: absolute;
+	right: 15px;
+	top: 12px;
+	font-size: 24px;
+	font-weight: bold;
+	color: #aaa;
+	cursor: pointer;
+	transition: color 0.2s;
+}
+
+.modal-content2 .close:hover {
+	color: #333;
+}
+/* 버튼 스타일 */
+.modal-content2 .button {
+	display: block;
+	width: 20%;
+	padding: 14px;
+	margin-top: 12px;
+	border: none;
+	border-radius: 8px;
+	background-color: #4CAF50;
+	color: white;
+	font-size: 15px;
+	font-weight: bold;
+	margin: 0 auto;
+	cursor: pointer;
+	transition: background 0.3s, transform 0.1s;
+}
+
+.modal-content2 .button:hover {
+	background-color: #45a049;
+}
+
+.modal-content2 .button:active {
+	transform: scale(0.98);
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

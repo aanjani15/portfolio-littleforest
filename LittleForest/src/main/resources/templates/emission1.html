@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Little Forest</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/emission.css">
+	<link rel="stylesheet" href="/css/mainpagestyle.css">
+	<link rel="stylesheet" href="/css/emission1.css">
+
+	<link rel="stylesheet" href="/css/sidebar.css?v=7">
+
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+	<style>
+		.sidebar {
+			width: 220px;
+			background: #e6f0ea;
+			padding: 10px;
+			box-sizing: border-box;
+			border-radius: 12px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		}
+
+		.sidebar button {
+			width: 100%;
+			padding: 12px 0;
+			margin-bottom: 12px;
+			border: none;
+			border-radius: 8px;
+			background: #ffffff;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+		}
+
+		.sidebar button:hover {
+			background: #cde6d0;
+			transform: translateY(-2px);
+		}
+
+		.sidebar button.active {
+			background: #4caf50;
+			color: #fff;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+		}
+
+		.main {
+			flex: 1;
+			padding: 20px;
+			overflow-y: auto;
+		}
+
+		.content-section {
+			display: none;
+		}
+
+		/* 기본 숨김 */
+		.content-section.active {
+			display: block;
+		}
+
+		/* 선택된 화면만 표시 */
+	</style>
+</head>
+
+<body>
+
+	<!-- 헤더: 한 번만 최상단에 -->
+	<div th:replace="fragments/header :: header"></div>
+
+
+	<!-- 🌙/☀️ 다크모드 토글 버튼 -->
+	<button id="lfThemeToggle" class="lf-theme-toggle" aria-label="다크 모드 토글">
+		<img id="lfThemeIcon" src="/images/sidebar/darkmode.png" alt="다크 모드로 전환" />
+	</button>
+
+
+	<!-- 메뉴 사이드바 + 본문 래퍼 시작 -->
+	<div class="page-with-sidebar">
+		<!-- [좌] 탭 + 메뉴 사이드바 (탭이 '위', 사이드바가 '아래') -->
+		<div class="lf-leftcol">
+			<!-- 탭 (사이드바 위) -->
+			<div class="lf-lefttabs" role="tablist" aria-label="기간 선택">
+				<button id="tab-month" class="lf-tab is-active" role="tab" aria-selected="true">탄소 감축량(차트)
+				</button>
+				<button id="tab-year" class="lf-tab" role="tab" aria-selected="false">탄소 감축량(달력)
+				</button>
+			</div>
+
+			<!-- 메뉴 사이드바 프래그먼트 (딱 1번만) -->
+			<div th:replace="fragments/sidebar :: sidebar"></div>
+		</div>
+
+		<!-- 탭사이드바 + 메인 영역 -->
+		<!-- <div style="display:flex; min-height: calc(100vh - 160px);">
+ --> <!-- 사이드바 -->
+		<!-- <div class="sidebar" style="width:200px; background:#f0f4f8; box-sizing:border-box;">
+			<button id="btn-month" class="active">월 탄소 소비량</button>
+			<button id="btn-year">년 탄소 소비량</button>
+		</div>
+</div> -->
+
+		<!-- [우] 메인 -->
+		<main class="main">
+			<!-- 월 섹션 -->
+			<section id="month-section" class="content-section active" aria-labelledby="tab-month">
+				<div class="wrap" th:with="uid=${user_id}, y=${year}, m=${month}">
+					<div class="title">나의 월별 탄소 감축량</div>
+					<div class="toolbar">
+						<div class="select">
+							<button class="arrow" id="prevBtn">◀</button>
+							<span>📅</span>
+							<select id="monthSelect"></select>
+							<select id="yearSelect"></select>
+							<button class="arrow" id="nextBtn">▶</button>
+						</div>
+					</div>
+
+
+					<div class="kpi">
+						<div class="label">EMISSIONS</div>
+						<div class="hint" title="선택한 월의 총 감축량(kg)">ⓘ</div>
+					</div>
+					<div class="big" id="bigNumber">-- KG</div>
+
+					<div class="charts">
+						<div class="chartbox">
+							<canvas id="emissionChart"></canvas>
+						</div>
+						<div class="chartbox">
+							<canvas id="emissionDonut"></canvas>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- 년 탄소 감축량 영역 -->
+			<section id="year-section" class="content-section" aria-labelledby="tab-year">
+				<div id="calendar-controls"
+					style="max-width: 800px; margin: 30px auto; display: flex; justify-content: center; gap: 20px; align-items: center;">
+					<select id="year-select" aria-label="년도 선택"></select>
+					<select id="month-select" aria-label="월 선택"></select>
+				</div>
+				<div id="calendar-container">
+					<div id="calendar"></div>
+				</div>
+			</section>
+		</main>
+	</div>
+
+	<!-- 푸터: 한 번만 최하단에 -->
+	<div th:replace="fragments/footer :: footer"></div>
+
+
+	<script src="/js/emission.js"></script>
+	<script>
+		const tabMonth = document.getElementById('tab-month');
+		const tabYear = document.getElementById('tab-year');
+		const monthSection = document.getElementById('month-section');
+		const yearSection = document.getElementById('year-section');
+
+		function activateTab(which) {
+			const isMonth = which === 'month';
+			tabMonth.classList.toggle('is-active', isMonth);
+			tabMonth.setAttribute('aria-selected', String(isMonth));
+			tabYear.classList.toggle('is-active', !isMonth);
+			tabYear.setAttribute('aria-selected', String(!isMonth));
+			monthSection.classList.toggle('active', isMonth);
+			yearSection.classList.toggle('active', !isMonth);
+			// 맨 위로 자연 스크롤(초기 노출 보장)
+			window.scrollTo({top: 0, behavior: 'smooth'});
+		}
+		tabMonth.addEventListener('click', () => activateTab('month'));
+		tabYear.addEventListener('click', () => activateTab('year'));
+	</script>
+
+
+	<script>
+		(function () {
+			const uid = /*[[${user_id}]]*/ 1;
+			let year = /*[[${year}]]*/    new Date().getFullYear();
+			let month = /*[[${month}]]*/   new Date().getMonth() + 1;
+
+			const monthSelect = document.getElementById('monthSelect');
+			const yearSelect = document.getElementById('yearSelect');
+			const prevBtn = document.getElementById('prevBtn');
+			const nextBtn = document.getElementById('nextBtn');
+			const bigNumber = document.getElementById('bigNumber');
+
+			// 드롭다운 채우기
+			const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+			monthNames.forEach((n, i) => {const o = document.createElement('option'); o.value = i + 1; o.textContent = n; monthSelect.appendChild(o);});
+			const curY = new Date().getFullYear();
+			for (let y = curY - 3; y <= curY + 1; y++) {const o = document.createElement('option'); o.value = y; o.textContent = y; yearSelect.appendChild(o);}
+
+			// 도넛과 동일한 팔레트
+			const COLOR_SELECTED = '#ff6b6b';
+			const COLOR_DEFAULT = '#dbe4f3';
+
+			// 막대차트용: 선택 월만 빨간색
+			function barColors(selectedMonth) {
+				return monthNames.map((_, i) =>
+					i === (selectedMonth - 1) ? COLOR_SELECTED : COLOR_DEFAULT
+				);
+			}
+
+			// 중앙 텍스트 플러그인 (Chart.js v4)
+			const centerTextPlugin = {
+				id: 'centerText',
+				beforeDraw(chart, args, opts) {
+					if (!opts) return;
+					const {ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
+					const x = left + width / 2;
+					const y = top + height / 2;
+					ctx.save();
+					ctx.textAlign = 'center';
+					ctx.textBaseline = 'middle';
+					ctx.fillStyle = '#9aa2ad';
+					ctx.font = '700 14px system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif';
+					if (opts.line1) ctx.fillText(opts.line1, x, y - 12);
+					ctx.fillStyle = '#ff6b6b';
+					ctx.font = '900 22px system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif';
+					if (opts.line2) ctx.fillText(opts.line2, x, y + 12);
+					ctx.restore();
+				}
+			};
+
+			// 막대 차트
+			const barChart = new Chart(document.getElementById('emissionChart'), {
+				type: 'bar',
+				data: {
+					labels: monthNames,
+					datasets: [{
+						data: new Array(12).fill(0),
+						backgroundColor: barColors(month),
+						borderRadius: 8,
+						borderSkipped: false
+					}]
+				},
+				options: {
+					responsive: true, maintainAspectRatio: false,
+					plugins: {legend: {display: false}, tooltip: {callbacks: {label: c => `${c.raw.toLocaleString()} kg`}}},
+					scales: {
+						x: {grid: {display: false}, ticks: {font: {weight: '700'}}},
+						y: {beginAtZero: true, grid: {borderDash: [6, 6]}, ticks: {callback: v => v.toLocaleString()}}
+					}
+				}
+			});
+
+			// 도넛 차트
+			const donutCtx = document.getElementById('emissionDonut');
+			const donutChart = new Chart(donutCtx, {
+				type: 'doughnut',
+				data: {labels: monthNames, datasets: [{data: new Array(12).fill(0), borderWidth: 0, hoverOffset: 6, backgroundColor: []}]},
+				options: {
+					responsive: true, maintainAspectRatio: false, cutout: '65%',
+					plugins: {
+						legend: {position: 'bottom'},
+						tooltip: {
+							callbacks: {
+								label: (c) => {
+									const v = c.raw || 0;
+									const total = (donutChart.data.datasets[0].data || []).reduce((a, b) => a + (b || 0), 0) || 1;
+									const pct = (v * 100 / total).toFixed(1);
+									return `${c.label}: ${v.toLocaleString()} kg (${pct}%)`;
+								}
+							}
+						},
+						centerText: {line1: '', line2: ''} // 동적으로 채움
+					}
+				},
+				plugins: [centerTextPlugin]
+			});
+
+			function setSelectors(y, m) {yearSelect.value = y; monthSelect.value = m;}
+
+			// 선택 월 강조색 배열
+			function donutColors(selectedMonth) {
+				return monthNames.map((_, i) => i === (selectedMonth - 1) ? '#ff6b6b' : '#dbe4f3');
+			}
+
+			// 추가: 선택 월 바뀔 때 막대 색만 업데이트
+			function refreshBarVisuals() {
+				barChart.data.datasets[0].backgroundColor = barColors(month);
+				barChart.update();
+			}
+
+			// 도넛 중앙 텍스트/색 업데이트
+			function refreshDonutVisuals() {
+				const data = donutChart.data.datasets[0].data;
+				const selKg = data[month - 1] || 0;
+				donutChart.data.datasets[0].backgroundColor = donutColors(month);
+				donutChart.options.plugins.centerText = {
+					line1: `${month}월`,
+					line2: `${selKg.toLocaleString()} KG`
+				};
+				donutChart.update();
+			}
+
+			async function loadMonthly(y) {
+				const r = await fetch(`/api/emission/monthly?user_Id=${uid}&year=${y}`);
+				const arr = await r.json(); // [{month, kg}]
+				const data = new Array(12).fill(0);
+				arr.forEach(it => data[it.month - 1] = it.kg || 0);
+
+				// 막대 차트 반영
+				barChart.data.datasets[0].data = data;
+				barChart.data.datasets[0].backgroundColor = barColors(month); //섹상 추가
+				barChart.update();
+
+				// 도넛 차트 반영
+				donutChart.data.datasets[0].data = data;
+				refreshDonutVisuals();
+				refreshBarVisuals();
+			}
+
+			async function loadSummary(y, m) {
+				const r = await fetch(`/api/emission/summary?user_Id=${uid}&year=${y}&month=${m}`);
+				const j = await r.json();
+				bigNumber.textContent = `${(j.totalKg || 0).toLocaleString()} KG`;
+			}
+
+			function step(dir) {
+				const d = new Date(year, month - 1, 1);
+				d.setMonth(d.getMonth() + dir);
+				year = d.getFullYear(); month = d.getMonth() + 1;
+				setSelectors(year, month);
+				loadSummary(year, month);
+				loadMonthly(year);
+			}
+
+			monthSelect.addEventListener('change', () => {
+				month = Number(monthSelect.value);
+				loadSummary(year, month);
+				refreshDonutVisuals(); // 선택 월만 바뀐 경우 색/중앙텍스트 갱신
+				refreshBarVisuals(); //막대차트도!
+			});
+
+			yearSelect.addEventListener('change', () => {
+				year = Number(yearSelect.value);
+				loadMonthly(year);
+				loadSummary(year, month);
+			});
+
+			prevBtn.addEventListener('click', () => step(-1));
+			nextBtn.addEventListener('click', () => step(1));
+
+			// 초기 로딩
+			setSelectors(year, month);
+			loadMonthly(year);
+			loadSummary(year, month);
+		})();
+
+		/* ========================= dark mode ========================= */
+		(function () {
+			const KEY = 'lfTheme'; // 'light' | 'dark'
+			const root = document.documentElement; // <html>
+
+			function applyTheme(mode) {
+				if (mode === 'dark') {
+					root.classList.add('theme-dark');
+					swapIcon('dark');
+					localStorage.setItem(KEY, 'dark');
+				} else {
+					root.classList.remove('theme-dark');
+					swapIcon('light');
+					localStorage.setItem(KEY, 'light');
+				}
+			}
+
+			function swapIcon(mode) {
+				const img = document.getElementById('lfThemeIcon');
+				if (!img) return;
+				if (mode === 'dark') {
+					img.src = '/images/whitemode.png';
+					img.alt = '라이트 모드로 전환';
+				} else {
+					img.src = '/images/sidebar/darkmode.png';
+					img.alt = '다크 모드로 전환';
+				}
+			}
+
+			// 초기 상태: 저장값 → 없으면 OS 설정 따름
+			(function init() {
+				const saved = localStorage.getItem(KEY);
+				const preferDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+				const initial = saved || (preferDark ? 'dark' : 'light');
+				applyTheme(initial);
+			})();
+
+			// 버튼 이벤트
+			const btn = document.getElementById('lfThemeToggle');
+			btn?.addEventListener('click', () => {
+				const isDark = document.documentElement.classList.contains('theme-dark');
+				applyTheme(isDark ? 'light' : 'dark');
+			});
+		})();
+
+	</script>
+
+</body>
+
+</html>

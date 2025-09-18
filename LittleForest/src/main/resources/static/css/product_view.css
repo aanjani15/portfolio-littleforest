@@ -1,0 +1,167 @@
+@charset "UTF-8";
+
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	background-color: #ffffff;
+	color: #222;
+	margin: 0;
+	padding: 0;
+}
+
+.products_wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 30px;
+	padding: 40px 20px;
+}
+
+.product_card {
+	width: 220px;
+	border: 1px solid #ddd;
+	border-radius: 12px;
+	overflow: hidden;
+	background-color: #fff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	text-decoration: none;
+	color: inherit;
+	transition: box-shadow 0.3s;
+}
+
+.product_card:hover {
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.product_img {
+	width: 400px;
+	height: 400px;
+	object-fit: cover;
+	display: block;
+}
+
+.product_info {
+	padding: 12px;
+}
+
+.product_name {
+	font-size: 16px;
+	font-weight: bold;
+	margin: 8px 0 4px;
+}
+
+.product_price {
+	font-size: 15px;
+	color: #e91e63;
+	margin-bottom: 6px;
+}
+
+.product_desc {
+	font-size: 13px;
+	color: #555;
+}
+
+.container {
+	width: 80%;
+	margin: 40px auto;
+	display: flex;
+	justify-content: space-between;
+	gap: 40px;
+}
+
+.wallet-section {
+	background-color: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	padding: 20px;
+}
+
+.product-container {
+	width: 45%;
+	text-align: center;
+}
+
+.product-container img {
+	border-radius: 12px;
+	display: block;
+	/* 이미지는 block 요소여야 함 */
+	margin: 0 auto;
+	/* 가로 중앙 정렬 */
+	max-width: 100%;
+	/* 반응형 */
+}
+
+.wallet-section {
+	width: 50%;
+}
+
+.wallet-section h2,
+.product-section h2 {
+	margin-bottom: 10px;
+	color: #333;
+}
+
+.total-balance {
+	font-size: 18px;
+	font-weight: bold;
+	margin-bottom: 20px;
+	color: #111;
+}
+
+.wallet-row {
+	margin-bottom: 15px;
+}
+
+.wallet-row label {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	background-color: #f9f9f9;
+	padding: 12px 16px;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.wallet-row label:hover {
+	background-color: #efefef;
+}
+
+.wallet-row input[type="radio"] {
+	margin-top: 4px;
+	transform: scale(1.2);
+}
+
+.wallet-row label div {
+	font-size: 14px;
+	color: #333;
+	margin-bottom: 3px;
+}
+
+input[type="button"] {
+	padding: 10px 24px;
+	border: none;
+	border-radius: 8px;
+	font-size: 16px;
+	cursor: pointer;
+	margin-top: 20px;
+	margin-right: 12px;
+	transition: background-color 0.3s ease;
+}
+
+#payment_button {
+	background-color: #FF4081;
+	color: white;
+}
+
+#payment_button:hover {
+	background-color: #e03572;
+}
+
+#undo_button {
+	background-color: #dcdcdc;
+	color: #333;
+}
+
+#undo_button:hover {
+	background-color: #c2c2c2;
+}

@@ -1,0 +1,1097 @@
+@charset "UTF-8";
+
+/* 레이아웃 */
+.pay-page {
+	max-width: 1000px;
+	margin: 32px auto 80px;
+	padding: 0 16px;
+}
+
+.pay-tabs {
+	display: flex;
+	gap: 24px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 16px;
+}
+
+.pay-tabs a {
+	padding: 10px 2px;
+	color: #666;
+	font-weight: 700;
+	text-decoration: none;
+	position: relative;
+}
+
+.pay-tabs a.active {
+	color: #2e7d32;
+}
+
+.pay-tabs a.active::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -1px;
+	height: 3px;
+	background: #2e7d32;
+}
+
+.pay-grid {
+	display: grid;
+	grid-template-columns: 1fr 360px;
+	gap: 24px;
+}
+
+/* 본문 공통 */
+.section-title {
+	font-size: 22px;
+	margin: 6px 0 12px;
+}
+
+.section-sub {
+	font-size: 16px;
+	color: #555;
+	margin: 18px 0 8px;
+}
+
+.empty {
+	padding: 24px;
+	color: #777;
+	border: 1px dashed #ddd;
+	border-radius: 10px;
+}
+
+/* 결제내역 카드 */
+.history-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.history-card {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	padding: 14px 16px;
+	background: #fff;
+}
+
+.hc-title {
+	font-weight: 800;
+}
+
+.hc-meta {
+	color: #777;
+	font-size: 13px;
+	margin-top: 6px;
+}
+
+.hc-amount {
+	font-weight: 900;
+}
+
+/* 포인트 상단 카드 */
+.easy-cards {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px;
+}
+
+.easy-card {
+	border: 1px solid #eee;
+	border-radius: 10px;
+	padding: 14px;
+	background: #fff;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.ec-badge {
+	font-size: 12px;
+	color: #2e7d32;
+	font-weight: 800;
+}
+
+.ec-title {
+	font-weight: 800;
+}
+
+.ec-amount {
+	color: #222;
+	font-size: 18px;
+	font-weight: 900;
+}
+
+.btn-outline {
+	border: 1px solid #dcdcdc;
+	background: #fff;
+	border-radius: 6px;
+	padding: 8px 10px;
+	cursor: pointer;
+}
+
+/* 이벤트 리스트 */
+.event-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.event-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	padding: 12px 14px;
+	background: #fff;
+}
+
+.ev-title {
+	font-weight: 800;
+}
+
+.ev-meta {
+	color: #2e7d32;
+	font-weight: 700;
+}
+
+/* 오른쪽 사이드 */
+.user-card {
+	border: 1px solid #e9e9e9;
+	border-radius: 12px;
+	background: #fff;
+	padding: 16px;
+	position: sticky;
+	top: 20px;
+	width: 280px;
+}
+
+.uc-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.uc-name {
+	font-weight: 900;
+}
+
+.uc-settings {
+	font-size: 13px;
+	color: #666;
+	text-decoration: none;
+}
+
+.balance-cards {
+	margin-top: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.balance-card {
+	background: #e8f5e9;
+	border: 1px solid #cfe6d1;
+	border-radius: 12px;
+	padding: 14px;
+}
+
+.bc-title {
+	font-size: 13px;
+	color: #2e7d32;
+	font-weight: 700;
+}
+
+.bc-amount {
+	font-size: 24px;
+	font-weight: 900;
+	margin: 6px 0 10px;
+}
+
+.bc-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.btn-light {
+	border: 1px solid #dcdcdc;
+	background: #fff;
+	border-radius: 6px;
+	padding: 8px 10px;
+	cursor: pointer;
+}
+
+.btn-green {
+	border: 0;
+	background: #35a845;
+	color: #fff;
+	border-radius: 8px;
+	padding: 10px 14px;
+	font-weight: 800;
+	cursor: pointer;
+}
+
+/* 모달 */
+.modal {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, .45);
+	display: none;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.modal.show {
+	display: flex;
+}
+
+.modal-dialog {
+	width: min(420px, 92vw);
+	background: #fff;
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+.modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 16px;
+	border-bottom: 1px solid #eee;
+}
+
+.modal-close {
+	width: 32px;
+	height: 32px;
+	border: 0;
+	background: #f0f0f0;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.modal-body {
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.form-row {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.form-row input {
+	height: 42px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 0 12px;
+}
+
+/* 반응형 */
+@media (max-width : 980px) {
+	.pay-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* =========================
+   공통: 모달 오버레이/다이얼로그
+   ========================= */
+.donate-modal,
+.modal {
+	position: fixed;
+	inset: 0;
+	display: none;
+	/* 기본은 숨김 */
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, .45);
+	/* 어두운 배경 */
+	z-index: 10000;
+}
+
+/* JS에서 .show 클래스를 쓰거나, aria-hidden="false" 를 쓰면 노출 */
+.donate-modal.show,
+.modal.show,
+.donate-modal[aria-hidden="false"],
+.modal[aria-hidden="false"] {
+	display: flex;
+}
+
+.donate-dialog,
+.modal-dialog {
+	width: min(880px, 92vw);
+	max-height: 86vh;
+	overflow: auto;
+	background: #fff;
+	border-radius: 16px;
+	box-shadow: 0 20px 50px rgba(0, 0, 0, .25);
+}
+
+/* =========================
+   상단 영역(헤더/탭/닫기)
+   ========================= */
+.donate-header,
+.modal-header {
+	position: sticky;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 16px 20px;
+	border-bottom: 1px solid #eef1f3;
+	background: #fff;
+	z-index: 1;
+}
+
+.donate-tabs {
+	display: flex;
+	gap: 8px;
+}
+
+.donate-tab {
+	font-size: 14px;
+	padding: 8px 12px;
+	border-radius: 999px;
+	border: 1px solid #d8e2dc;
+	background: #f7faf9;
+	color: #455a64;
+	cursor: default;
+}
+
+.donate-tab.active {
+	background: #e8f5e9;
+	border-color: #a5d6a7;
+	color: #1b5e20;
+}
+
+.donate-close,
+.modal-close {
+	font-size: 28px;
+	line-height: 1;
+	border: 0;
+	background: transparent;
+	color: #607d8b;
+	cursor: pointer;
+}
+
+.donate-close:hover,
+.modal-close:hover {
+	color: #263238;
+}
+
+/* =========================
+   본문 레이아웃/타이포
+   ========================= */
+.donate-body,
+.modal-body {
+	padding: 24px 28px;
+}
+
+.donate-quote {
+	font-size: 22px;
+	line-height: 1.35;
+	font-weight: 800;
+	text-align: center;
+	margin: 8px 0 4px;
+}
+
+.donate-sub {
+	text-align: center;
+	color: #6b7280;
+	margin-bottom: 20px;
+}
+
+.donate-grid {
+	display: grid;
+	grid-template-columns: 1fr 320px;
+	gap: 24px;
+	align-items: start;
+}
+
+@media (max-width : 900px) {
+	.donate-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* =========================
+   금액 입력/퀵버튼/결제수단
+   ========================= */
+.amount-row label {
+	font-weight: 700;
+	font-size: 16px;
+	color: #111827;
+	display: block;
+	margin-bottom: 8px;
+}
+
+.amount-input-wrap {
+	position: relative;
+}
+
+.amount-input-wrap input {
+	width: 100%;
+	padding: 18px 54px 18px 16px;
+	border: 2px solid #e5e7eb;
+	border-radius: 12px;
+	font-size: 20px;
+	font-weight: 800;
+	outline: none;
+}
+
+.amount-input-wrap input:focus {
+	border-color: #10b981;
+	box-shadow: 0 0 0 4px rgba(16, 185, 129, .1);
+}
+
+.amount-input-wrap .unit {
+	position: absolute;
+	right: 14px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #6b7280;
+	font-weight: 700;
+}
+
+.help {
+	font-size: 12px;
+	color: #6b7280;
+	margin-top: 8px;
+}
+
+.quick-buttons {
+	margin-top: 12px;
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.quick-buttons button {
+	padding: 8px 12px;
+	border-radius: 10px;
+	border: 1px solid #d1d5db;
+	background: #fff;
+	cursor: pointer;
+}
+
+.quick-buttons button:hover {
+	border-color: #10b981;
+	color: #059669;
+}
+
+.method-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 16px;
+}
+
+.method-label {
+	font-size: 14px;
+	color: #6b7280;
+}
+
+#chargeModal .method-pill {
+	background: #FEE500;
+	/* 카카오 옐로우 */
+	color: #191919;
+	/* 가독성 좋은 진회색 */
+	border: 1px solid #e1c900;
+	/* 살짝 어두운 테두리로 또렷하게 */
+	padding: 6px 12px;
+	border-radius: 999px;
+	font-weight: 700;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, .05);
+	/* 아주 얕은 입체감 */
+}
+
+.point-balance {
+	margin-left: auto;
+	font-weight: 700;
+	color: #111827;
+}
+
+/* =========================
+   우측 안내/동의/버튼
+   ========================= */
+.donate-right .notice-box {
+	padding: 14px;
+	border: 1px dashed #cbd5e1;
+	border-radius: 12px;
+	background: #f8fafc;
+}
+
+.donate-right .notice-box .title {
+	font-weight: 800;
+	margin-bottom: 6px;
+}
+
+.donate-right .notice-box .desc {
+	font-size: 14px;
+	color: #4b5563;
+}
+
+.org-box {
+	margin-top: 12px;
+}
+
+.checkbox {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	margin-bottom: 8px;
+	font-size: 14px;
+	color: #374151;
+}
+
+.checkbox input {
+	width: 18px;
+	height: 18px;
+}
+
+/* =========================
+   버튼(물결 효과 포함)
+   ========================= */
+.donate-btn {
+	position: relative;
+	width: 100%;
+	margin-top: 12px;
+	padding: 14px 16px;
+	border-radius: 12px;
+	border: 0;
+	background: #22c55e;
+	/* 초록 */
+	color: #fff;
+	font-weight: 800;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.donate-btn:hover {
+	filter: brightness(0.95);
+}
+
+.donate-btn:disabled {
+	background: #9ca3af;
+	cursor: not-allowed;
+}
+
+.donate-btn--wave .wave {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.donate-btn--wave .wave::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%) scale(0);
+	width: 120%;
+	height: 120%;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .25);
+	animation: wave .6s ease-out forwards;
+	opacity: 0;
+}
+
+keyframes wave {
+	to {
+		transform: translate(-50%, -50%)scale(1);
+		opacity: 1;
+	}
+
+}
+
+/* =========================
+   선물 모달(간단 폼)
+   ========================= */
+.form-row {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-bottom: 12px;
+}
+
+.form-row input {
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid #d1d5db;
+}
+
+/* ====== [충전 모달 전용 튜닝] ====== */
+
+/* 스크립트가 style="display:block"로 여는 경우에도 중앙 정렬되도록 강제 */
+.donate-modal[style*="display: block"] {
+	display: flex !important;
+	/* overlay 자체를 flex로 만들어 중앙정렬 */
+	align-items: center;
+	justify-content: center;
+	padding: 32px 16px;
+	/* 작은 화면에서 가장자리 여백 */
+}
+
+/* 가로보다 세로가 더 긴 비율 + 정확히 화면 중앙 배치 */
+#chargeModal .donate-dialog {
+	width: 450px;
+	/* 360px를 기본으로, 화면이 작으면 92vw까지 줄어듦 */
+	min-height: 72vh;
+	/* 세로가 더 길게 */
+	max-height: 86vh;
+	/* 화면 넘치면 내부 스크롤 */
+	display: flex;
+	flex-direction: column;
+}
+
+/* 헤더 아래 영역은 자동으로 스크롤 가능 */
+#chargeModal .donate-body {
+	overflow: auto;
+}
+
+/* 충전 모달은 한 열 레이아웃(왼/오른쪽 스택) → 세로 길이 확보 */
+#chargeModal .donate-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 22px;
+}
+
+/* 입력창*/
+#chargeModal .amount-input-wrap {
+	max-width: 300px;
+	/* 필요하면 300~360 사이로 조절 */
+}
+
+#chargeModal .amount-row {
+	display: grid;
+	justify-items: start;
+	/* 라벨/입력 좌측 정렬 */
+	row-gap: 8px;
+}
+
+#chargeModal .quick-buttons {
+	max-width: 340px;
+}
+
+/* 결제수단 pill과 도움말 간격 정리 */
+#chargeModal .method-row {
+	margin-top: 10px;
+}
+
+/* 모달의 제목/부제도 폭에 맞춰 줄바꿈 여유 */
+#chargeModal .donate-quote {
+	font-size: 20px;
+	margin-top: 6px;
+}
+
+#chargeModal .donate-sub {
+	margin-bottom: 10px;
+}
+
+/* ====== 3D 충전 버튼 ====== */
+#chargeModal .donate-btn {
+	/* 단색(원하시면 색만 바꾸세요) */
+	background: #22c55e;
+	border: 0;
+	border-radius: 14px;
+	width: 100%;
+	padding: 16px 18px;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 900;
+	position: relative;
+	cursor: pointer;
+	/* 3D 효과 */
+	box-shadow: 0 10px 0 #15834a,
+		/* 아래 엣지(진한 초록) */
+		0 18px 24px rgba(0, 0, 0, .18);
+	/* 외곽 그림자 */
+	transform: translateY(0);
+	transition: transform .06s ease, box-shadow .06s ease;
+}
+
+/* hover: 살짝 떠오르는 느낌 */
+#chargeModal .donate-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 11px 0 #15834a, 0 22px 28px rgba(0, 0, 0, .20);
+}
+
+/* active: 눌렸을 때 아래로 내려가며 엣지 축소 */
+#chargeModal .donate-btn:active {
+	transform: translateY(6px);
+	box-shadow: 0 4px 0 #15834a, 0 12px 16px rgba(0, 0, 0, .16);
+}
+
+/* 물결 이펙트가 버튼 위에 잘 보이도록 */
+#chargeModal .donate-btn .wave {
+	z-index: 0;
+}
+
+#chargeModal .donate-btn .label {
+	position: relative;
+	z-index: 1;
+}
+
+/* ====== 기타: 모달 자체 중앙고정 보강 ====== */
+.donate-modal,
+.modal {
+	align-items: center;
+	/* 혹시 기본 규칙이 덮였을 경우 대비 */
+	justify-content: center;
+}
+
+
+
+/* 기부 성공 전용 모달 */
+.lf-success {
+	position: fixed;
+	inset: 0;
+	z-index: 10000;
+	display: none;
+}
+
+.lf-success.show {
+	display: block;
+}
+
+/* 배경 어둡게 (모달이 열릴 때만) */
+.lf-success__backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, .32);
+	/* ← “살짝” 어둡게 */
+	opacity: 0;
+	transition: opacity .18s ease;
+}
+
+.lf-success.show .lf-success__backdrop {
+	opacity: 1;
+}
+
+/* 모달 박스 */
+.lf-success__dialog {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%) scale(.98);
+	background: #fff;
+	width: min(520px, 92vw);
+	border-radius: 14px;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, .18);
+	padding: 22px 22px 18px;
+	opacity: 0;
+	transition: opacity .18s ease, transform .2s ease;
+}
+
+.lf-success.show .lf-success__dialog {
+	opacity: 1;
+	transform: translate(-50%, -50%) scale(1);
+}
+
+.lf-success__title {
+	margin: 0 0 8px;
+	font-size: 20px;
+}
+
+.lf-success__msg {
+	margin: 0 0 16px;
+	line-height: 1.6;
+	color: #333;
+}
+
+.lf-success__actions {
+	text-align: right;
+}
+
+/* 모달뒤로보내기 */
+#confettiTarget canvas,
+canvas[class*="confetti"],
+canvas[id*="confetti"] {
+	z-index: 1 !important;
+
+}
+
+
+
+/* 사이드바 */
+.page-with-sidebar{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:16px;
+  padding:16px;
+  align-items:start;
+  box-sizing:border-box;
+}
+.page-with-sidebar .page-content{ min-width:0; }
+@media (max-width:992px){
+  .page-with-sidebar{ padding-left:88px; }
+}
+
+/* ////////다크모드/////////////////////// */
+
+/* ========== 다크모드 토글 버튼 스타일 ========== */
+.lf-theme-toggle{
+  position: fixed;
+  top: calc(var(--lf-header-h)); /* 헤더 + 여백 */           /* 헤더 바로 아래 느낌 */
+  right: 20px;
+  z-index: 900;
+  border: 0;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 6px 18px rgba(0,0,0,.18);
+  cursor: pointer;
+  line-height: 0;
+}
+.theme-dark .lf-theme-toggle{
+  background: rgba(0,0,0,.6);
+  box-shadow: 0 6px 18px rgba(0,0,0,.4);
+}
+.lf-theme-toggle img{
+  display:block;
+  width: 32px;
+  height: 32px;
+}
+
+/* ========== 다크모드 컬러 레이어 ========== */
+/* 기본(라이트) 변수 */
+:root{
+  --lf-bg: #ffffff;
+  --lf-bg-soft: #f6f7f8;
+  --lf-panel: #ffffff;
+  --lf-border: #e7e7e7;
+  --lf-text: #111;
+  --lf-text-muted: #666;
+  --lf-green: #2e7d32;
+  --lf-green-weak: #e8f5e9;
+}
+
+/* 다크 변수(루트 클래스 .theme-dark 활성화 시) */
+.theme-dark{
+  --lf-bg: #0f1113;
+  --lf-bg-soft: #141618;
+  --lf-panel: #141618;
+  --lf-border: #2a2e33;
+  --lf-text: #e8e9ea;
+  --lf-text-muted: #a8b0b6;
+  --lf-green: #69d088;         /* 살짝 밝은 그린 */
+  --lf-green-weak: #12271a;    /* 연한 녹 배경 */
+}
+
+/* 페이지 배경/문자 기본 치환 */
+body{
+  background: var(--lf-bg);
+  color: var(--lf-text);
+}
+
+/* 탭/섹션/카드류 공통 */
+.pay-tabs{ border-bottom-color: var(--lf-border); }
+.pay-tabs a{ color: var(--lf-text-muted); }
+.pay-tabs a.active{ color: var(--lf-green); }
+.pay-tabs a.active::after{ background: var(--lf-green); }
+
+.section-sub{ color: var(--lf-text-muted); }
+.empty{
+  color: var(--lf-text-muted);
+  border-color: var(--lf-border);
+}
+
+/* 카드: 결제내역/이벤트/사용자 패널 */
+.history-card,
+.event-row,
+.easy-card,
+.user-card,
+.modal-dialog,
+.donate-dialog{
+  background: var(--lf-panel) !important;
+  border-color: var(--lf-border) !important;
+  color: var(--lf-text) !important;
+}
+
+/* 자잘한 텍스트 */
+.hc-meta{ color: var(--lf-text-muted); }
+.ev-meta{ color: var(--lf-green); }
+
+/* 포인트 카드(우측) */
+.balance-card{
+  background: var(--lf-green-weak);
+  border-color: color-mix(in hsl, var(--lf-green) 30%, #0000);
+}
+.bc-title{ color: var(--lf-green); }
+
+/* 버튼류 */
+.btn-light{
+  background: var(--lf-panel);
+  border-color: var(--lf-border);
+  color: var(--lf-text);
+}
+.btn-outline{
+  background: var(--lf-panel);
+  border-color: var(--lf-border);
+  color: var(--lf-text);
+}
+.btn-green, .donate-btn{
+  background: #22c55e;
+  color:#fff;
+}
+
+/* 모달 오버레이 */
+.modal,
+.donate-modal{
+  background: rgba(0,0,0,.55);
+}
+
+/* 사이드 레이아웃 그리드 보강(경계색) */
+.pay-grid{ gap: 24px; }
+
+/* 테이블/경계선 가능성 있는 요소들 한번 더 안전망 */
+*{ border-color: var(--lf-border); }
+
+
+/* 숫자/강조 텍스트를 다크모드에서 흰색으로 */
+.theme-dark .ec-amount,
+.theme-dark .bc-amount,
+.theme-dark .hc-amount,
+.theme-dark .ev-meta {
+  color: #fff !important;
+}
+
+/* 카드 타이틀/뱃지는 가독성 유지 (선택 사항) */
+.theme-dark .ec-title,
+.theme-dark .hc-title,
+.theme-dark .ev-title {
+  color: var(--lf-text); /* 이미 밝게 설정됨 */
+}
+.theme-dark .ec-badge,
+.theme-dark .bc-title {
+  color: #69d088; /* 미묘하게 밝은 그린 */
+}
+
+
+
+/* ===== Glass preset: 다크모드에서만 적용 ===== */
+/* ===== Softer Glass (다크모드에서만) ===== */
+.theme-dark .easy-card,
+.theme-dark .user-card,
+.theme-dark .balance-card,
+.theme-dark .event-row,
+.theme-dark .history-card,
+.theme-dark .modal-dialog,
+.theme-dark .donate-dialog {
+  /* 더 투명하고, 살짝 그린 틴트가 있는 유리 */
+  background:
+    linear-gradient( to bottom right,
+      rgba(20, 24, 26, .55),
+      rgba(20, 24, 26, .45)
+    ) !important;
+  border: 1px solid rgba(255, 255, 255, .16) !important;
+  /* 바깥 그림자는 살짝만 */
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, .22),
+    inset 0 0 0 1px rgba(255,255,255,.04);
+  /* 유리 핵심: blur + 채도↑ */
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  /* 둥글게 & 테두리 강조 조금 */
+  border-radius: 14px;
+}
+
+/* 상단 가장자리 하이라이트(유리엣지) */
+.theme-dark .easy-card::before,
+.theme-dark .user-card::before,
+.theme-dark .balance-card::before,
+.theme-dark .event-row::before,
+.theme-dark .history-card::before,
+.theme-dark .modal-dialog::before,
+.theme-dark .donate-dialog::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom,
+      rgba(255,255,255,.18), rgba(255,255,255,0) 40%);
+  mix-blend-mode: screen;
+}
+
+/* 카드 내부의 텍스트 대비 보강(숫자/강조는 더 하얗게) */
+.theme-dark .ec-amount,
+.theme-dark .bc-amount,
+.theme-dark .hc-amount,
+.theme-dark .ev-meta{
+  color: #ffffff !important;
+}
+.theme-dark .ec-title,
+.theme-dark .hc-title,
+.theme-dark .ev-title,
+.theme-dark .uc-name{
+  color: rgba(255,255,255,.96);
+}
+.theme-dark .ec-badge,
+.theme-dark .bc-title{
+  color: #8be1a8;
+}
+
+/* 버튼은 유리 위에 놓인 반투명 버튼 느낌 */
+.theme-dark .btn-light,
+.theme-dark .btn-outline{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+  color: #fff;
+}
+.theme-dark .btn-light:hover,
+.theme-dark .btn-outline:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.28);
+}
+
+/* 탭 경계도 유리 톤으로 */
+.theme-dark .pay-tabs{
+  border-bottom-color: rgba(255,255,255,.14);
+}
+
+/* 성능/가독성: 작은 화면에서는 blur 강도 살짝 낮춤 */
+@media (max-width: 768px){
+  .theme-dark .easy-card,
+  .theme-dark .user-card,
+  .theme-dark .balance-card,
+  .theme-dark .event-row,
+  .theme-dark .history-card,
+  .theme-dark .modal-dialog,
+  .theme-dark .donate-dialog{
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(140%);
+  }
+}
+
+/* 백드롭필터 미지원 브라우저 폴백 */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))){
+  .theme-dark .easy-card,
+  .theme-dark .user-card,
+  .theme-dark .balance-card,
+  .theme-dark .event-row,
+  .theme-dark .history-card,
+  .theme-dark .modal-dialog,
+  .theme-dark .donate-dialog{
+    background: rgba(20,24,26,.78) !important; /* 블러 못 쓰면 불투명도만 조금 높임 */
+  }
+}
+

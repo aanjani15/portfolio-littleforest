@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title} ?: '게시글 상세'"></title>
+	<link rel="stylesheet" th:href="@{/css/admin.css}">
+
+</head>
+
+<body th:replace="~{admin/layout :: layout(~{::section}, ~{::#page-scripts})}">
+	<section>
+		<h2>게시글 상세</h2>
+
+		<div class="post-card">
+			<div class="post-head">
+				<h3 th:text="${p.title}">제목</h3>
+				<div class="post-meta">
+					<span>카테고리 : </span><span th:text="${p.type}">타입</span><br>
+					<span>작성일 : </span><span th:text="${#dates.format(p.created_At, 'yyyy-MM-dd')}">작성일</span><br>
+					<span>조회 수: </span><span th:text="${p.likes} ?: 0">조회수</span>
+				</div>
+			</div>
+			<div class="post-body" th:text="${p.content}">본문</div>
+		</div>
+
+		<h3 style="margin-top:18px">댓글</h3>
+		<div class="post-card" th:if="${#lists.isEmpty(comments)}">댓글이 없습니다.</div>
+		<div class="post-card" th:if="${!#lists.isEmpty(comments)}">
+			<div th:each="c : ${comments}" class="cmt">
+				<div class="meta">
+					<span>작성자 : </span><span th:text="${c.user.name}">작성자명</span>
+					<span th:text="${#dates.format(c.created_At, 'yyyy-MM-dd')}">시간</span>
+				</div>
+				<!-- 내용 필드명에 맞춰 필요 시 c.content 로 변경 -->
+				<div class="body" th:text="${c.comment_Id} ?: '(내용 없음)'"></div>
+
+				<span><img th:src="@{/image/likes.png}" alt="좋아요"
+						style="width:20px; height:20px; vertical-align:middle;" /></span>
+				<span th:text="${c.likes} ?: 0">0</span>
+
+				<button type="button" class="btn-del" th:attr="data-id=${c.id}"
+					onclick="deleteCommentAxios(this)">삭제</button>
+			</div>
+		</div>
+
+		<div style="margin-top:12px">
+			<a th:href="@{/admin/posts}" class="btn">목록</a>
+		</div>
+
+		<div id="cmt-confirm" class="modal" aria-hidden="true">
+			<div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="cmt-confirm-msg">
+				<p id="cmt-confirm-msg">삭제하시겠습니까?</p>
+				<div class="modal__actions">
+					<button type="button" id="cmt-confirm-ok" class="btn btn-danger">확인</button>
+					<button type="button" id="cmt-confirm-cancel" class="btn btn-ghost">취소</button>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- 페이지 스크립트 묶음 -->
+		<th:block id="page-scripts">
+			<script th:src="@{/js/admin-comment.js(v=${#dates.createNow().time})}"></script>
+		</th:block>
+	</section>
+</body>
+
+</html>

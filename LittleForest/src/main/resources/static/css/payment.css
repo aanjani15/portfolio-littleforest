@@ -1,0 +1,256 @@
+@charset "UTF-8";
+
+
+/* 1) 폰트 선언 */
+@font-face {
+	font-family: 'MyKoreanFont';
+	src: url('/fonts/DungGeunMo.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+	/* 한글 범위 지정 */
+	unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F;
+}
+
+@font-face {
+	font-family: 'MyEnglishFont';
+	src: url('/fonts/Receipt Demo.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+	/* 영문, 숫자, 기호 범위 */
+	unicode-range: U+0020-007F;
+}
+
+
+.page-payment,
+.page-payment .receipt,
+.page-payment table,
+.page-payment th,
+.page-payment td {
+	font-family: 'MyEnglishFont', 'MyKoreanFont', monospace;
+}
+
+.page-payment {
+	background-color: #f4f4f4;
+	/*  padding: 0; */
+}
+
+/* receipt을 가운데 정렬 + 위에서 떨어뜨리기 */
+.page-payment .receipt {
+	background-color: white;
+	width: 600px;
+	border: 2px solid #ccc;
+	border-top: 20px solid #7ea47e;
+	border-radius: 5px;
+	padding: 20px;
+	position: relative;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	min-height: 600px;
+	/* 세로 */
+	/* 추가 */
+	margin: 100px auto 80px;
+	/* 위로 100px 내려오고 좌우는 가운데, 아래는 푸터와 여유 */
+}
+
+.page-payment .receipt-header {
+	text-align: center;
+	margin-bottom: 20px;
+	line-height: 1.8;
+	/* 줄 간격 */
+}
+
+.page-payment .receipt-logo-box {
+	display: flex;
+	flex-direction: column;
+	/* 세로 배치 */
+	align-items: center;
+	/* 가운데 정렬 */
+	gap: 5px;
+	/* 로고와 텍스트 사이 간격 */
+	margin-bottom: 15px;
+	/* 로고 + 브랜드와 닉네임 사이 간격 */
+}
+
+.page-payment .receipt-logo {
+	width: 30px;
+	height: 30px;
+}
+
+.page-payment .receipt-brand {
+	font-weight: bold;
+	border: 2px solid #333;
+	padding: 4px 8px;
+	display: inline-block;
+	border: 2px solid #1b5e20;
+	/* 안쪽 초록 선 */
+	outline: 3px solid #1b5e20;
+	/* 바깥 초록 선 */
+	outline-offset: 4px;
+	/* 선 사이 흰 여백 */
+
+}
+
+.page-payment .user-nickname {
+	font-size: 1.1em;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+.page-payment .date-time {
+	font-size: 0.9em;
+	color: #444;
+}
+
+.page-payment table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+	font-size: 0.9em;
+}
+
+.page-payment thead th {
+	text-align: left;
+	border-bottom: 2px dashed #ccc;
+	padding-bottom: 10px;
+	border-top: 2px dashed #ccc;
+	/* 위에 점선 추가 */
+	padding-top: 10px;
+	/* 점선과 내용 간격 */
+}
+
+.page-payment tbody td {
+	padding: 6px 0;
+	border-bottom: 1px dotted #ddd;
+}
+
+.page-payment .summary {
+	margin-top: 50px;
+	text-align: center;
+	border-top: 2px dashed #ccc;
+	/* 👈 위에 점선 추가 */
+	padding-top: 15px;
+	/* 점선과 내용 간격 */
+}
+
+.page-payment .total {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+.page-payment .green-point {
+	color: #3c703c;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+
+/* 전체화면 영상 배경 */
+.bg-video {
+	position: fixed;
+	/* absolute → fixed (스크롤에도 고정) */
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	/* 화면 높이에 맞춤 */
+	object-fit: cover;
+	z-index: -1;
+	object-fit: cover;
+	/* 화면에 꽉 차게 */
+	z-index: -1;
+	/* 뒤로 보내기 */
+	inset: 0;
+	background: linear-gradient(180deg,
+			rgba(12, 26, 34, .15) 0%,
+			/* 기존 .35 → .15 */
+			rgba(12, 26, 34, .60) 65%,
+			/* 기존 .85 → .45 */
+			var(--bg) 100%);
+}
+
+/* 영상 위 컨텐츠가 잘 보이도록 반투명 배경 */
+.page-payment .receipt {
+	position: relative;
+	z-index: 1;
+	background-color: rgba(255, 255, 255, 0.9);
+	/* 불투명도 조정 가능 */
+}
+
+
+/* 상단 오른쪽 버튼 스타일 */
+.header-right {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 1000;
+	display: flex;
+	gap: 10px;
+}
+
+.header-right a,
+.header-right button {
+	background-color: #33C975;
+	/* 밝기 조금 낮춘 초록 */
+	color: #fff;
+	border: none;
+	padding: 10px 16px;
+	/* 버튼 크기 통일 */
+	border-radius: 10px;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	/* 아이콘과 글자 사이 간격 */
+	font-size: 0.9rem;
+	/* 버튼 폰트 크기 통일 */
+	transition: background-color 0.3s, transform 0.2s;
+}
+
+.header-right a:hover,
+.header-right button:hover {
+	background-color: #39E86A;
+	/* 마우스 오버 시 약간 더 진한 초록 */
+	transform: translateY(-2px);
+}
+
+
+/* 효과들   */
+
+/*종이질감  */
+.page-payment .receipt {
+	background: rgba(255, 255, 255, 0.9) url('/image/paper.png');
+	background-size: cover;
+}
+
+
+
+/* 포인트 DungGeunMo + 오른쪽 정렬 */
+.page-payment table tbody td:nth-child(3) {
+	font-family: 'MyKoreanFont', 'MyEnglishFont', monospace;
+	/* DungGeunMo 우선 */
+	font-weight: 550;
+}
+
+.page-payment table tbody td:nth-child(5) {
+	font-family: 'MyKoreanFont', 'MyEnglishFont', monospace;
+	/* DungGeunMo 우선 */
+	font-weight: 700;
+	color: #2e7d32;
+	/* 진한 초록(머티리얼 800 계열 느낌) */
+
+	text-shadow: 0 0 1px rgba(46, 125, 50, .5);
+	letter-spacing: 0.3px;
+}
+
+
+/* 09.02 탄소감축량 추가  */
+.emission-kg {
+	font-size: 0.85em;
+	color: #2e7d32;
+	/* 초록 느낌 */
+	margin-top: 2px;
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fintecho.littleforest.mapper.PointMapper">
+<insert id="randomcost" parameterType="PointVO">
+insert into point_table values(point_seq.nextval, #{user_Id},100,'SPEND',null,'나무키우기 잡초제거',sysdate)
+</insert>
+<insert id="biryocost" parameterType="PointVO">
+insert into point_table values(point_seq.nextval, #{user_Id},#{amount},'SPEND',null,'비료구매',sysdate)
+</insert>
+
+
+
+
+
+<select id="getPointByUserId" resultType="com.fintecho.littleforest.vo.PointVO">
+	  SELECT * 
+	  FROM point_table
+	  WHERE user_id = #{userId}
+	  ORDER BY created_at DESC, id DESC
+	</select>
+	
+	
+	 <!-- 공통 INSERT: type/amount/상대방/메모를 그대로 받아서 기록 -->
+  <insert id="insertLog">
+    INSERT INTO point_table
+      (id, user_id, amount, type, counterparty_user_id, memo, created_at)
+    VALUES
+      (point_seq.NEXTVAL,
+       #{userId},
+       #{amount},
+       #{type},
+       #{counterpartyUserId},
+       #{memo},
+       SYSDATE)
+  </insert>
+
+  <!-- ===== 편의용: 부호/타입 고정 쿼리들 ===== -->
+
+<!-- 충전: 양수 / type=CHARGE -->
+<insert id="insertCharge">
+  INSERT INTO point_table
+    (id, user_id, amount, type, counterparty_user_id, memo, created_at)
+  VALUES
+    (point_seq.NEXTVAL, #{userId}, #{amount}, 'CHARGE', NULL, #{memo}, SYSDATE)
+</insert>
+
+  <!-- 적립: 양수 / type=EARN -->
+  <insert id="insertEarn">
+    INSERT INTO point_table
+    VALUES
+      (point_seq.NEXTVAL, #{userId}, #{amount}, 'EARN', NULL, #{memo}, SYSDATE)
+  </insert>
+
+  <!-- 사용: 음수 / type=SPEND -->
+  <insert id="insertSpend">
+    INSERT INTO point_table
+    VALUES
+      (point_seq.NEXTVAL, #{userId}, -#{amount}, 'SPEND', NULL, #{memo}, SYSDATE)
+  </insert>
+
+  <!-- 기부: 음수 / type=DONATE -->
+<!-- PointMapper.xml -->
+<insert id="insertDonate">
+  INSERT INTO point_table
+    (id, user_id, amount, type, counterparty_user_id, memo, created_at)
+  VALUES
+    (point_seq.NEXTVAL,  
+    #{user_Id, jdbcType=NUMERIC},
+     #{amount,  jdbcType=NUMERIC}, 
+     'DONATE', 
+     NULL, 
+      #{memo,    jdbcType=VARCHAR},
+      SYSDATE)
+</insert>
+
+
+  <!-- 선물(보낸쪽): 음수 / type=GIFT / 상대 유저 세팅 -->
+<insert id="insertGiftOut">
+  INSERT INTO point_table
+    (id, user_id, amount, type, counterparty_user_id, memo, created_at)
+  VALUES
+    (point_seq.NEXTVAL, #{fromUserId}, (-1 * #{amount}), 'GIFT', #{toUserId}, #{memo}, SYSDATE)
+</insert>
+
+<!-- GIFT: 받는 사람 로그(양수) -->
+<insert id="insertGiftIn">
+  INSERT INTO point_table
+    (id, user_id, amount, type, counterparty_user_id, memo, created_at)
+  VALUES
+    (point_seq.NEXTVAL, #{toUserId}, #{amount}, 'GIFT', #{fromUserId}, #{memo}, SYSDATE)
+</insert>
+
+</mapper>

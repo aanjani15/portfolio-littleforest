@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fintecho.littleforest.mapper.GrownTreeMapper">
+
+  <select id="grownSelect" parameterType="int">
+    SELECT *
+    FROM grown_tree_table
+    WHERE user_id = #{user_Id,jdbcType=INTEGER}
+    ORDER BY id DESC
+  </select>
+
+
+  <insert id="grownInsert" parameterType="com.fintecho.littleforest.vo.GrownTreeVO">
+    INSERT INTO grown_tree_table (
+      id, user_id, growing_tree_id, complete_tree, ident_tree, photo
+    ) VALUES (
+      grown_tree_seq.NEXTVAL,
+      #{user_Id, jdbcType=INTEGER},
+      #{growing_Tree_Id, jdbcType=INTEGER},
+      SYSDATE,
+      NULL,
+      #{photo, jdbcType=VARCHAR}
+    )
+  </insert>
+
+</mapper>
