@@ -74,6 +74,13 @@
 ## 📊 ERD & 테이블 설계
 ERD 이미지 첨부 (https://drive.google.com/file/d/1c2CmWteDQokKMabPMcZ7VuJjKofZd2Uz/view?usp=drive_link)
 
+<details>
+<summary>📷 ERD 이미지 더보기</summary>
+
+https://drive.google.com/uc?export=view&id=1c2CmWteDQokKMabPMcZ7VuJjKofZd2Uz
+
+</details>
+
 주요 테이블:
 - 사용자/인증: `user_table`, `attendance_table`  
 - 지갑/결제: `wallet_table`, `payment_table`, `merchant_table`  
