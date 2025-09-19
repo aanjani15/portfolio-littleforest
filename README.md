@@ -22,17 +22,33 @@
 
 ---
 
-### 🎯 목표 및 설계
-#### 1. 팀 목표
+## 🎯 목표 및 설계
+### 목표
 - 소비자의 계좌·결제 내역을 기반으로 탄소 소비 분석 및 시각화  
 - 친환경 소비에 따른 **그린포인트 적립** 제공  
 - **나무 키우기(게이미피케이션)** 기능과 친환경 제품 구매 활용  
 - 사용자들의 탄소 중립 금융 습관 형성 유도  
 
-#### 2. 담당 파트 목표
-- 직관적이고 단순한 포인트 적립 시스템 설계  
-- 소비에 따른 적립 방법과 감축 효과를 쉽게 이해할 수 있는 UX 구현  
-- 소비 내역 기반 탄소 감축량 시각화 → 작은 행동의 긍정적 효과 체감  
+### 📊 ERD & 테이블 설계
+ERD 이미지 첨부 (https://drive.google.com/file/d/1c2CmWteDQokKMabPMcZ7VuJjKofZd2Uz/view?usp=drive_link)
+
+<details>
+<summary>📷 ERD 이미지 더보기</summary>
+  
+<img width="398" height="592" alt="image" src="https://github.com/user-attachments/assets/bcb4685c-67ec-40bf-91e1-251c93e85e41" />
+<img width="383" height="620" alt="화면 캡처 2025-09-18 163515" src="https://github.com/user-attachments/assets/7c7d80ee-11b2-4b6e-b78a-2f7b6e5f087a" />
+
+</details>
+
+#### 주요 테이블:
+- **사용자/인증**: user_table, attendance_table  
+- **지갑/결제**: wallet_table, payment_table, merchant_table  
+- **탄소/포인트**: emission_table, point_table, point_event_table  
+- **나무 키우기**: growing_tree_table, grown_tree_table  
+- **커뮤니티**: community_table, comment_table, likes_table  
+- **고객지원**: inquery_table, answer_table  
+- **채팅**: chat_room_table, chat_message_table 
+
 
 ---
 
@@ -87,44 +103,19 @@
 </details>
 
 ---
-## 📊 ERD & 테이블 설계
-ERD 이미지 첨부 (https://drive.google.com/file/d/1c2CmWteDQokKMabPMcZ7VuJjKofZd2Uz/view?usp=drive_link)
 
-<details>
-<summary>📷 ERD 이미지 더보기</summary>
-  
-<img width="398" height="592" alt="image" src="https://github.com/user-attachments/assets/bcb4685c-67ec-40bf-91e1-251c93e85e41" />
-<img width="383" height="620" alt="화면 캡처 2025-09-18 163515" src="https://github.com/user-attachments/assets/7c7d80ee-11b2-4b6e-b78a-2f7b6e5f087a" />
-
-</details>
-
-### 주요 테이블:
-- **사용자/인증**: user_table, attendance_table  
-- **지갑/결제**: wallet_table, payment_table, merchant_table  
-- **탄소/포인트**: emission_table, point_table, point_event_table  
-- **나무 키우기**: growing_tree_table, grown_tree_table  
-- **커뮤니티**: community_table, comment_table, likes_table  
-- **고객지원**: inquery_table, answer_table  
-- **채팅**: chat_room_table, chat_message_table 
-
----
-
-### 📌 후기
-- API 선정 과정에서 실질적 활용 가능성 검증의 중요성을 배움  
-- Deepl API 다국어 지원 시 레이아웃 깨짐 문제 해결 경험  
-- 결제 키워드 기반 포인트 적립 정책 설계 과정에서 비즈니스 로직 반영 훈련  
-
----
-
-### 🏆 성과
-- **NetZero Point API (CODEF) 연동 성공** → 실제 사용자별 탄소중립 포인트 데이터 조회  
-- **Deepl API 번역 기능 구현** → 다국어 지원  
-- **포인트 자동 적립 정책 설계** 및 안정화 
+### 🏆 성과 및 후기 
+- **NetZero Point API (CODEF) 연동 성공** → 실제 사용자별 탄소중립 포인트 데이터 조회
+  -  API 선정 과정에서 실질적 활용 가능성 검증의 중요성을 배움
+- **Deepl API 번역 기능 구현**
+  - 다국어 지원 시 레이아웃 깨짐 문제 해결 경험  
+- **포인트 자동 적립 정책 설계** 및 안정화
+  - 결제 키워드 기반 포인트 적립 정책 설계 과정에서 비즈니스 로직 반영 훈련
 
 ---
 
 ### 🎥 시연 자료
-- [📺 시연 영상 보기](https://drive.google.com/file/d/1B79tO0RvvM4-UvIusbN7ap0b9GK5vbZp/view?usp=drive_link)  
+- [📺 시연 영상 보기](https://drive.google.com/file/d/1KNOvw39GN9Nq5Je-ABuRC-72UrQRXZcF/view?usp=drive_link)  
 - [📑 발표 자료 (PPT)](https://docs.google.com/presentation/d/16lXHTDZbE-LNdOH8F0PCaCt6K38miHoa/edit?usp=drive_link&ouid=115939005204624444347&rtpof=true&sd=true)
 - [📑 발표 자료 (pdf)](https://drive.google.com/file/d/1R2O6azIVtrfG5PVHf0HQbu1ax7nbVQV5/view?usp=drive_link)
 - [📑 UML](https://drive.google.com/file/d/1nqFyjvWFnB1mlrkAlK9wcyfHImJZQSMl/view?usp=drive_link)
