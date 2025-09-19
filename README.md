@@ -1,6 +1,3 @@
-# portfolio-littleforest
-
-
 # 🌳 Little Forest
 
 **개발기간** : 2025.07.23 ~ 2025.09.08 (총 44일)  
